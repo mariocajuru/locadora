@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:b="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/security 
+                        http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+	<http>
+	
+		<intercept-url pattern="/v2/**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" /> 
+		
+		<intercept-url pattern="/admin/banco/consulta.jsf" access="ROLE_BANCO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/banco/cadastro.jsf" access="ROLE_BANCO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/banco/excluir.jsf" access="ROLE_BANCO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/endereco/bairro/consulta.jsf" access="ROLE_BAIRRO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/endereco/bairro/cadastro.jsf" access="ROLE_BAIRRO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/endereco/bairro/excluir.jsf" access="ROLE_BAIRRO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/imovel-caracteristicas/consulta.jsf" access="ROLE_CARACTERISTICAS_IMOVEL_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-caracteristicas/cadastro.jsf" access="ROLE_CARACTERISTICAS_IMOVEL_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-caracteristicas/excluir.jsf" access="ROLE_CARACTERISTICAS_IMOVEL_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/filial/consulta.jsf" access="ROLE_FILIAIS_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/filial/cadastro.jsf" access="ROLE_FILIAIS_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/filial/excluir.jsf" access="ROLE_FILIAIS_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/filial/funcionario/cadfuncionario.jsf" access="ROLE_FUNCIONARIOS_ALTERAR,
+		ROLE_FUNCIONARIOS_CONSULTAR, ROLE_FUNCIONARIOS_EXCLUIR, ROLE_FUNCIONARIOS_INCLUIR, ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/filial/funcionario/permissoes.jsf" access="ROLE_PERMISSAO_LOCACAO_ALTERAR,
+		ROLE_ADMIN, ROLE_PERMISSAO_LOCACAO_CONSULTAR, ROLE_PERMISSAO_LOCACAO_EXCLUIR, ROLE_PERMISSAO_LOCACAO_INCLUIR" />
+		
+		<intercept-url pattern="/admin/cadquadrodechave.jsf" access="ROLE_ADMIN, ROLE_QUADRO_CHAVES_ALTERAR,
+		ROLE_QUADRO_CHAVES_CONSULTAR, ROLE_QUADRO_CHAVES_EXCLUIR, ROLE_QUADRO_CHAVES_INCLUIR" />
+		
+		<intercept-url pattern="/admin/endereco/regiao/consulta.jsf" access="ROLE_REGIAO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/endereco/regiao/cadastro.jsf" access="ROLE_REGIAO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/endereco/regiao/excluir.jsf" access="ROLE_REGIAO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/imovel-situacao/consulta.jsf" access="ROLE_SITUACAO_IMOVEL_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-situacao/cadastro.jsf" access="ROLE_SITUACAO_IMOVEL_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-situacao/excluir.jsf" access="ROLE_SITUACAO_IMOVEL_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/imovel-tipo/consulta.jsf" access="ROLE_TIPO_IMOVEL_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-tipo/cadastro.jsf" access="ROLE_TIPO_IMOVEL_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-tipo/excluir.jsf" access="ROLE_TIPO_IMOVEL_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/imovel-proprietario/consulta.jsf" access="ROLE_FORMA_PAGAMENTO_PROPRIETARIO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-proprietario/cadastro.jsf" access="ROLE_FORMA_PAGAMENTO_PROPRIETARIO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-proprietario/excluir.jsf" access="ROLE_FORMA_PAGAMENTO_PROPRIETARIO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/imovel-temperto/consulta.jsf" access="ROLE_PERTO_IMOVEL_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-temperto/cadastro.jsf" access="ROLE_PERTO_IMOVEL_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/imovel-temperto/excluir.jsf" access="ROLE_PERTO_IMOVEL_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/pessoa/ramo-de-atuacao/consulta.jsf" access="ROLE_RAMO_ATIVIDADE_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/restrito/pessoa/ramo-de-atuacao/cadastro.jsf" access="ROLE_RAMO_ATIVIDADE_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/restrito/pessoa/ramo-de-atuacao/excluir.jsf" access="ROLE_RAMO_ATIVIDADE_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/destinacao-locacao/consulta.jsf" access="ROLE_DESTINACAO_LOCACAO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/destinacao-locacao/cadastro.jsf" access="ROLE_DESTINACAO_LOCACAO_EXCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/destinacao-locacao/excluir.jsf" access="ROLE_DESTINACAO_LOCACAO_INCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/status-locacao/consulta.jsf" access="ROLE_STATUS_LOCACAO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/status-locacao/cadastro.jsf" access="ROLE_STATUS_LOCACAO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/status-locacao/cadastro.jsf" access="ROLE_STATUS_LOCACAO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/permissoes-locacao/consulta.jsf" access="ROLE_PERMISSAO_LOCACAO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/permissoes-locacao/cadastro.jsf" access="ROLE_PERMISSAO_LOCACAO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/permissoes-locacao/excluir.jsf" access="ROLE_PERMISSAO_LOCACAO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/situacao-locacao/consulta.jsf" access="ROLE_SITUACAO_LOCACAO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/situacao-locacao/cadastro.jsf" access="ROLE_SITUACAO_LOCACAO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/situacao-locacao/excluir.jsf" access="ROLE_SITUACAO_LOCACAO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/indices-reajuste/consulta.jsf" access="ROLE_INDICE_REAJUSTRE_LOCACAO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/indices-reajuste/cadastro.jsf" access="ROLE_INDICE_REAJUSTRE_LOCACAO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/indices-reajuste/excluir.jsf" access="ROLE_INDICE_REAJUSTRE_LOCACAO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/imposto-de-renda-locacao/consulta.jsf" access="ROLE_IMPOSTO_RENDA_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/imposto-de-renda-locacao/cadastro.jsf" access="ROLE_IMPOSTO_RENDA_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/imposto-de-renda-locacao/excluir.jsf" access="ROLE_IMPOSTO_RENDA_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/contas-locacao/plano/consulta.jsf" access="ROLE_PLANO_CONTAS_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/contas-locacao/plano/cadastro.jsf" access="ROLE_PLANO_CONTAS_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/contas-locacao/plano/excluir.jsf" access="ROLE_PLANO_CONTAS_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/contas-locacao/financeiro/consulta.jsf" access="ROLE_CONTAS_FINANCEIRO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/contas-locacao/financeiro/cadastro.jsf" access="ROLE_CONTAS_FINANCEIRO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/contas-locacao/financeiro/excluir.jsf" access="ROLE_CONTAS_FINANCEIRO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/contas-locacao/custo/consulta.jsf" access="ROLE_CENTRO_CUSTO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/contas-locacao/custo/cadastro.jsf" access="ROLE_CENTRO_CUSTO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/contas-locacao/custo/excluir.jsf" access="ROLE_CENTRO_CUSTO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/contas-locacao/grupo/consulta.jsf" access="ROLE_GRUPO_CONTAS_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/contas-locacao/grupo/cadastro.jsf" access="ROLE_GRUPO_CONTAS_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/contas-locacao/grupo/excluir.jsf" access="ROLE_GRUPO_CONTAS_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/parametro/consulta.jsf" access="ROLE_PARAMETROS_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/parametro/cadastro.jsf" access="ROLE_PARAMETROS_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/parametro/excluir.jsf" access="ROLE_PARAMETROS_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/seguro-incendio/residencial/consulta.jsf" access="ROLE_SEGURO_INCENDIO_RESIDENCIAL_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/seguro-incendio/residencial/cadastro.jsf" access="ROLE_SEGURO_INCENDIO_RESIDENCIAL_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/seguro-incendio/residencial/excluir.jsf" access="ROLE_SEGURO_INCENDIO_RESIDENCIAL_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/admin/locacao/seguro-incendio/comercial/consulta.jsf" access="ROLE_SEGURO_INCENDIO_COMERCIAL_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/seguro-incendio/comercial/cadastro.jsf" access="ROLE_SEGURO_INCENDIO_COMERCIAL_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/admin/locacao/seguro-incendio/comercial/excluir.jsf" access="ROLE_SEGURO_INCENDIO_COMERCIAL_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/imovel/devolucaochave.jsf" access="ROLE_DEVOLUCAO_CHAVE_ALTERAR,ROLE_ADMIN,ROLE_DEVOLUCAO_CHAVE_CONSULTAR,
+		ROLE_DEVOLUCAO_CHAVE_EXCLUIR,ROLE_DEVOLUCAO_CHAVE_INCLUIR" />
+		<intercept-url pattern="/restrito/imovel/pareceremprestimochaves.jsf" access="ROLE_DEVOLUCAO_CHAVE_ALTERAR,ROLE_ADMIN,ROLE_DEVOLUCAO_CHAVE_CONSULTAR,
+		ROLE_DEVOLUCAO_CHAVE_EXCLUIR,ROLE_DEVOLUCAO_CHAVE_INCLUIR" />
+		
+		<intercept-url pattern="/restrito/imovel/consulta.jsf" access="ROLE_IMOVEL_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/restrito/imovel/cadastro.jsf" access="ROLE_IMOVEL_CONSULTAR,ROLE_IMOVEL_INCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/pessoa/consulta.jsf" access="ROLE_PESSOA_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/restrito/pessoa/cadastro.jsf" access="ROLE_PESSOA_CONSULTAR,ROLE_PESSOA_INCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/vistoria.jsf" access="ROLE_VISTORIA_ALTERAR,ROLE_VISTORIA_CONSULTAR,ROLE_VISTORIA_EXCLUIR,ROLE_VISTORIA_INCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/financeiro/consulta/consulta.jsf" access="ROLE_PESSOA_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="restrito/imovel/cadastroFinalizado.jsf" access="ROLE_PESSOA_CONSULTAR,ROLE_ADMIN,ROLE_PESSOA_INCLUIR" />
+		
+		<intercept-url pattern="/restrito/financeiro/contas-a-pagar/gerar.jsf" access="ROLE_CONTA_PAGAR_INCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/financeiro/manualmente/gerar.jsf" access="ROLE_GERAR_INCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/financeiro/desconto/consulta.jsf" access="ROLE_LANCAR_DESCONTO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/restrito/financeiro/desconto/cadastro.jsf" access="ROLE_LANCAR_DESCONTO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/restrito/financeiro/desconto/excluir.jsf" access="ROLE_LANCAR_DESCONTO_EXCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/financeiro/reajuste/cadastro.jsf" access="ROLE_REAJUSTE_ALTERAR,ROLE_REAJUSTE_CONSULTAR,ROLE_REAJUSTE_EXCLUIR,ROLE_REAJUSTE_INCLUIR,ROLE_ADMIN" />
+		
+		<intercept-url pattern="/restrito/locacao/consulta-contrato.jsf" access="ROLE_CONTRATO_CONSULTAR,ROLE_ADMIN" />
+		<intercept-url pattern="/restrito/locacao/cadastro-contrato.jsf" access="ROLE_CONTRATO_INCLUIR,ROLE_ADMIN" />
+		<intercept-url pattern="/restrito/locacao/excluir-contrato.jsf" access="ROLE_CONTRATO_EXCLUIR,ROLE_ADMIN" />
+		
+		 	<intercept-url pattern="/restrito/principal.jsf" access="ROLE_BASICO,ROLE_USUARIO, ROLE_ADMIN, ROLE_CAPTADOR, ROLE_ATENDENTE" /> 
+		
+	<!-- 	<intercept-url pattern="/restrito/principal.jsf" access="ROLE_USUARIO, ROLE_ADMIN, ROLE_CAPTADOR, 
+		ROLE_ATENDENTE, ROLE_BAIRRO_ALTERAR, ROLE_BAIRRO_CONSULTAR, ROLE_BAIRRO_EXCLUIR, ROLE_BAIRRO_INCLUIR, 
+		ROLE_BANCO_ALTERAR, ROLE_BANCO_CONSULTAR, ROLE_BANCO_EXCLUIR, ROLE_BANCO_INCLUIR, ROLE_CARACTERISTICAS_IMOVEL_ALTERAR,
+		ROLE_CARACTERISTICAS_IMOVEL_CONSULTAR, ROLE_CARACTERISTICAS_IMOVEL_EXCLUIR, ROLE_CARACTERISTICAS_IMOVEL_INCLUIR,
+		ROLE_CENTRO_CUSTO_ALTERAR, ROLE_CENTRO_CUSTO_CONSULTAR, ROLE_CENTRO_CUSTO_EXCLUIR, ROLE_CENTRO_CUSTO_INCLUIR,
+		ROLE_CONTAS_FINANCEIRO_ALTERAR, ROLE_CONTAS_FINANCEIRO_CONSULTAR, ROLE_CONTAS_FINANCEIRO_EXCLUIR, 
+		ROLE_CONTAS_FINANCEIRO_INCLUIR, ROLE_DESTINACAO_LOCACAO_ALTERAR, ROLE_DESTINACAO_LOCACAO_CONSULTAR, ROLE_DESTINACAO_LOCACAO_EXCLUIR,
+		ROLE_DESTINACAO_LOCACAO_INCLUIR, ROLE_FILIAIS_ALTERAR, ROLE_FILIAIS_CONSULTAR, ROLE_FILIAIS_EXCLUIR, ROLE_FILIAIS_INCLUIR,
+		ROLE_FORMA_PAGAMENTO_PROPRIETARIO_ALTERAR, ROLE_FORMA_PAGAMENTO_PROPRIETARIO_CONSULTAR, ROLE_FORMA_PAGAMENTO_PROPRIETARIO_EXCLUIR,
+		ROLE_FORMA_PAGAMENTO_PROPRIETARIO_INCLUIR, ROLE_FUNCIONARIOS_ALTERAR, ROLE_FUNCIONARIOS_CONSULTAR, ROLE_FUNCIONARIOS_EXCLUIR,
+		ROLE_FUNCIONARIOS_INCLUIR, ROLE_GRUPO_CONTAS_ALTERAR, ROLE_GRUPO_CONTAS_CONSULTAR, ROLE_GRUPO_CONTAS_EXCLUIR, ROLE_GRUPO_CONTAS_INCLUIR, ROLE_IMPOSTO_RENDA_ALTERAR,
+		ROLE_IMPOSTO_RENDA_CONSULTAR, ROLE_IMPOSTO_RENDA_EXCLUIR, ROLE_IMPOSTO_RENDA_INCLUIR, ROLE_INDICE_REAJUSTRE_LOCACAO_ALTERAR,
+		ROLE_INDICE_REAJUSTRE_LOCACAO_CONSULTAR, ROLE_INDICE_REAJUSTRE_LOCACAO_EXCLUIR, ROLE_INDICE_REAJUSTRE_LOCACAO_INCLUIR,
+		ROLE_PARAMETROS_ALTERAR, ROLE_PARAMETROS_CONSULTAR, ROLE_PARAMETROS_EXCLUIR, ROLE_PARAMETROS_INCLUIR, ROLE_PERMISSAO_LOCACAO_ALTERAR, 
+		ROLE_PERMISSAO_LOCACAO_CONSULTAR, ROLE_PERMISSAO_LOCACAO_EXCLUIR, ROLE_PERMISSAO_LOCACAO_INCLUIR, ROLE_PERTO_IMOVEL_ALTERAR,
+		ROLE_PERTO_IMOVEL_CONSULTAR, ROLE_PERTO_IMOVEL_EXCLUIR, ROLE_PERTO_IMOVEL_INCLUIR, ROLE_PLANO_CONTAS_ALTERAR, ROLE_PLANO_CONTAS_CONSULTAR, ROLE_PLANO_CONTAS_EXCLUIR, 
+		ROLE_PLANO_CONTAS_INCLUIR, ROLE_QUADRO_CHAVES_ALTERAR, ROLE_QUADRO_CHAVES_CONSULTAR, ROLE_QUADRO_CHAVES_EXCLUIR, ROLE_QUADRO_CHAVES_INCLUIR,
+		ROLE_RAMO_ATIVIDADE_ALTERAR, ROLE_RAMO_ATIVIDADE_CONSULTAR, ROLE_RAMO_ATIVIDADE_EXCLUIR, ROLE_RAMO_ATIVIDADE_INCLUIR, ROLE_REGIAO_ALTERAR,
+		ROLE_REGIAO_CONSULTAR, ROLE_REGIAO_EXCLUIR, ROLE_REGIAO_INCLUIR, ROLE_SEGURO_INCENDIO_COMERCIAL_ALTERAR, ROLE_SEGURO_INCENDIO_COMERCIAL_CONSULTAR, 
+		ROLE_SEGURO_INCENDIO_COMERCIAL_EXCLUIR, ROLE_SEGURO_INCENDIO_COMERCIAL_INCLUIR, ROLE_SEGURO_INCENDIO_RESIDENCIAL_ALTERAR,
+		ROLE_SEGURO_INCENDIO_RESIDENCIAL_CONSULTAR, ROLE_SEGURO_INCENDIO_RESIDENCIAL_EXCLUIR,
+		ROLE_SEGURO_INCENDIO_RESIDENCIAL_INCLUIR, ROLE_SITUACAO_IMOVEL_ALTERAR, ROLE_SITUACAO_IMOVEL_CONSULTAR, ROLE_SITUACAO_IMOVEL_EXCLUIR,
+		ROLE_SITUACAO_IMOVEL_INCLUIR,ROLE_SITUACAO_LOCACAO_ALTERAR, ROLE_SITUACAO_LOCACAO_CONSULTAR, ROLE_SITUACAO_LOCACAO_EXCLUIR,
+		ROLE_SITUACAO_LOCACAO_INCLUIR, ROLE_STATUS_LOCACAO_ALTERAR, ROLE_STATUS_LOCACAO_CONSULTAR, ROLE_STATUS_LOCACAO_EXCLUIR, ROLE_STATUS_LOCACAO_INCLUIR,
+		ROLE_TIPO_IMOVEL_ALTERAR, ROLE_TIPO_IMOVEL_CONSULTAR, ROLE_TIPO_IMOVEL_EXCLUIR, ROLE_TIPO_IMOVEL_INCLUIR" /> -->
+		
+		<intercept-url pattern="/restrito/**" access="ROLE_USUARIO, ROLE_ADMIN, ROLE_CAPTADOR, ROLE_ATENDENTE" />
+		<form-login login-page="/publico/login.jsf"
+			always-use-default-target="true" default-target-url="/restrito/principal.jsf"
+			authentication-failure-url="/publico/login.jsf?login_error=1" />
+		<logout />
+		<remember-me />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+		<password-encoder hash="md5"/>
+	<!--	<user-service>
+		<user name="admin" password="123" authorities="ROLE_ADMIN" />
+		<user name="user" password="123" authorities="ROLE_USUARIO" />
+		</user-service>-->
+		
+ 		<!-- 	<jdbc-user-service data-source-ref="locadoraDataSource"
+				users-by-username-query="SELECT fun_login as username, fun_senha as password, 'true' as enable FROM Funcionario WHERE fun_login = ? and fun_ativo='True'"
+				authorities-by-username-query="SELECT f.fun_login as username, f.fun_nivel as authority FROM Funcionario f WHERE f.fun_login = ?" /> 
+ -->		
+		<jdbc-user-service data-source-ref="locadoraDataSource"
+				users-by-username-query="SELECT fun_loguin as username, fun_senha as password, 'true' as enable FROM Funcionario WHERE fun_loguin = ? and fun_ativo='True'"
+				authorities-by-username-query="SELECT f.fun_loguin as username, p.PERMISSAO as authority FROM Funcionario f, FUNCIONARIO_PERMISSAO p WHERE f.PES_ID = p.FUNCIONARIO and f.fun_loguin = ?" /> 
+		
+		</authentication-provider>
+	</authentication-manager>
+</b:beans>

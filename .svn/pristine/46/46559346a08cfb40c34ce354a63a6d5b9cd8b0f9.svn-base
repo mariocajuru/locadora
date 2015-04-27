@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#">DEVOLUÇÃO DE CHAVES</a></li>
+			<li><a href="pareceremprestimochaves.jsf">PARECER DOS EMPRESTIMOS DE CHAVES</a></li>
+		</ul>
+
+		<h:form id="form">
+			<p:growl id="growl"  showDetail="true" life="3500" />
+
+			<!-- Pesquisar pessoa -->
+			<div class="row">
+				<div class="bs-callout bs-callout-info">
+					<h4>Pesquisar empréstimo</h4>
+				</div>
+				<p:tooltip for="nomeTeste"  showEffect="blind" hideEffect="explode"
+					value="Pesquisar a pessoa,tecla * traz todas as pessoas que estam com chave pendente!" />
+				<label class="control-label">Nome</label>
+				<p:autoComplete id="nomeTeste" label="Nome da Pessoa"
+					required="true" 
+					dropdown="true"
+					requiredMessage="Falta selecionar pessoa !"
+					 size="30"
+					maxlength="30"  effect="fade"
+					completeMethod="#{emprestimoChaveBean.pesquisarNomeDevendoChave}" var="p"
+					itemLabel="#{p.pesNome}" itemValue="#{p}" 
+					converter="convertePessoa" forceSelection="true">
+					<p:ajax event="itemSelect" 
+						listener="#{emprestimoChaveBean.handleSelect}" update="@form" />
+					<f:facet name="itemtip">
+						<h:panelGrid columns="2" cellpadding="5">
+							<f:facet name="header">
+								<p:graphicImage library="resources"
+									name="#{not empty p.pesFoto ? p.pesFoto : 'upload/nao-encontrada.jpg'}"
+									width="40" height="50" />
+							</f:facet>
+
+							<h:outputText value="Nome: " />
+							<h:outputText id="nomePesquisa" value="#{p.pesNome}" />
+							<h:outputText value="CPF: " />
+							<h:outputText id="cpfPesquisa" value="#{p.pesCpfCnpj}" />
+							<h:outputText value="End.: " />
+							<h:outputText id="enderecoPesquisa"
+								value="#{p.endereco.endNome},nº#{p.endereco.endNumero},#{p.endereco.bairro.baiNome},#{p.endereco.cidade.cidNome}" />
+						</h:panelGrid>
+					</f:facet>
+				</p:autoComplete>
+				<!-- <h:outputLabel value="#{emprestimoChaveBean.pessoaDevendoChave.pesNome}"  id="teste" />
+				<h:outputLabel value="#{request.remoteUser}" /> -->
+			</div>
+<p:spacer height="10"/>  
+				
+				<!-- Lista chaves emprestadas para pessoa selecionada -->
+			<div class="row">
+				<div class="bs-callout bs-callout-info">
+					<h4>Lista chaves emprestadas</h4>
+				</div>
+				<p:dataTable 
+				id="dataTable" 
+				rendered="#{not empty emprestimoChaveBean.listaImoveisDevolucaoChave}"
+				value="#{emprestimoChaveBean.listaImoveisDevolucaoChave}" 
+				var="imo"
+				paginator="true" 
+				rows="7" 
+				rowKey="#{imo.imoId}"
+				selection="#{emprestimoChaveBean.imovelDevolvido}" 
+				emptyMessage="Não há registro desse Imóvel"
+				rowStyleClass="#{imo.imoEfetivo eq 'S' ? 'old' : null}" >
+			 <p:column selectionMode="single" style="width:33px;text-align:center" />  
+				
+				<p:column
+					headerText="Código" 
+					filterBy="#{imo.imoId}" filterValue="Código do imóvel">
+				
+					<h:outputText 
+						value="#{imo.imoId}" />
+					
+				</p:column>
+				<p:column
+					headerText="Filial" >
+					<h:outputText 
+						value="#{emprestimoChaveBean.qualFilialPertence(imo.imoId)}" />
+					
+				</p:column>
+				<p:column 
+					headerText="Tipo do Imóvel"
+					filterBy="#{imo.tipoimovel.tipNome}"
+					sortBy="#{imo.tipoimovel.tipNome}" filterValue="Tipo">
+					
+					<h:outputText value="#{imo.tipoimovel.tipNome}" />
+					
+				</p:column>
+	
+				<p:column headerText="Situação"
+					filterBy="#{imo.situacaoimovel.sitNome}"
+					sortBy="#{imo.situacaoimovel.sitNome}" filterValue="Situação">
+					
+					<h:outputText value="#{imo.situacaoimovel.sitNome}" />
+					
+				</p:column>
+
+				<p:column 
+					headerText="Endereço" 
+					filterBy="#{imo.endereco.endNome}" 
+					sortBy="#{imo.endereco.endNome}" filterValue="Nome do endereço">
+					
+					<h:outputText value="#{imo.endereco.endNome} / #{imo.endereco.endNumero}" />
+					
+				</p:column>
+				
+				<p:column 
+					headerText="Cep" 
+					filterBy="#{imo.endereco.endCep}"
+					sortBy="#{imo.endereco.endCep}" filterValue="Cep">
+					
+					<h:outputText value="#{imo.endereco.endCep}" />
+					
+				</p:column>
+				
+				<p:column 
+					headerText="Bairro/Cidade">
+				
+					<h:outputText value="#{imo.endereco.bairro.baiNome} / #{imo.endereco.cidade.cidNome}" />
+					
+				</p:column>
+				</p:dataTable>
+				</div>
+			<div class="row">
+				<div class="bs-callout bs-callout-info">
+					<h4>Observações do parecer</h4>
+				</div>
+				<p:inputTextarea id="obsVistoria" class="autosize form-control"
+					rows="5" cols="100" maxlength="249" counter="counterVistoria"
+					counterTemplate="{0} caracteres restantes"
+					value="#{emprestimoChaveBean.obsParecer}"
+					style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;"
+					rendered="#{not empty emprestimoChaveBean.listaImoveisDevolucaoChave}" />
+				<div style="text-align: right; padding-top: 20px;">
+					<p:outputLabel
+						rendered="#{not empty emprestimoChaveBean.listaImoveisDevolucaoChave}"
+						id="counterVistoria" />
+				</div>
+
+			</div>
+			<p:outputPanel
+				rendered="#{not empty emprestimoChaveBean.listaImoveisDevolucaoChave}">
+				<div class="row">
+					<div style="text-align: center">
+						<!-- houve interesse no imovel -->
+						<label class="col-md-2 control-label labelRenovar">DESEJA ALOCAR O IMÓVEL</label>
+
+						<div class="col-md-2">
+							<p:selectBooleanButton id="interesse"
+								class="form-control input-sm"
+								value="#{emprestimoChaveBean.alocarImovel}" onLabel="Sim"
+								offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close">
+							</p:selectBooleanButton>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div style="text-align: center">
+						<p:commandButton process="@this,dataTable,obsVistoria,interesse"
+							value="Gravar Devolução" update="growl @form"
+							actionListener="#{emprestimoChaveBean.gravarDevolucao}"
+							class="btn btn-primary btn-lg" />
+					</div>
+				</div>
+			</p:outputPanel>
+			
+			<p:confirmDialog id="confirmDialog"
+				message="Chave devolvida.Deseja gerar o pre-contrato de locação para o Sr. #{emprestimoChaveBean.pessoaDevendoChave.pesNome}, com o imóvel codigo:#{emprestimoChaveBean.imovelDevolvido.imoId}?"
+				showEffect="bounce" hideEffect="explode" header="Confirmação"
+				severity="alert" widgetVar="confirmacao">
+
+				<p:commandButton value="SIM-GERAR CONTRATO" oncomplete="confirmation.hide()" icon="ui-icon-check"
+					 process="@this" ajax="false" action="#{emprestimoChaveBean.gerarPreContrato}" onclick="confirmacao.hide()"/>
+				<p:commandButton value="NÃO-CACELAR CONTRATO" onclick="confirmacao.hide()"
+					type="button" process="@this"  icon="ui-icon-close"/>
+
+			</p:confirmDialog>
+			
+			<p:confirmDialog id="completarCadastroDialog"
+				message="Deseja completar o cadastro do Sr. #{emprestimoChaveBean.pessoaDevendoChave.pesNome} para gerar o pre-cadastro?"
+				showEffect="bounce" hideEffect="explode" header="Confirmação"
+				severity="alert" widgetVar="completarCadastro">
+
+				<p:commandButton value="SIM" oncomplete="completarCadastro.hide()"
+					 process="@this" icon="ui-icon-check"
+					 onclick="javascript: window.open('#{request.contextPath}/restrito/pessoa/cadastro.jsf?id=#{emprestimoChaveBean.pessoaDevendoChave.pesId}', '_self');"/>
+				<p:commandButton value="NÃO" onclick="completarCadastro.hide()"
+					type="button" process="@this"  icon="ui-icon-close"/>
+
+			</p:confirmDialog>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

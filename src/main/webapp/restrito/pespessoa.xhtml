@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+	
+	<div class="bs-callout bs-callout-info">
+				<h4>Consulta Pessoas</h4>
+			</div>
+		
+		<h:form id="formPessoas">
+
+			<h:messages 
+				autoUpdate="true" />
+				
+			<!-- <h:inputHidden value="#{pessoaAlterarBean.pessoa.pesId}" /> -->
+			
+		<!-- 	<p:blockUI 
+				block="dataTable" 
+				trigger="dataTable" /> -->
+			
+			<p:dataTable 
+				id="dataTable" 
+				value="#{pessoaAlterarBean.listaPessoas}"
+				var="pes" 
+				paginator="true"
+				rows="7" 
+				rowKey="#{pes.pesId}"
+				selection="#{pessoaAlterarBean.pessoa}" 
+				selectionMode="single"
+				emptyMessage="Não há registro dessa Pessoa"
+				rowStyleClass="#{pes.funcionario.funId ge '1' ? 'old' : null}" >
+				
+				<p:ajax 
+					event="rowSelect" 
+					update=":formPessoas"
+					oncomplete="pesDialog.show()"
+					listener="#{pessoaAlterarBean.carregar}" >
+					
+					<f:setPropertyActionListener 
+						target="#{pessoaAlterarBean.pessoa}"
+						value="#{pes}" />
+						
+				</p:ajax>
+				
+				<p:column>
+				
+					<h:graphicImage 
+						library="imagens"
+						name="ROLE_USUARIO_VIP_#{pes.funcionario.funId ge '1'}.png"
+						style="border:0" />
+						
+				</p:column>
+
+				<p:column 
+					headerText="Codigo" 
+					filterBy="#{pes.pesId}" filterValue="Id" >
+					
+					<h:outputText 
+						value="#{pes.pesId}" />
+					
+				</p:column>
+
+				<p:column 
+					headerText="Nome da Pessoa" 
+					filterBy="#{pes.pesNome}"
+					sortBy="#{pes.pesNome}" filterValue="Nome">
+					
+					<h:outputText 
+						value="#{pes.pesNome}" />
+					
+				</p:column>
+
+				<p:column 
+					headerText="CPF-CNPJ" 
+					filterBy="#{pes.pesCpfCnpj}"
+					sortBy="#{pes.pesCpfCnpj}" filterValue="CPF-CNPJ">
+					
+					<h:outputText 
+						value="#{pes.pesCpfCnpj}" />
+					
+				</p:column>
+
+				<p:column 
+					headerText="Tipo" 
+					filterBy="#{pes.pesTipo}"
+					sortBy="#{pes.pesTipo}" filterValue="Tipo">
+					
+					<h:outputText 
+						value="#{pes.pesTipo}" />
+					
+				</p:column>
+				
+				<p:column>
+
+					<h:commandButton 
+						action="#{pessoaAlterarBean.editar}"
+						class="btn btn-warning" 
+						value="Editar">
+
+						<f:setPropertyActionListener
+							target="#{pessoaAlterarBean.pessoa}"
+							value="#{pes}" />
+							
+					</h:commandButton>
+					
+				</p:column>
+				
+				<!-- 
+				<p:column>
+				
+					<h:link 
+						value="tetttt" 
+						outcome="/restrito/cadpessoa" >
+						
+						<a href="#{request.contextPath}/restrito/cadpessoa.jsf" class="hiddenMenuItem">Editar
+						
+							<f:setPropertyActionListener 
+								target="#{pessoaAlterarBean.pessoa}"
+								value="#{pes}" />
+								
+							<f:ajax
+								listener="#{pessoaAlterarBean.editar}" 
+								execute="@this" 
+								event="click"/>		
+							
+						</a>
+					</h:link>
+					
+				</p:column>
+				-->
+
+				<sec:ifAnyGranted 
+					roles="ROLE_ADMIN">
+					
+					<p:column>
+
+						<h:commandButton 
+							action="#{pessoaAlterarBean.excluir}"
+							rendered="#{pes.funcionario.funId == null}"
+							onclick="if(!confirm('Confirma a exclusão #{pes.pesNome}?')) return false;"
+							class="btn btn-danger" 
+							value="Deletar" >
+							
+							<f:setPropertyActionListener 
+								target="#{pessoaAlterarBean.pessoa}"
+								value="#{pes}" />
+								
+						</h:commandButton>
+						
+					</p:column>
+					
+				</sec:ifAnyGranted>
+				
+			</p:dataTable>
+			
+			<h:panelGrid columns="2">
+			
+				<p:panel header="Exportar todos os dados">
+				
+					<h:commandLink>
+					
+						<p:graphicImage 
+							library="imagens" 
+							name="excel.png" />
+							
+						<p:dataExporter 
+							type="xls" 
+							target="dataTable"
+							fileName="listaPessoas" />
+							
+					</h:commandLink>
+
+					<h:commandLink>
+					
+						<p:graphicImage 
+							library="imagens" 
+							name="pdf.png" />
+							
+						<p:dataExporter 
+							type="pdf" 
+							target="dataTable"
+							fileName="listaPessoas" />
+							
+					</h:commandLink>
+
+					<h:commandLink>
+					
+						<p:graphicImage
+							library="imagens"
+							name="csv.png" />
+						
+						<p:dataExporter 
+							type="csv" 
+							target="dataTable"
+							fileName="listaPessoas" />
+							
+					</h:commandLink>
+
+					<!--    
+					<h:commandLink>  
+					
+            			<p:graphicImage 
+	            			library="imagens" 
+	            			name="xml.png" />  
+	            			
+            			<p:dataExporter
+	            			type="xml" 
+	            			target="dataTable" 
+	            			fileName="listaPessoas" />  
+            			
+        			</h:commandLink>  
+        			-->
+        			
+				</p:panel>
+
+				<p:panel header="Exportar dados da página">
+				
+					<h:commandLink>
+						<p:graphicImage library="imagens" name="excel.png" />
+						<p:dataExporter type="xls" target="dataTable"
+							fileName="listaPessoas" pageOnly="true" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage library="imagens" name="pdf.png" />
+						<p:dataExporter type="pdf" target="dataTable"
+							fileName="listaPessoas" pageOnly="true" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage library="imagens" name="csv.png" />
+						<p:dataExporter type="csv" target="dataTable"
+							fileName="listaPessoas" pageOnly="true" />
+					</h:commandLink>
+
+					<!--       
+					<h:commandLink>  
+					
+			            <p:graphicImage 
+				            library="imagens" 
+				            name="xml.png" />
+				              
+			            <p:dataExporter 
+				            type="xml" 
+				            target="dataTable" 
+				            fileName="listaPessoas" 
+				            pageOnly="true"/>  
+			            
+			        </h:commandLink> 
+			        -->
+        
+				</p:panel>
+				
+			</h:panelGrid>
+
+			<p:dialog 
+				header="Detalhe da Pessoa" 
+				widgetVar="pesAlterDialog"
+				resizable="false" 
+				width="500" 
+				showEffect="explode"
+				hideEffect="explode" >
+				
+				<h:panelGrid 
+					id="alterDisplay" >
+
+				</h:panelGrid>
+				
+				<h:commandButton 
+					global="false" 
+					process="@this" 
+					readonly="true"
+					transient="true"
+					immediate="true"
+					value="Fechar"
+					onclick="pesAlterDialog.hide(); return false;"
+					class="btn btn-default" />
+					
+			</p:dialog>
+
+			<!--
+				Inicio
+			  	Detalhes Pessoa
+			 -->			 
+			<p:dialog 
+				header="#{pessoaAlterarBean.pessoa.pesNome}" 
+				widgetVar="pesDialog"
+				resizable="true" 
+				width="800" 
+				maximizable="false" 
+				minimizable="false">
+				
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<td>Data de Nascimento:
+							
+								<h:outputText 
+									value="#{pessoaAlterarBean.pessoa.pesDataNasc}"
+									style="font-weight:bold" 
+									converter="javax.faces.DateTime"/>
+							
+							</td>
+							<td>Estado civil: <b>#{pessoaAlterarBean.pessoa.pesEstadoCivil}</b></td>
+							<td>CPF/CPNJ: <b>#{pessoaAlterarBean.pessoa.pesCpfCnpj}</b></td>
+						</tr>
+						<tr>
+							<td>RG/IE: <b>#{pessoaAlterarBean.pessoa.pesRgIe}</b></td>
+							<td>Estado civil: <b>#{pessoaAlterarBean.pessoa.pesSexo}</b></td>
+							<td>Profissão: <b>#{pessoaAlterarBean.pessoa.pesProfissao}</b></td>
+						</tr>
+						<tr>
+							<td>Quant. Veiculos: <b>#{pessoaAlterarBean.pessoa.pesQtdVeiculo}</b></td>
+							<td>Quant. Filhos: <b>#{pessoaAlterarBean.pessoa.pesQtdFilho}</b></td>
+							<td>Faturamento: 
+								<b><h:outputText value="#{pessoaAlterarBean.pessoa.pesFaturamento}">
+									<f:convertNumber currencySymbol="R$" type="currency" />
+								</h:outputText></b>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">Endereço: <b>#{pessoaAlterarBean.endereco.endNome}</b></td>
+							<td colspan="1">Número: <b>#{pessoaAlterarBean.endereco.endNumero}</b></td>
+						</tr>
+						<tr>
+							<td>CEP: <b>#{pessoaAlterarBean.endereco.endCep}</b></td>
+							<td>Complemento: <b>#{pessoaAlterarBean.endereco.endComplemento}</b></td>
+							<td>Referência: <b>#{pessoaAlterarBean.endereco.endPontoreferencial}</b></td>
+						</tr>
+						<tr>
+							<td>Região: <b>#{pessoaAlterarBean.endereco.bairro.regiao.regNome}</b></td>
+							<td>Zona: <b>#{pessoaAlterarBean.endereco.endZona}</b></td>
+							<td>Bairro: <b>#{pessoaAlterarBean.bairro.baiNome}</b></td>
+						</tr>
+						<tr>
+							<td colspan="2">Cidade: <b>#{pessoaAlterarBean.cidade.cidNome}</b></td>
+							<td>UF: <b>#{pessoaAlterarBean.cidade.cidUf}</b></td>
+						</tr>
+						<tr>
+							<td colspan="3">Observação: <b>#{pessoaAlterarBean.pessoa.pesObservacao}</b></td>
+						</tr>	
+						<tr>
+							<td colspan="3">
+								Email's:
+								<br/>
+																	
+								<ui:repeat value="#{pessoaAlterarBean.listaEmail}" var="ema">
+									<a href="mailto:${ema.emaEndereco}"><b>${ema.emaEndereco}</b></a>
+								</ui:repeat>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								Telefones:
+																	
+								<ui:repeat value="#{pessoaAlterarBean.listaTel}" var="tel">
+									<br/>
+									<a><b>${tel.telNumero}</b></a>
+								</ui:repeat>
+							</td>
+						</tr>								
+					</tbody>
+				</table>
+				
+				<center>
+				
+					<h:commandButton 
+						global="false" 
+						process="@this" 
+						readonly="true"
+						transient="true" 
+						immediate="true" 
+						value="Fechar"
+						onclick="pesDialog.hide();return false;" class="btn btn-default" />
+				</center>
+				
+			</p:dialog>
+			<!--
+				Fim
+			  	Detalhes Pessoa
+			 -->	
+
+		</h:form>
+	</ui:define>
+	
+</ui:composition>
+</html>

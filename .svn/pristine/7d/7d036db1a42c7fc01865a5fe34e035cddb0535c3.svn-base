@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<p:outputPanel rendered="#{impostoDeRendaBean.alteracao}">
+
+	<div class="row">
+		<div class="col-xs-6">
+			<div class="panel panel-default">
+				<div class="panel-footer">Valores</div>
+				
+<div class="row">
+					<!-- LIMITE INFERIOR -->
+					<label class="col-xs-3 control-label labelRenovar">FAIXA</label>
+					<div class="col-xs-2">
+						<div class="form-group">
+
+							<h:selectOneMenu class="form-control input-sm" id="faixa"
+								value="#{impostoDeRendaBean.faixaImpostoDeRenda.faiImpRenFaixa}">
+								<f:selectItem itemValue="" itemLabel="" />
+								<f:selectItem itemValue="1ª" itemLabel="1ª" />
+								<f:selectItem itemValue="2ª" itemLabel="2ª" />
+								<f:selectItem itemValue="3ª" itemLabel="3ª" />
+								<f:selectItem itemValue="4ª" itemLabel="4ª" />
+								<f:selectItem itemValue="5ª" itemLabel="5ª" />
+								<f:selectItem itemValue="6ª" itemLabel="6ª" />
+								<f:selectItem itemValue="7ª" itemLabel="7ª" />
+								<f:selectItem itemValue="8ª" itemLabel="8ª" />
+								<f:selectItem itemValue="9ª" itemLabel="9ª" />
+								<f:selectItem itemValue="10ª" itemLabel="10ª" />
+								<f:selectItem itemValue="11ª" itemLabel="11ª" />
+								<f:selectItem itemValue="12ª" itemLabel="12ª" />
+								<f:selectItem itemValue="13ª" itemLabel="13ª" />
+								<f:selectItem itemValue="14ª" itemLabel="14ª" />
+								<f:selectItem itemValue="15ª" itemLabel="15ª" />
+								<f:selectItem itemValue="16ª" itemLabel="16ª" />
+								<f:selectItem itemValue="17ª" itemLabel="17ª" />
+								<f:selectItem itemValue="18ª" itemLabel="18ª" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<!-- LIMITE INFERIOR -->
+					<label class="col-xs-3 control-label labelRenovar">LIMITE
+						INFERIOR</label>
+
+					<div class="col-xs-2">
+						<div class="form-group">
+
+							<pe:inputNumber id="limitInferiros"
+								value="#{impostoDeRendaBean.faixaImpostoDeRenda.faiImpRenLimiteInferior}"
+								size="15" maxlength="15" required="false" symbol="R$" emptyValue="empty" decimalSeparator="," thousandSeparator=".">
+								<f:validateLength minimum="0" maximum="15" />
+								<f:converter converterId="javax.faces.Double" />
+							</pe:inputNumber>
+
+						</div>
+						
+						</div>
+						
+						<div class="row">
+
+						<!-- LIMITE SUPERIOR -->
+						<label class="col-xs-3 control-label labelRenovar">LIMITE
+							SUPERIOR</label>
+
+						<div class="col-xs-2">
+							<div class="form-group">
+
+								<pe:inputNumber id="limitSuperior"
+									value="#{impostoDeRendaBean.faixaImpostoDeRenda.faiImpRenLimiteSuperior}"
+									size="15" maxlength="15" required="false" symbol="R$" emptyValue="empty" decimalSeparator="," thousandSeparator=".">
+									<f:validateLength minimum="0" maximum="15" />
+									<f:converter converterId="javax.faces.Double" />
+								</pe:inputNumber>
+
+							</div>
+
+						</div>
+
+						<!-- ALÍQUOTA -->
+						<label class="col-xs-3 control-label labelRenovar">ALÍQUOTA</label>
+
+						<div class="col-xs-2">
+							<div class="form-group">
+
+								<pe:inputNumber id="aliquota"
+									value="#{impostoDeRendaBean.faixaImpostoDeRenda.faiImpRenAliquota}"
+									size="15" maxlength="15" required="false" symbol="%"
+									symbolPosition="s" emptyValue="empty" decimalPlaces="2">
+									<f:validateLength minimum="0" maximum="15" />
+									<f:converter converterId="javax.faces.Double" />
+								</pe:inputNumber>
+
+							</div>
+
+						</div>
+					</div>
+						
+						<div class="row">
+
+						<!-- DEDUÇÃO -->
+						<label class="col-xs-3 control-label labelRenovar">DEDUÇÃO</label>
+
+						<div class="col-xs-2">
+							<div class="form-group">
+
+								<pe:inputNumber id="deducao"
+									value="#{impostoDeRendaBean.faixaImpostoDeRenda.faiImpRenDeducao}"
+									size="15" maxlength="15" required="false" symbol="R$" emptyValue="empty" decimalSeparator="," thousandSeparator=".">
+									<f:validateLength minimum="0" maximum="15" />
+									<f:converter converterId="javax.faces.Double" />
+								</pe:inputNumber>
+
+							</div>
+
+						</div>
+						<div class="col-xs-7">
+					<div class="btn-group">
+						<p:commandButton id="adicionar" class="btn btn-default btn-sm"
+							action="#{impostoDeRendaBean.adicionarReajuste}" update="faixa,limitInferiros,limitSuperior,aliquota,deducao,tabelaImpostoDeRenda"
+							process="@this,faixa,limitInferiros,limitSuperior,aliquota,deducao" value="Adicionar" />
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-footer">Tabela</div>
+
+					<p:dataTable id="tabelaImpostoDeRenda" 
+						value="#{impostoDeRendaBean.impostoDeRenda.faixaImpostoDeRendas}" var="val"
+						type="definition" emptyMessage="Não há valores para esse imposto de renda">
+						
+						<f:facet name="header">
+							<p:outputLabel value="Mês #{impostoDeRendaBean.impostoDeRenda.impRenMes}" />
+							<p:outputLabel value="- Ano #{impostoDeRendaBean.impostoDeRenda.impRenAno}" />
+						</f:facet>
+						
+						<p:column style="text-align: center"
+							headerText="Faixa">													
+								<p:outputLabel value="#{val.faiImpRenFaixa}"
+									class="form-control input-sm">
+								</p:outputLabel>
+						</p:column>
+						<p:column style="text-align: center"
+							headerText="Limite Inferior">													
+								<p:outputLabel value="#{val.faiImpRenLimiteInferior}"
+									class="form-control input-sm">
+									<f:convertNumber type="currency" currencySymbol="R$" maxFractionDigits="2" minFractionDigits="2"
+									/>
+								</p:outputLabel>
+						</p:column>
+						<p:column style="text-align: center"
+							headerText="Limite Superior">													
+								<p:outputLabel value="#{val.faiImpRenLimiteSuperior}"
+									class="form-control input-sm">
+									<f:convertNumber type="currency" currencySymbol="R$" maxFractionDigits="2" minFractionDigits="2"/>
+								</p:outputLabel>
+						</p:column>
+						<p:column style="text-align: center"
+							headerText="Alíquota">													
+								<p:outputLabel value="#{(val.faiImpRenAliquota/100)}"
+									class="form-control input-sm">
+									<f:convertNumber type="percent" maxFractionDigits="2" minFractionDigits="2"/>
+								</p:outputLabel>
+						</p:column>
+						<p:column style="text-align: center"
+							headerText="Dedução">													
+								<p:outputLabel value="#{val.faiImpRenDeducao}"
+									class="form-control input-sm">
+									<f:convertNumber type="currency" currencySymbol="R$" maxFractionDigits="2" minFractionDigits="2"/>
+								</p:outputLabel>
+						</p:column>
+					</p:dataTable>
+				</div>
+
+			</div>
+	</div>
+	
+	</p:outputPanel>
+</ui:composition>

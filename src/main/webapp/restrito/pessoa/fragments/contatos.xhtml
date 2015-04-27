@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+
+		<!-- TELEFONES -->
+		<div class="col-sm-6">
+	
+			<p:outputPanel id="displayTelefone" style="padding: 10px;">
+
+				<p:dataList value="#{pessoaBean.listaTel}" var="tel" id="tableTel"
+					emptyMessage="Vazio.">
+					<f:facet name="header">Lista de Telefones</f:facet>
+					Numero: #{tel.telNumero}, Tipo: #{tel.telTipo}, Sms: #{tel.telSms == 'S' ? 'SIM' : 'NÂO'} 
+					<p:commandButton id="removerTelefone" value="Remover"
+						process="@this" icon="ui-icon-check"
+						action="#{pessoaBean.removerTel(tel)}" update="@this,tableTel">
+						<f:setPropertyActionListener target="#{pessoaBean.telefone}"
+							value="#{tel}" />
+					</p:commandButton>
+				</p:dataList>
+
+			</p:outputPanel>
+
+			<div style="text-align: center;">
+				<p:commandButton id="showDialogButton" type="button"
+					value="Adicionar Telefone" onclick="PF('dialogTelefone').show()"
+					icon="ui-icon-extlink" />
+			</div>
+
+			<p:dialog header="Adicionar Telefone" widgetVar="dialogTelefone"
+				resizable="false">
+
+				<p:panelGrid id="panelX" columns="2" style="margin-bottom:10px">
+
+					<h:outputLabel value="Numero de telefone:" for="telefone" />
+
+					<p:inputMask id="telefone" label="Numero de telefone"
+						value="#{pessoaBean.telefone.telNumero}" size="15" maxlength="15"
+						requiredMessage="Falta o Telefone da Pessoa !" mask="(99) 9999-9999">
+						<f:validateLength minimum="0" maximum="15" />
+							<f:validateLength minimum="0" maximum="15" />
+					</p:inputMask>
+
+					<h:outputLabel value="SMS:" for="sms" />
+					<h:selectOneMenu id="sms" value="#{pessoaBean.telefone.telSms}">
+						<f:converter converterId="javax.faces.Character" />
+						<f:selectItem itemValue="S" itemLabel="Sim" />
+						<f:selectItem itemValue="N" itemLabel="Não" />
+					</h:selectOneMenu>
+
+					<h:outputLabel value="Tipo do telefone:" for="tipotelefone" />
+					<h:selectOneMenu id="tipotelefone"
+						value="#{pessoaBean.telefone.telTipo}">
+						<f:selectItem itemValue="CELULAR" itemLabel="Celular" />
+						<f:selectItem itemValue="RESIDENCIAL" itemLabel="Residencial" />
+						<f:selectItem itemValue="COMERCIAL" itemLabel="Comercial" />
+						<f:selectItem itemValue="RECADO" itemLabel="Recado" />
+					</h:selectOneMenu>
+					</p:panelGrid>
+					<center>
+					<p:commandButton id="submitTel" value="Adicionar"
+						icon="ui-icon-check" actionListener="#{pessoaBean.addTel}"
+						process="@this,telefone,sms,tipotelefone"
+						update="@parent,displayTelefone,confirmDialog"
+						onclick="PF('dialogTelefone').hide();"/>
+					</center>
+					<!-- <p:commandButton global="false" process="@this" readonly="true"
+						transient="true" immediate="true" value="Fechar"
+						onclick="dialogTelefone.hide();" class="btn btn-default"
+						partialSubmit="@this" /> -->
+				
+
+			</p:dialog>
+
+		</div>
+
+		<div class="col-sm-6">
+
+			<!-- EMAIL -->
+			<p:outputPanel id="panelEmail" style="padding: 10px;">
+				<p:dataList id="tableEmail" var="mail"
+					value="#{pessoaBean.listaEmail}" emptyMessage="Vazio." >
+
+					<f:facet name="header">Email's</f:facet> 
+								
+					#{mail.emaEndereco}
+					   			
+		  			<p:commandButton id="removerMail" value="Remover"
+						process="@this" icon="ui-icon-check"
+						action="#{pessoaBean.removerEmail(mail)}"
+						update="@this,tableEmail">
+						<f:setPropertyActionListener target="#{pessoaBean.email}" value="#{mail}" />
+					</p:commandButton>
+					
+				</p:dataList>
+			</p:outputPanel>
+
+			<div style="text-align: center;">
+				<p:commandButton id="addEmail" type="button" value="Adicionar Email"
+					onclick="PF('dialogEmail').show()" icon="ui-icon-extlink"
+					update="displayEmail formMail" />
+			</div>
+
+			<p:dialog header="Adicionar Email" widgetVar="dialogEmail"
+				resizable="false">
+
+				<p:panelGrid id="panelCadastrarEmail" columns="2"
+					style="margin-bottom:10px">
+
+					<h:outputLabel value="Email:" for="mailC" />
+					<h:inputText id="mailC" label="E-Mail"
+						requiredMessage="Falta o E-Mail da Pessoa !"
+						value="#{pessoaBean.email.emaEndereco}" size="50" maxlength="50"
+						validatorMessage="E-mail inválido, digite um e-mail valido">
+						<f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+					</h:inputText>
+
+					<h:outputLabel value="Spam:" for="spamC" />
+					<h:selectOneMenu id="spamC" value="#{pessoaBean.email.emaSpam}">
+						<f:converter converterId="javax.faces.Character" />
+						<f:selectItem itemValue="S" itemLabel="Sim" />
+						<f:selectItem itemValue="N" itemLabel="Não" />
+					</h:selectOneMenu>
+				</p:panelGrid>
+
+				<center>
+					<p:commandButton id="submitEmail" value="Adicionar"
+						icon="ui-icon-check" action="#{pessoaBean.addEmail}"
+						process="@this,mailC,spamC" update="@parent,panelEmail,confirmDialog" />
+				</center>
+			</p:dialog>
+
+		</div>
+		
+	</div>
+</ui:composition>

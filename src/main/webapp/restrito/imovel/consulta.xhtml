@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<h:outputStylesheet library="plugins" name="w2ui/w2ui-1.3.2.css" />
+		<h:outputScript library="plugins" name="w2ui/w2ui-1.3.2.js" />
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#">CONSULTA</a></li>
+			<li><a href="cadastro.jsf">CADASTRO</a></li>
+		</ul>
+		
+		<br/>
+		
+		<div id="grid" style="width: 100%; height: 500px; overflow: hidden;"></div>
+
+		<script type="text/javascript">
+		$(function () {
+			$('#grid').w2grid({ 
+				name: 'grid', 
+				header: 'CONSULTA DE IMÓVEIS',
+				show: {
+					header 		: true,
+					toolbar 	: true,
+					footer		: false,
+					lineNumbers	: false,
+					selectColumn: false,
+					expandColumn: false
+				},
+				columns: [
+					{ field: 'recid',    caption: 'Código',   size: '49px',  sortable: true, resizable: true },
+				    { field: 'situacao', caption: 'Situação', size: '90px', sortable: true, resizable: true },
+				    { field: 'tipo',     caption: 'Tipo',     size: '158px', sortable: true, resizable: true },
+				    { field: 'cep',      caption: 'CEP',      size: '70px', sortable: true, resizable: true },
+				    { field: 'endereco', caption: 'Endereço', size: '350px', sortable: true, resizable: true },
+				    { field: 'bairro',   caption: 'Bairro',   size: '80px', sortable: true, resizable: true },
+				    { field: 'cidade',   caption: 'Cidade',   size: '130px', sortable: true, resizable: true },
+				    { field: 'estado',   caption: 'Estado',   size: '50px',  sortable: true, resizable: true },
+				    { field: 'venda',   caption: 'Venda?',    size: '60px',  sortable: true, resizable: true },
+				    { field: 'foto',   caption: 'Foto?',    size: '60px',  sortable: true, resizable: true },
+				],
+				searches: [
+					{ type: 'int',   field: 'recid',    caption: 'ID' },
+					{ type: 'text',  field: 'situacao', caption: 'Situação' },
+					{ type: 'text',  field: 'tipo',     caption: 'Tipo' },
+					{ type: 'text',  field: 'cep',      caption: 'CEP' },
+					{ type: 'text',  field: 'endereco', caption: 'Endereço' },
+					{ type: 'text',  field: 'bairro',   caption: 'Bairro' },
+					{ type: 'text',  field: 'cidade',   caption: 'Cidade' },
+					{ type: 'text',  field: 'estado',   caption: 'Estado' },
+					{ type: 'text',  field: 'venda', caption: 'Venda?' },
+					{ type: 'text',  field: 'foto', caption: 'Imóvel tem foto?' },
+				],
+				records: [
+							
+					<ui:repeat value="#{imovelBean.listaImoveis}" var="imovel">
+						{ 
+							recid:     #{imovel.getImoId()}, 
+							situacao: '#{imovel.getSituacaoimovel().getSitNome()}', 
+							tipo:     '#{imovel.getTipoimovel().getTipNome()}', 
+							cep:      '#{imovel.getEndereco().getEndCep()}', 
+							endereco: '#{imovel.getEndereco().getEndNome()}, nº: #{imovel.getEndereco().getEndNumero()}, complemento: #{imovel.getEndereco().getEndComplemento()}',
+							numero:   '#{imovel.getEndereco().getEndNumero()}',
+							bairro:   '#{imovel.getEndereco().getBairro().getBaiNome()}',
+							cidade:   '#{imovel.getEndereco().getCidade().getCidNome()}',
+							estado:   '#{imovel.getEndereco().getCidade().getCidUf()}',
+							venda: '#{imovel.getImoVenda() == true ? "Sim" : "Não"}',
+							foto: '#{imovel.getImoFoto() == true ? "Sim" : "Não"}',
+						 },
+					</ui:repeat>
+						
+				],
+				onDblClick: function(event) {
+					console.log(event.recid);
+				    window.open("#{request.contextPath}/restrito/imovel/cadastro.jsf?id=" + event.recid, "_self");
+				}
+			});	
+		});
+		</script>
+</ui:define>
+</ui:composition>
+</html>

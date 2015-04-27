@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<div class="row">
+
+	<h5>PERMISSÕES</h5>
+	<div class="col-xs-12">
+		<p:tree value="#{funcionarioBean.arvore.arvore}" var="doc" id="tree"
+			selectionMode="checkbox" style="width: 800px;"
+			selection="#{funcionarioBean.arvoreSelecionada}">
+			<p:treeNode icon="ui-icon-document">
+				<h:outputText value="#{doc}" />
+			</p:treeNode>
+			<p:treeNode type="Documents" expandedIcon="ui-icon-folder-open"
+				collapsedIcon="ui-icon-folder-collapsed">
+				<h:outputText value="#{doc}" />
+			</p:treeNode>
+			<p:treeNode type="Captador" expandedIcon="ui-icon-folder-open"
+				collapsedIcon="ui-icon-person">
+				<h:outputText value="#{doc}" />
+			</p:treeNode>
+			<p:treeNode type="Pictures" icon="ui-icon-newwin">
+				<h:outputText value="#{doc}" />
+			</p:treeNode>
+
+			<p:treeNode type="alterar" icon="ui-icon-pencil">
+				<h:outputText value="#{doc}" />
+			</p:treeNode>
+			<p:treeNode type="excluir" icon="ui-icon-trash">
+				<h:outputText value="#{doc}" />
+			</p:treeNode>
+			<p:treeNode type="incluir" icon="ui-icon-plus">
+				<h:outputText value="#{doc}" />
+			</p:treeNode>
+			<p:treeNode type="consultar" icon="ui-icon-zoomin">
+				<h:outputText value="#{doc}" />
+			</p:treeNode>
+		</p:tree>
+	</div>
+</div>
+
+</html>

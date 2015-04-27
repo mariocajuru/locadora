@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="formulario" class="form-horizontal">
+
+			<legend>Cadastro Contrato - Locação</legend>
+
+			<div class="row">
+				<div class="bs-example bs-example-tabs">
+					<ul id="myTab" class="nav nav-tabs">
+						<li><a href="consulta-contrato.jsf">CONSULTA</a></li>
+						<li><a href="cadastro-contrato.jsf?id=#{contratoLocacaoImpressaoBean.locacao.locId}">CADASTRO</a></li>
+						<li class="active"><a>IMPRIMIR</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true" closable="true" errorClass="bs-callout bs-callout-info" />
+			
+			<br/>
+			
+		
+			<div class="row">
+						
+				<!-- ID -->
+				<label class="col-xs-1 control-label labelRenovar">CÓDIGO</label>
+			
+				<div class="col-xs-2">
+					<div class="form-group">
+					
+						<h:inputText id="id" class="form-control input-sm"
+							value="#{contratoLocacaoImpressaoBean.locacao.locId}" disabled="true" />
+							
+					</div>
+				</div>
+			
+			</div>
+		
+			<div class="row">
+			
+		
+		
+		
+				<!-- Contrato Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+								
+						<h:commandButton class="btn btn-default btn-block" 
+							 value="Contrato Locação"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ContratoParticularDeLocacao}" />
+							
+					</div>
+				</div>
+				
+				<!-- Informações Proprietário -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+				
+						<h:commandButton class="btn btn-default btn-block" 
+							 value="Informações ao Proprietário"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_InformacoesProprietario}" />
+							
+					</div>
+				</div>
+				
+		
+				<!-- Atualização de Registro -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Atualização de Registro"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_TermoDeComprissoParaAtualizacaoDeRegistro}" />
+							
+					</div>
+				</div>
+		
+				<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Particular de Locação de Imoveis 2"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ParticularDeLocacaoDeImoveis2}" />
+							
+					</div>
+				</div>
+		
+		
+					<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Particular de Locação de Imoveis 3"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ParticularDeLocacaoDeImoveis3}" />
+							
+					</div>
+				</div>
+				
+		
+					<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Particular de Locação de Imoveis 4"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ParticularDeLocacaoDeImoveis4}" />
+							
+					</div>
+				</div>
+		
+		
+					<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Particular de Locação de Imoveis Reajuste"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ParticularDeLocacaoDeImoveisReajuste}" />
+							
+					</div>
+				</div>
+				
+					<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Particular de Locação de Imoveis Sem Reajuste"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ParticularDeLocacaoDeImoveisSemReajuste}" />
+							
+					</div>
+				</div>
+				
+				<!-- contrato-particular -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+				
+						<h:commandButton class="btn btn-default btn-block" 
+							 value="Contrato Particular"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_particular}" />
+							
+					</div>
+				</div>
+				
+					<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Assinatura"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_DadosDigitarAssinatura}" />
+							
+					</div>
+				</div>
+				
+				<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Ficha Financeira do Imóvel"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_FichaFinanceiraDoImovel}" />
+							
+					</div>
+				</div>
+				
+					<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Informações Sobre a Locação"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_InformacoesSobreALocacao}" />
+							
+					</div>
+				</div>
+			
+			<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Protocolo de Entrega de Contrato de Locação"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ProtocoloDeEntregaDeContratoDeLocacao}" />
+							
+					</div>
+				</div>
+				
+					<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Recibo Seguro"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ReciboSeguro}" />
+							
+					</div>
+				</div>
+				
+				<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Contrato Locação Solidario"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ContratoLocacaoSolidario}" />
+							
+					</div>
+				</div>
+				
+				<!-- Informações Locação -->	
+				<div class="col-xs-4">
+					<div class="form-group" style="text-align: center; padding-left: 10px;">
+					
+					<h:commandButton class="btn btn-default btn-block" 
+							 value="Contrato Padrão"
+							 action="#{contratoLocacaoImpressaoBean.gerarContrato_ContratoPadrao}" />
+							
+					</div>
+				</div>
+			
+			</div>
+			
+			<hr/>
+			
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+</html>

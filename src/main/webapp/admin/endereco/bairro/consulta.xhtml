@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<h:outputStylesheet library="plugins" name="w2ui/w2ui-1.3.2.css" />
+		<h:outputScript library="plugins" name="w2ui/w2ui-1.3.2.js" />
+
+		<h3>Bairro</h3>
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#">CONSULTA</a></li>
+			<li><a href="cadastro.jsf">CADASTRO</a></li>
+		</ul>
+		
+		<br/>
+		
+		<div id="grid" style="width: 100%; height: 100%; min-height: 500px; max-height: 1000px; overflow: hidden;"></div>
+
+		<script type="text/javascript">
+		$(function () {
+			$('#grid').w2grid({ 
+				name: 'grid', 
+				show: {
+					header 		: false,
+					toolbar 	: true,
+					footer		: false,
+					lineNumbers	: false,
+					selectColumn: false,
+					expandColumn: false
+				},
+				columns: [
+					{ field: 'recid', caption: 'Código', size: '60px', sortable: true, resizable: true },
+				    { field: 'nome', caption: 'Nome', size: '280px', sortable: true, resizable: true },
+				    { field: 'regiao', caption: 'Região', size: '350px', sortable: true, resizable: true },
+				],
+				searches: [
+					{ type: 'int',   field: 'recid', caption: 'Código' },
+					{ type: 'text',  field: 'nome', caption: 'Nome' },
+					{ type: 'text',  field: 'regiao', caption: 'Região' },
+				],
+				records: [
+							
+					<ui:repeat value="#{bairroBean.listaBairros}" var="bai">
+						{ 
+							recid: #{bai.getBaiId()}, 
+							nome: '#{bai.getBaiNome()}',
+							regiao: '#{bai.getRegiao().getRegNome()}', 
+						 },
+					</ui:repeat>
+						
+				],
+				onDblClick: function(event) {
+				    window.open("cadastro.jsf?id=" + event.recid, "_self");
+				}
+			});	
+		});
+		</script>
+</ui:define>
+</ui:composition>
+</html>

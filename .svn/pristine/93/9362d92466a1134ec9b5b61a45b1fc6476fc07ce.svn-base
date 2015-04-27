@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div class="page-header">
+			<h1>
+				Upload de fotos <small>visão geral</small>
+			</h1>
+		</div>
+		<h:form id="form">
+			<p:growl id="growl" sticky="true" showDetail="true" life="2000"
+				autoUpdate="true" />
+
+			<p:dataTable id="dataTable" value="#{imovelBean.listaImoveis}"
+				var="imo" paginator="true" rows="7" rowKey="#{imo.imoId}"
+				selection="#{uploadAquirvo.imovel}" selectionMode="single"
+				emptyMessage="Não há registro desse Imóvel"
+				rowStyleClass="#{imo.imoEfetivo eq 'S' ? 'old' : null}">
+
+				<p:ajax event="rowSelect" update=":form:dialogGaleria"
+					oncomplete="dialogGaleria.show()"
+					listener="#{uploadAquirvo.carregarFotos}">
+
+					<f:setPropertyActionListener target="#{uploadAquirvo.imovel}"
+						value="#{imo}" />
+
+				</p:ajax>
+
+				<p:column headerText="Codigo" filterBy="#{imo.imoId}"
+					filterValue="Id co imovel">
+
+					<h:outputText value="#{imo.imoId}" />
+
+				</p:column>
+
+				<!--  
+				<p:column headerText="Pro">
+					<p:subTable value="#{imo.proprietarios}" var="pro" >
+					 	<p:column>  
+							<h:outputText value="#{pro.proObservacao}"/>  
+						</p:column>
+					</p:subTable>
+				</p:column>  
+				-->
+
+				<p:column headerText="Tipo do Imóvel"
+					filterBy="#{imo.tipoimovel.tipNome}"
+					sortBy="#{imo.tipoimovel.tipNome}" filterValue="Tipo">
+
+					<h:outputText value="#{imo.tipoimovel.tipNome}" />
+
+				</p:column>
+
+				<p:column headerText="Situação"
+					filterBy="#{imo.situacaoimovel.sitNome}"
+					sortBy="#{imo.situacaoimovel.sitNome}" filterValue="Situação">
+
+					<h:outputText value="#{imo.situacaoimovel.sitNome}" />
+
+				</p:column>
+
+				<p:column headerText="Endereço" filterBy="#{imo.endereco.endNome}"
+					sortBy="#{imo.endereco.endNome}" filterValue="Nome do endereço">
+
+					<h:outputText
+						value="#{imo.endereco.endNome} / #{imo.endereco.endNumero}" />
+
+				</p:column>
+
+				<p:column headerText="Cep" filterBy="#{imo.endereco.endCep}"
+					sortBy="#{imo.endereco.endCep}" filterValue="Cep">
+
+					<h:outputText value="#{imo.endereco.endCep}" />
+
+				</p:column>
+
+				<p:column headerText="Bairro/Cidade">
+
+					<h:outputText
+						value="#{imo.endereco.bairro.baiNome} / #{imo.endereco.cidade.cidNome}" />
+
+				</p:column>
+
+				<p:column>
+
+					<h:commandButton class="btn btn-primary"
+						onclick="PF('dlg').show();" value="Adicionar fotos">
+
+						<f:setPropertyActionListener target="#{uploadAquirvo.imovel}"
+							value="#{imo}" />
+						<f:ajax render=":form:fieldset"></f:ajax>
+					</h:commandButton>
+
+				</p:column>
+			<!-- 	<p:column>
+
+					<p:commandButton class="btn btn-primary"  process="@this" 
+						onclick="PF('dialogFotos').show();" value="Fotos na web " action="#{uploadAquirvo.ativarFotoWeb(imo)}">
+					</p:commandButton>
+
+				</p:column> -->
+
+			</p:dataTable>
+
+			<p:dialog id="dialogGaleria" widgetVar="dialogGaleria" modal="true"
+				position="center" width="953" height="493" header="Fotos">
+				<p:panel rendered="#{uploadAquirvo.listaFotos.size()==0}">
+					<img src="\\DESENVJAVA02\teste\d.jpg"
+						style="width: 300px; height: 300px;" />
+					<h3>Nenhuma imagem encontrada</h3>
+				</p:panel>
+				
+		
+
+ 			<p:dataTable id="tabelaFotos" 
+					value="#{uploadAquirvo.listaFotosPorImovel}" var="foto"
+					paginator="true" rows="5" emptyMessage="Não há registro de fotos">
+					<center>
+						<f:facet name="header">  
+		            Click em sim ou não para alterar fotos na web 
+    			    </f:facet>
+						<f:facet name="footer">
+
+							<p:commandButton global="false" process="@this" readonly="true"
+								transient="true" immediate="true" value="Fechar"
+								onclick="dialogGaleria.hide();return false;"
+								class="btn btn-default btn-lg" />
+
+
+						</f:facet>
+
+						<p:column headerText="Codigo" filterBy="#{foto.fotId}" style="width:2%">
+							<h:outputText value="#{foto.fotId}" />
+						</p:column>
+						<p:column headerText="Foto" filterBy="#{foto.fotNome}">
+							<center>
+								<h:graphicImage library="#{foto.fotArquivo}" width="120"
+									height="95" name="#{foto.fotNome}" style="border:0" />
+							</center>
+						</p:column>
+						<p:column headerText="Foto na web ?" style="width:12%">
+							<center>
+								<p:commandLink action="#{uploadAquirvo.fotoWeb}" process="@this"
+									update="tabelaFotos">
+									<p:outputLabel value="#{foto.fotWeb ? 'SIM' : 'NÃO'}"></p:outputLabel>
+									<f:setPropertyActionListener
+										target="#{uploadAquirvo.fotoimovel}" value="#{foto}" />
+								</p:commandLink>
+							</center>
+						</p:column>
+					</center>
+				</p:dataTable>
+
+			</p:dialog>
+			<p:dialog id="dialog" header="Adicionar fotos" widgetVar="dlg"
+				closable="true" maximizable="true" minimizable="true"
+				showEffect="explode" hideEffect="bounce" height="300">
+				<p:fieldset id="fieldset"
+					legend="Adicionar fotos ao imóvel: código:#{uploadAquirvo.imovel.imoId}"
+					style="margin-top:20px">
+					<p:fileUpload fileUploadListener="#{uploadAquirvo.upload}"
+						allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|PNG|GIF|JPG|JPEG)$/"
+						sizeLimit="3145728" cancelLabel="Cancelar"
+						fileLimitMessage="Quantidade de imágens excedidas.Limite de 10 imágens, recarregue a página"
+						label="Selecionar" invalidFileMessage="Tipo de imagem inválido"
+						invalidSizeMessage="Imagem muito grande" uploadLabel="Enviar"
+						update="growl" multiple="true" fileLimit="10" mode="advanced"
+						oncomplete="dialog.hide()" />
+
+
+				</p:fieldset>
+				<!-- <h:commandButton global="false" process="@this" readonly="true"
+					transient="true" immediate="true" value="Fechar"
+					onclick="dialog.hide();return false;" class="btn btn-success" /> -->
+			</p:dialog>
+
+			<!-- <h:outputText
+				value="podendo ser automatico com:  showButtons='false' label='Procurar...' auto='true' "></h:outputText>
+			<br />
+ -->
+			<p:dialog id="dialogFotosWeb" widgetVar="dialogFotos" header="Escolha a foto que irá para web"
+				position="center" minWidth="440" minHeight="500"  modal="true"  resizable="false" draggable="false"
+				closable="true" >
+
+				<p:dataTable id="tabelaFotos2"
+					value="#{uploadAquirvo.listaFotosPorImovel}" var="foto"
+					paginator="true" rows="5" emptyMessage="Não há registro de fotos">
+
+					<p:column headerText="Codigo" filterBy="#{foto.fotId}">
+						<h:outputText value="#{foto.fotId}" />
+					</p:column>
+					<p:column headerText="Web">
+						<h:commandLink action="#{uploadAquirvo.ativarFotoWeb}">
+							<h:graphicImage library="#{foto.fotArquivo}"
+								name="#{foto.fotNome}" style="border:0" />
+							<f:setPropertyActionListener target="#{uploadAquirvo.fotoimovel}"
+								value="#{foto}" />
+						</h:commandLink>
+					</p:column>
+				</p:dataTable>
+				
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+			<div class="page-header">
+			<h1>
+				Cadastro de Cidades <small>visão geral</small>
+			</h1>
+		</div>
+		<style>  
+      .coluna1 {text-align: right}  
+      .coluna2 {text-align: left}  
+    </style>  
+
+		<h:form id="incluir">
+			 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+			<h:inputHidden value="#{cidadeBean.cidade.cidId}" />
+			<h:inputHidden value="#{cidadeBean.destinoSalvar}" />
+
+			<p:panel header="Incluir Cidades">
+
+				<h:panelGrid columns="2" bgcolor="#FAFAD2"  columnClasses="coluna1, coluna2">
+
+					<h:outputLabel value="Nome" />
+					<h:inputText id="nome" label="nome"
+						value="#{cidadeBean.cidade.cidNome}" size="30" maxlength="30"
+						required="true" requiredMessage="Falta o nome da Cidade!">
+						<f:validateLength minimum="5" maximum="30" />
+					</h:inputText>
+
+					<h:outputLabel value="Uf:" />
+					<h:inputText id="uf" label="nome"
+						value="#{cidadeBean.cidade.cidUf}" size="2" maxlength="2"
+						required="true" requiredMessage="Falta o UF!">
+						<f:validateLength minimum="2" maximum="2" />
+					</h:inputText>
+
+					<h:outputLabel value="Codigo do IBGE:" />
+					<h:inputText id="codigoIbge" label="nome"
+						value="#{cidadeBean.cidade.cidCodigoIbge}" size="10"
+						maxlength="10" required="true"
+						requiredMessage="Falta o Codigo do IBGE!">
+						<f:validateLength minimum="0" maximum="5" />
+					</h:inputText>
+
+
+					<h:commandButton action="#{cidadeBean.salvar}" value="Salvar"  update="tabelaCidade" class="btn btn-primary"/>
+					<h:commandButton value="limpar" type="reset" class="btn btn-info"></h:commandButton>
+				</h:panelGrid>
+			</p:panel>
+			</h:form>
+			<h:form id="TelaCidade">
+			<p:dataTable id="tabelaCidade" value="#{cidadeBean.listaCidades}" var="cidade" paginator="true" rows="5" emptyMessage="Não há registro dessa Cidade">
+				<p:column headerText="Codigo" filterBy="#{cidade.cidId}">
+					<h:outputText value="#{cidade.cidId}" />
+				</p:column>
+				<p:column headerText="Nome da Cidade" filterBy="#{cidade.cidNome}">
+					<h:outputText value="#{cidade.cidNome}" />
+				</p:column>
+				<p:column headerText="UF"  filterBy="#{cidade.cidUf}">
+					<h:outputText value="#{cidade.cidUf}" />
+				</p:column>
+				<p:column headerText="IBGE" filterBy="#{cidade.cidCodigoIbge}">
+					<h:outputText value="#{cidade.cidCodigoIbge}" />
+				</p:column>
+				<p:column>
+				<h:commandButton value="Deletar Cidade"  action="#{cidadeBean.excluirCidade}" update="tabelaCidade" class="btn btn-danger">
+				<f:setPropertyActionListener target="#{cidadeBean.cidade}"
+						value="#{cidade}"/>
+				<f:ajax execute="@this" render=":TelaCidade"></f:ajax>
+				</h:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+</ui:define>
+</ui:composition>
+</html>

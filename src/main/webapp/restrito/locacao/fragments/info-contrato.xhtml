@@ -1,0 +1,538 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+		
+	<div class="row">
+		
+		<!-- ID -->
+		<label class="col-xs-2 control-label labelRenovar">CÓDIGO</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:inputText id="id" class="form-control input-sm"
+					value="#{contratoLocacaoBean.locacao.locId}" disabled="true" />
+					
+			</div>
+		</div>
+		</div>
+	
+	<br/>
+		
+		<div class="row">
+		
+		<!-- MODELO DO CONTRATO -->
+		<label class="col-xs-2 control-label labelRenovar">MODELO DO CONTRATO</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:selectOneMenu id="tipocontrato" class="form-control input-sm"
+					value="#{contratoLocacaoBean.locacao.locTipo}" required="true"
+					requiredMessage="Selecione a categoria" disabled="#{contratoLocacaoBean.alteracao}">		
+					<f:selectItem itemValue="PADRÃO" itemLabel="PADRÃO" />
+					<f:selectItem itemValue="TRANSFERÊNCIA COM REAJUSTE" itemLabel="TRANSFERÊNCIA COM REAJUSTE" />
+					<f:selectItem itemValue="TRANSFERÊNCIA SEM REAJUSTE" itemLabel="TRANSFERÊNCIA SEM REAJUSTE" />
+					<f:selectItem itemValue="TÍTULO CAPITALIZAÇÃO" itemLabel="TÍTULO CAPITALIZAÇÃO" />
+					<f:selectItem itemValue="SEGURO FIANÇA" itemLabel="SEGURO FIANÇA" />
+					<f:selectItem itemValue="LOCÁTARIO SOLIDÁRIO" itemLabel="LOCÁTARIO SOLIDÁRIO" />
+					<p:ajax process="@this" update="@form" listener="#{contratoLocacaoBean.modeloContrato}"></p:ajax>
+				</h:selectOneMenu>
+				
+			</div>
+		</div>
+	
+	</div>
+	
+	<div class="row">
+	
+		<!-- Categoria -->
+		<label class="col-xs-2 control-label labelRenovar">DESTINAÇÃO</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:selectOneMenu id="categoria" class="form-control input-sm"
+					value="#{contratoLocacaoBean.locacao.locCategoria}" required="true"
+					requiredMessage="Selecione a categoria" disabled="#{contratoLocacaoBean.alteracao}">		
+					<f:selectItem itemValue="RESIDENCIAL" itemLabel="RESIDENCIAL" />
+					<f:selectItem itemValue="COMERCIAL" itemLabel="COMERCIAL" />
+					<p:ajax process="@this, categoria" update="mesesContrato, dataFinalContrato,destinacaoLocacao" event="change"
+					 listener="#{contratoLocacaoBean.alterarCategoria}"/>
+				</h:selectOneMenu>
+				
+			</div>
+		</div>
+		
+		
+		<!-- Data da locação -->
+		<label class="col-xs-2 control-label labelRenovar">DATA INÍCIO LOCAÇÃO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+				<p:calendar id="dataInicioLocacao" disabled="#{contratoLocacaoBean.alteracao}"
+					value="#{contratoLocacaoBean.locacao.locDataInicialContrato}" locale="pt_BR" requiredMessage="DATA INÍCIO LOCAÇÃO Obrigatório"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true" required="true" >
+					<h:outputScript name="js/calendario_pt_BR.js"  />
+						<p:ajax event="dateSelect" process="@this,categoria,mesesContrato" update="@this, mesesContrato,dataFinalContrato" listener="#{contratoLocacaoBean.limparMesesContrato}"/>
+				</p:calendar>
+		
+			</div>
+		</div>
+		
+		<!-- MESES CONTRATO -->
+		<label class="col-xs-2 control-label labelRenovar">MESES CONTR.</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				
+					<pe:inputNumber id="mesesContrato" disabled="#{contratoLocacaoBean.alteracao}" maxValue="60"
+						value="#{contratoLocacaoBean.locacao.locMesesDeContrato}"
+						required="true" decimalPlaces="0" requiredMessage="MESES CONTR. obrigatório">
+						<p:ajax event="change" process="@this,dataInicioLocacao" update="@this, dataFinalContrato"
+							listener="#{contratoLocacaoBean.calcularDestinacao}"></p:ajax>
+					</pe:inputNumber>
+
+			</div>
+		</div>
+		
+		<!-- Data final contrato -->
+		<label class="col-xs-2 control-label labelRenovar">DATA FINAL CONTRATO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+				<p:calendar id="dataFinalContrato" disabled="true"
+					value="#{contratoLocacaoBean.locacao.locDataTerminioContrato}" locale="pt_BR"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true" required="true"> 
+					<h:outputScript name="js/calendario_pt_BR.js"  />
+				</p:calendar>
+		
+			</div>
+		</div>
+		
+		<!--RESPONSÁVEL -->
+		<label class="col-xs-2 control-label labelRenovar">RESPONSÁVEL</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<p:inputText id="responsavel" class="form-control input-sm" disabled="true"
+					value="#{contratoLocacaoBean.locacao.locResponsavel}" maxlength="60" />
+					
+			</div>
+		</div>
+		
+		<!--STATUS -->
+		<label class="col-xs-2 control-label labelRenovar">STATUS</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+			<h:selectOneMenu id="status" class="form-control input-sm"
+					value="#{contratoLocacaoBean.statusLocacao.staLocId}" required="true"
+					requiredMessage="Selecione o status da locação" disabled="#{contratoLocacaoBean.alteracao}">		
+					<f:selectItems value="#{statusLocacaoBean.listaStatusLocacao}" 
+					var="sta" itemValue="#{sta.staLocId}" itemLabel="#{sta.staLocNome}"/>
+				</h:selectOneMenu>
+					
+			</div>
+		</div>
+	
+	</div>
+
+	<div class="row">
+
+		<!-- INDICE REAJUSTRE -->
+		<label class="col-xs-2 control-label labelRenovar">IND.REAJUSTE</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:selectOneMenu id="indiceReajustre" class="form-control input-sm"
+					value="#{contratoLocacaoBean.indicesReajustes.indReaId}"
+					required="true" requiredMessage="Selecione o status da locação"
+					disabled="#{contratoLocacaoBean.alteracao}">
+					<f:selectItems
+						value="#{indicesReajustesBean.listaIndicesReajustes}" var="sta"
+						itemValue="#{sta.indReaId}" itemLabel="#{sta.indReaNome}" />
+				</h:selectOneMenu>
+			</div>
+		</div>
+
+
+		<!-- PRAZO GARANTIA -->
+		<label class="col-xs-2 control-label labelRenovar">PRAZO
+			GARANTIA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<p:inputText id="prazoGarantia" class="form-control input-sm"
+					disabled="true"
+					value="#{contratoLocacaoBean.locacao.locPrazoGarantia}"
+					required="true" decimalPlaces="0" />
+
+			</div>
+		</div>
+
+
+		<!--SITUAÇÃO DA LOCAÇÃO -->
+		<label class="col-xs-2 control-label labelRenovar">SITUAÇÃO DA
+			LOCAÇÃO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:selectOneMenu id="situacaoLocao" class="form-control input-sm"
+					value="#{contratoLocacaoBean.situacaoLocacao.sitLocId}"
+					required="true" requiredMessage="Selecione a situação da locação"
+					disabled="#{contratoLocacaoBean.alteracao}">
+					<f:selectItems value="#{situacaoLocacaoBean.listaSituacaoLocacoes}"
+						var="sta" itemValue="#{sta.sitLocId}"
+						itemLabel="#{sta.sitLocNome}" />
+				</h:selectOneMenu>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+				
+	<!-- Data pagamento locatario -->
+		<label class="col-xs-2 control-label labelRenovar">DIAS DE CARÊNCIA</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+					<pe:inputNumber id="diasCarencia" 
+				 	disabled="#{contratoLocacaoBean.alteracao}" maxValue="31"
+					value="#{contratoLocacaoBean.locacao.locCarencia}" required="false" decimalPlaces="0" >
+					</pe:inputNumber>
+					
+		
+			</div>
+		</div>
+		
+			<!-- Data situação -->
+		<label class="col-xs-2 control-label labelRenovar">DATA SITUAÇÃO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+				<p:calendar id="dataSituacao" disabled="#{contratoLocacaoBean.alteracao}"
+					value="#{contratoLocacaoBean.locacao.locDataSituacao}" locale="pt_BR" requiredMessage="DATA SITUAÇÃO obrigatorio"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true" required="true">
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+				</p:calendar>
+		
+			</div>
+		</div>	
+		
+			<!-- Tipo da pessoa -->
+		<label class="col-xs-2 control-label labelRenovar">TIPO DO LOCATÁRIO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="tipoLocatario" class="form-control input-sm"
+					value="#{contratoLocacaoBean.inquilino.pesTipo == null? '':'' || contratoLocacaoBean.inquilino.pesTipo =='F'? 'PESSOA FÍSICA':'PESSOA JURÍDICA'}"
+					disabled="true">
+				</h:inputText>
+			</div>
+		</div>
+		
+		</div>
+		<div class="row">
+		
+		<!-- Data pagamento locatario -->
+		<label class="col-xs-2 control-label labelRenovar">DIA RECEBIMENTO LOCATÁRIO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+					<p:inputText id="diasPagamentoLocatario" 
+				 	disabled="#{contratoLocacaoBean.alteracao}"  requiredMessage="DIA RECEBIMENTO LOCATÁRIO Obrigatório "
+					value="#{contratoLocacaoBean.locacao.locDiaPagamentoLocatario}" required="false" >
+					<p:ajax process="@this, diasPagamentoLocatario" update="@this,diasPagamentoLocador" listener="#{contratoLocacaoBean.calcularDiaPagamentoLocador}"></p:ajax>
+					</p:inputText>
+		
+			</div>
+		</div>
+		
+		<!-- Data pagamento locador -->
+		<label class="col-xs-2 control-label labelRenovar">DIA PAGAMENTO LOCADOR</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">				
+					<p:inputText id="diasPagamentoLocador" 
+				 	disabled="true" required="true" requiredMessage="confirme o DIA RECEBIMENTO LOCATÁRIO"
+					value="#{contratoLocacaoBean.locacao.locDiaPagamentoLocador}" />		
+			</div>
+		</div>
+		
+		<!--MODO PAGAMENTO -->
+		<label class="col-xs-2 control-label labelRenovar">MODO PAGAMENTO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+			<h:selectOneMenu id="modoPagamento" class="form-control input-sm"
+					value="#{contratoLocacaoBean.locacao.locModoPamento}" required="true"
+					requiredMessage="Selecione a categoria" disabled="#{contratoLocacaoBean.alteracao}">
+					<f:selectItem itemValue="GARANTIDO POSTERIOR" itemLabel="GARANTIDO POSTERIOR" />		
+					<f:selectItem itemValue="GARANTIDO ANTERIOR" itemLabel="GARANTIDO ANTERIOR" />
+				</h:selectOneMenu>
+					
+			</div>
+		</div>
+		
+		</div>
+	<div class="row">
+
+		<!-- Categoria -->
+		<label class="col-xs-2 control-label labelRenovar">RAMO DA
+			DESTINAÇÃO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<p:selectOneMenu id="destinacaoLocacao"
+					class="form-control input-sm" filter="true" filterText="Filter"
+					filterMatchMode="startsWith"
+					value="#{contratoLocacaoBean.destinacaoLocacao.desLocId}"
+					required="true" requiredMessage="Selecione a destinação da locação"
+					disabled="#{contratoLocacaoBean.alteracao || contratoLocacaoBean.locacao.locCategoria == 'RESIDENCIAL'}">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems
+						value="#{destinacaoLocacaoBean.listaDestinacaoLocacao}" var="des"
+						itemValue="#{des.desLocId}" itemLabel="#{des.desLocNome}" />
+					<p:ajax event="change" process="@this" update="panelSeguroIncendio"
+						listener="#{contratoLocacaoBean.regraRamoDestinacaoLocacao}" />
+				</p:selectOneMenu>
+
+			</div>
+		</div>
+
+
+		<!-- TAXA ADM. -->
+		<label class="col-xs-2 control-label labelRenovar">TAXA ADM.%</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="taxaAdmImovel" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.imoTaxa}" disabled="true">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</h:inputText>
+
+			</div>
+		</div>		
+				
+		<!-- Valor ALUGUEL -->
+		<label class="col-xs-2 control-label labelRenovar">VAL.ALUGUEL</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="valorAluguel" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.imoValorAluguel}"
+					disabled="true">
+					<f:convertNumber currencySymbol="R$" type="currency" />
+				</h:inputText>
+
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Dialog confirmação do seguro -->
+	<p:confirmDialog id="confirmDialog"
+		message="Lançar o contrato com esse tipo  de ramo da destinação com seguro incêndio completo ?"
+		showEffect="bounce" hideEffect="explode" header="Confirmação"
+		severity="alert" widgetVar="confirmacao">
+
+		<p:commandButton value="SIM"
+			action="#{contratoLocacaoBean.confirmacaoDialogSeguroSim}"
+			process="@this" update="panelSeguroIncendio"
+			onclick="confirmacao.hide()" />
+		<p:commandButton value="NÃO" onclick="confirmacao.hide()"
+			process="@this" />
+
+	</p:confirmDialog>
+
+	<div class="row">
+
+		<label class="col-xs-2 control-label labelRenovar">CALCULAR
+			I.R FONTE</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<p:selectBooleanCheckbox id="calcularIR"
+					value="#{contratoLocacaoBean.locacao.locCalcularIrFonte}" />
+
+			</div>
+		</div>
+
+		<label class="col-xs-3 control-label labelRenovar">CALCULAR
+			IRRF SOBRE VALOR LIQ.</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<p:selectBooleanCheckbox id="calcularIRRF"
+					value="#{contratoLocacaoBean.locacao.locCalcularIrrf}" />
+
+			</div>
+		</div>
+
+		<label class="col-xs-2 control-label labelRenovar">GERAR
+			BOLETO</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<p:selectBooleanCheckbox id="gerarBoleto"
+					value="#{contratoLocacaoBean.locacao.locGerarBoleto}" />
+
+			</div>
+		</div>
+
+	</div>
+	<div class="row">
+	
+			<p:outputPanel rendered="#{contratoLocacaoBean.alteracao}">
+			<!-- Lançamento(Mês/Ano) -->
+		<label class="col-xs-2 control-label labelRenovar">LANÇAMENTO(MÊS/ANO)</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group">
+				<p:calendar id="lancamentoMesAno"
+					disabled="#{contratoLocacaoBean.alteracao}"
+					value="#{contratoLocacaoBean.locacao.locLancamentoMesAno}"
+					locale="pt_BR" 
+					pattern="MM/yyyy" minlength="10" maxlength="10" navigator="true"
+					required="false">
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+				</p:calendar>
+
+			</div>
+		</div>
+		</p:outputPanel>
+
+
+	</div>
+
+	<div class="row">
+
+		<div class="col-xs-12">
+
+			<label class="control-label">INFORMAÇÕES ADICIONAIS</label>
+
+			<p:inputTextarea id="infAdicionais" class="autosize form-control"
+				rows="5" cols="100" maxlength="250" counter="counterVistoria"
+				counterTemplate="{0} caracteres restantes" disabled="false"
+				value="#{contratoLocacaoBean.informacaoAdicional.infAdiObservacao}"
+				style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;" />
+
+			<h:outputText id="vazioVistoria" />
+
+			<div style="text-align: right; padding-top: 20px;">
+				<h:outputText id="counterVistoria" />
+			</div>
+
+		</div>
+		
+				<hr />
+
+		<div class="row" style="text-align: center">
+	<hr />
+			<div class="btn-group">
+
+				<h:commandButton value="Salvar" rendered="#{contratoLocacaoBean.alteracao}"
+					action="#{contratoLocacaoBean.gravarInformacaoAdiconal}"
+					class="btn btn-default btn-lg">
+					<p:ajax process="@this,infAdicionais"
+						update="infAdicionais, outPanel"></p:ajax>
+				</h:commandButton>
+
+				<h:commandButton class="btn btn-default btn-lg" value="Limpar"
+					ajax="true" immediate="true" type="reset" rendered="#{contratoLocacaoBean.alteracao}">
+				</h:commandButton>
+
+			</div>
+
+		</div>
+			<br/>
+		<div class="col-xs-12">
+
+			<p:outputPanel id="outPanel" rendered="#{contratoLocacaoBean.alteracao}">
+				<p:dataList value="#{contratoLocacaoBean.listaInformacaoAdicinal}"
+					var="inf" type="definition"
+					emptyMessage="Não há informações adicionais cadastradas para essa locação">
+					<ul class="list-group">
+						<li class="list-group-item active">
+							<p class="list-group-item-text">
+								Codigo:
+								<kbd>#{inf.infAdiId}</kbd>
+								Data:
+								<kbd>
+									<p:outputLabel value="#{inf.infAdiData}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</p:outputLabel>
+								</kbd>
+								Funcionário:
+								<kbd>#{contratoLocacaoBean.funcionario(inf.infAdiFuncionario)}</kbd>
+								Setor:
+								<kbd>#{inf.infAdiSetor}</kbd>
+							</p>
+							<h4 class="list-group-item-heading">#{inf.infAdiObservacao}</h4>
+						</li>
+					</ul>
+				</p:dataList>
+			</p:outputPanel>
+		</div>
+
+		<div class="col-xs-6">
+
+			<label class="control-label">CLÁUSULA ESPECIAL DO CONTRATO DE LOCAÇÃO</label>
+
+			<p:inputTextarea id="clausula" class="autosize form-control" rows="5"
+				cols="100" maxlength="150" counter="counter" disabled="#{contratoLocacaoBean.alteracao}"
+				counterTemplate="{0} caracteres restantes"
+				value="#{contratoLocacaoBean.locacao.locClausulaEspecial}"
+				style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;" />
+
+			<h:outputText id="vazio" />
+
+			<div style="text-align: right; padding-top: 20px;">
+				<h:outputText id="counter" />
+			</div>
+
+		</div>
+		
+		<div class="col-xs-6">
+
+			<label class="control-label">TEXTO DE ACERTO DE CONTAS</label>
+
+			<p:inputTextarea id="textoAcertoDeContas" class="autosize form-control" rows="5"
+				cols="100" maxlength="150" counter="counterAcerto" disabled="#{contratoLocacaoBean.alteracao}"
+				counterTemplate="{0} caracteres restantes"
+				value="#{contratoLocacaoBean.locacao.locAcertoContas}"
+				style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;" />
+
+			<h:outputText id="vazioAcerto" />
+
+			<div style="text-align: right; padding-top: 20px;">
+				<h:outputText id="counterAcerto" />
+			</div>
+
+		</div>
+	</div>
+
+</ui:composition>

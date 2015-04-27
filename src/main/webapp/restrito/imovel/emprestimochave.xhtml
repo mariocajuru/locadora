@@ -1,0 +1,486 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+	
+	
+		<h:form id="form">
+			<p:growl id="growl" sticky="true" showDetail="true" life="2000" />
+			
+				<!-- Selecionar o imóvel -->
+			<div class="row">
+				<div class="bs-callout bs-callout-info">
+					<h4>Escolha do imóvel</h4>
+				</div>
+							<p:selectOneMenu value="#{emprestimoChaveBean.filial.filId}"
+								effect="fold" id="filial" required="true"
+								label="Escolher a filial"
+								requiredMessage="Falta escolher a filial">
+								<f:selectItem itemLabel="Selecione a filial" itemValue="" />
+								<f:selectItems value="#{filialBean.listaSedes}" var="fil"
+									itemLabel="#{fil.filNome}" itemValue="#{fil.filId}" />
+							</p:selectOneMenu>
+							<p:commandButton id="enviarFilial" process="@this,filial"
+								action="#{emprestimoChaveBean.escolhaFilial}" value="Buscar"
+								update="multiImoveis" icon="ui-icon-search"
+								onclick="PF('dialogImovel').show()"  />
+								
+								<p:dialog id="dialogEscolhaImovel" header="Escolher o imóvel"
+							widgetVar="dialogImovel" resizable="false">
+
+							<p:growl showDetail="true" sticky="true" />
+							<p:panelGrid id="panelEscolherImovel" columns="1"
+								style="margin-bottom:200px">
+								<p:dataTable id="multiImoveis" var="imo"
+									value="#{emprestimoChaveBean.listaImovel}" paginator="true"
+									rows="5" emptyMessage="Não há registro dessa Pessoa"
+									selection="#{emprestimoChaveBean.listaImovelEscolhido}"
+									rowKey="#{imo.imoId}">
+
+									<f:facet name="header">  
+							            Selecione o imóvel para emprestimo da chave  
+							        </f:facet>
+									<p:column selectionMode="multiple" style="width:2%" />
+									<p:column headerText="Tipo" style="width:23%">
+										<h:outputText
+											value="#{emprestimoChaveBean.carregarTipoImovel(imo.imoId)}" />
+									</p:column>
+									<p:column headerText="Rua" style="width:25%"
+										filterBy="#{imo.endereco.endNome}">
+										<h:outputText value="#{imo.endereco.endNome}" />
+									</p:column>
+									<p:column headerText="Nº" style="width:10%"
+										filterBy="#{imo.endereco.endNumero}">
+										<h:outputText value="#{imo.endereco.endNumero}" />
+									</p:column>
+									<p:column headerText="Bairro" style="width:20%"
+										filterBy="#{imo.endereco.bairro.baiNome}">
+										<h:outputText value="#{imo.endereco.bairro.baiNome}" />
+									</p:column>
+									<p:column headerText="Cidade" style="width:20%"
+										filterBy="#{imo.endereco.cidade.cidNome}">
+										<h:outputText
+											value="#{imo.endereco.cidade.cidNome}-#{imo.endereco.cidade.cidUf}" />
+									</p:column>
+									<f:facet name="footer">
+									</f:facet>
+								</p:dataTable>
+								</p:panelGrid>
+								<p:commandButton value="Adicionar" process="@this,multiImoveis"
+									icon="ui-icon-search"
+									action="#{emprestimoChaveBean.carregarImoveisEscolhidos}" update="displayImoveis"/>
+									
+									<p:commandButton global="false" process="@this" readonly="true"
+								transient="true" immediate="true" value="Fechar"
+								onclick="dialogEscolhaImovel.hide();"
+								class="btn btn-default" />
+						</p:dialog>
+
+						<p:outputPanel id="displayImoveis"
+							style="display:block;margin-top:10px;"
+							rendered="#{not empty emprestimoChaveBean.listaImovelEscolhido}">
+							<p:dataList  value="#{emprestimoChaveBean.listaImovelEscolhido}"
+								var="imo" itemType="circle"
+								rendered="#{not empty emprestimoChaveBean.listaImovelEscolhido}"
+								id="dataListImoveis">
+								<f:facet name="header">  
+                Lista de Imóveis escolhidos  
+            </f:facet>
+								<p:column headerText="RUA">
+  #{emprestimoChaveBean.carregarTipoImovel(imo.imoId)} - Endereço: #{imo.endereco.endNome}  nº: #{imo.endereco.endNumero}  CEP: #{imo.endereco.endCep} Bairro: #{emprestimoChaveBean.carregarBairroImovel(imo.imoId)}
+   - Posição da chave no quadro #{imo.imoChavePosicao}ª
+								</p:column>
+							</p:dataList>
+						</p:outputPanel>
+						<p:separator></p:separator>
+				</div>
+				<!-- Dados Pessoal -->
+			<div class="row">
+				<div class="bs-callout bs-callout-info">
+					<h4>Informações Pessoais</h4>
+				</div>
+				
+				<h:outputLabel value="Tipo de Pessoa:" for="fj" />
+				<h:selectOneMenu id="fj"
+					requiredMessage="Falta selecionar o tipo da Pessoa !"
+					value="#{emprestimoChaveBean.pessoa.pesTipo}" required="true">
+					<f:converter converterId="javax.faces.Character" />
+					<f:selectItem itemLabel="Selecione o tipo da Pessoa" />
+					<f:selectItem itemValue="F" itemLabel="Pessoa Fisica" />
+					<f:selectItem itemValue="J" itemLabel="Pessoa Juridica" />
+					<f:ajax render="form" />
+				</h:selectOneMenu>
+			
+
+				<h:outputLabel value="Nome:" for="nome" styleClass="coluna1"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'F'}" />
+				<h:inputText id="nome" label="Nome da Pessoa"
+					requiredMessage="Falta o nome da Pessoa !" required="true"
+					value="#{emprestimoChaveBean.pessoa.pesNome}" size="30" maxlength="30"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'F'}" />
+					
+					
+				
+					
+				<h:outputLabel value="Razão social:" for="nomeEmpresa"
+					styleClass="coluna1" rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'J'}" />
+				<h:inputText id="nomeEmpresa" label="Nome da Pessoa"
+					requiredMessage="Falta Razão social !" required="true"
+					value="#{emprestimoChaveBean.pessoa.pesNome}" size="30" maxlength="30"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'J'}" />
+
+				<h:outputLabel value="CPF:" for="cpf"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'F'}" />
+				<p:inputMask id="cpf" label="CPF"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'F'}"
+					value="#{emprestimoChaveBean.cpf}" size="14"
+					requiredMessage="Falta o CPF da Pessoa !" mask="999.999.999-99">
+					<p:ajax event="blur"
+						listener="#{emprestimoChaveBean.confirmaCPF(emprestimoChaveBean.cpf)}"
+						process="@this" update="growl cpf" />
+				</p:inputMask>
+
+				<h:outputLabel value="RG:" for="rg"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'F'}" />
+				<p:inputMask id="rg" label="RG" mask="99-999.999.999-99"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'F'}"
+					value="#{emprestimoChaveBean.pessoa.pesRgIe}" size="20"
+					requiredMessage="Falta o RG da Pessoa !" />
+
+				<h:outputLabel value="CNPJ:" for="cnpj"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'J'}" />
+				<p:inputMask id="cnpj" label="CNPJ" value="#{emprestimoChaveBean.cpf}"
+					size="20" rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'J'}"
+					requiredMessage="Falta o CNPJ da Empresa !"
+					mask="99.999.999/9999-99">
+					<p:ajax event="blur"
+						listener="#{emprestimoChaveBean.confirmaCNPJ(emprestimoChaveBean.cpf)}"
+						process="@this" update="growl, cnpj" />
+				</p:inputMask>
+
+				<h:outputLabel value="Inscrição Estadual:" for="ie"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'J'}" />
+				<p:inputMask id="ie" label="Inscrição Estadual"
+					mask="99-999.999.999-99" value="#{emprestimoChaveBean.pessoa.pesRgIe}"
+					size="20" rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'J'}"
+					requiredMessage="Falta o RG da Pessoa !" />
+
+				<h:outputLabel value="Inscrição Municipal:" for="im"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'J'}" />
+				<h:inputText id="im" label="Inscrição Municipal"
+					value="#{emprestimoChaveBean.pessoa.pesIm}" maxlength="15" size="15"
+					rendered="#{emprestimoChaveBean.pessoa.pesTipo == 'J'}"
+					requiredMessage="Falta o IM da Pessoa !" />
+			</div>
+			
+						<!-- Detalhes de Contato -->
+
+			<div class="row">
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Detalhes de Contato</h4>
+				</div>
+
+				<p:commandButton id="addEmail" type="button" value="Adicionar Email"
+					onclick="PF('dialogEmail').show()" icon="ui-icon-extlink"
+					update="displayEmail formMail" process="@this"/>
+
+				<p:dialog header="Adicionar Email" widgetVar="dialogEmail"
+					resizable="false" id="dialogAddEmail">
+
+					<p:growl id="growlEmail" showDetail="true" sticky="true" />
+					<p:panelGrid id="panelCadastrarEmail" columns="2"
+						style="margin-bottom:10px">
+
+
+						<h:outputLabel value="E-Mail:" for="mailC" />
+						<h:inputText id="mailC" label="E-Mail" required="false"
+							requiredMessage="Falta o E-Mail da Pessoa !"
+							value="#{emprestimoChaveBean.email.emaEndereco}" size="50" maxlength="50"
+							validatorMessage="E-mail inválido, digite um e-mail valido">
+							<f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+						</h:inputText>
+
+						<h:outputLabel value="Spam:" for="spamC" />
+						<h:selectOneMenu id="spamC" value="#{emprestimoChaveBean.email.emaSpam}">
+							<f:converter converterId="javax.faces.Character" />
+							<f:selectItem itemValue="S" itemLabel="Sim" />
+							<f:selectItem itemValue="N" itemLabel="Não" />
+						</h:selectOneMenu>
+						<p:commandButton id="submitEmail" value="Adicionar" update="displayEmail,growlEmail,panelCadastrarEmail"
+							process="@this,mailC,spamC" icon="ui-icon-check" actionListener="#{emprestimoChaveBean.addEmail}" >
+						</p:commandButton>
+						<p:commandButton global="false" process="@this" readonly="true"
+								transient="true" immediate="true" value="Fechar"
+								onclick="PF('dialogEmail').hide();"
+								class="btn btn-default" />
+					</p:panelGrid>
+					
+				</p:dialog>
+				<p:outputPanel id="displayEmail"
+					style="display:block;margin-top:10px;">
+					<p:dataList value="#{emprestimoChaveBean.listaEmail}" var="mail"
+						itemType="circle" rendered="#{not empty emprestimoChaveBean.listaEmail}"
+						id="tableEmail">
+						<f:facet name="header">  
+                Lista de E-mail  
+            </f:facet> 
+   E-Mail: #{mail.emaEndereco}, Spam (S-sim:N-não): #{mail.emaSpam} 
+    <p:commandButton id="removerMail" value="Remover" process="@this"
+							icon="ui-icon-check" >
+							<f:setPropertyActionListener target="#{emprestimoChaveBean.email}"
+								value="#{mail}" />
+							<f:ajax event="click" listener="#{emprestimoChaveBean.removerEmail(mail)}"
+								execute="removerMail" render="tableEmail" />
+						</p:commandButton>
+					</p:dataList>
+				</p:outputPanel>
+
+				<br />
+				<p:commandButton id="showDialogButton" type="button"
+					value="Adcionar Telefone" onclick="PF('dialogTelefone').show()"
+					icon="ui-icon-extlink" process="@this"/>
+
+				<p:dialog header="Adcionar Telefone" widgetVar="dialogTelefone"
+					resizable="false" id="dialogAddTelefone">
+
+					<p:growl id="growlAddTelefone" showDetail="true" sticky="true" />
+					<p:panelGrid id="panelCadastrarTelefone" columns="2"
+						style="margin-bottom:10px">
+						<h:outputLabel value="Numero de telefone:" for="telefone" />
+						<p:inputMask id="telefone" label="Numero de telefone" required="false"
+							value="#{emprestimoChaveBean.telefone.telNumero}" size="15" maxlength="15"
+							requiredMessage="Falta o Telefone da Pessoa !"
+							mask="(999) 9999-9999">
+							<f:validateLength minimum="0" maximum="15" />
+						</p:inputMask>
+
+						<h:outputLabel value="SMS:" for="sms" />
+						<h:selectOneMenu id="sms" value="#{emprestimoChaveBean.telefone.telSms}">
+							<f:converter converterId="javax.faces.Character" />
+							<f:selectItem itemValue="S" itemLabel="Sim" />
+							<f:selectItem itemValue="N" itemLabel="Não" />
+						</h:selectOneMenu>
+
+						<h:outputLabel value="Tipo do telefone:" for="tipotelefone" />
+						<h:selectOneMenu id="tipotelefone"
+							value="#{emprestimoChaveBean.telefone.telTipo}">
+							<f:selectItem itemValue="CELULAR" itemLabel="Celular" />
+							<f:selectItem itemValue="RESIDENCIAL" itemLabel="Residencial" />
+							<f:selectItem itemValue="COMERCIAL" itemLabel="Comercial" />
+							<f:selectItem itemValue="RECADO" itemLabel="Recado" />
+						</h:selectOneMenu>
+						
+						<p:commandButton id="submitTelefone" value="Adicionar" update="displayTelefone,growlAddTelefone,panelCadastrarTelefone"
+							process="@this,telefone,sms,tipotelefone" icon="ui-icon-check" actionListener="#{emprestimoChaveBean.addTel}" >
+						</p:commandButton>
+						<p:commandButton global="false" process="@this" readonly="true"
+								transient="true" immediate="true" value="Fechar"
+								onclick="PF('dialogTelefone').hide();"
+								class="btn btn-default" />
+					</p:panelGrid>
+
+
+				</p:dialog>
+				<p:outputPanel id="displayTelefone"
+					style="display:block;margin-top:10px;">
+					<p:dataList value="#{emprestimoChaveBean.listaTel}" var="tel"
+						itemType="circle" rendered="#{not empty emprestimoChaveBean.listaTel}"
+						id="tableTel">
+						<f:facet name="header">  
+                Lista de Telefones  
+            </f:facet>
+   Numero: #{tel.telNumero}, Tipo: #{tel.telTipo}, Sms(S-sim:N-não): #{tel.telSms} 
+   
+    <p:commandButton id="removerTel" value="Remover" process="@this"
+							icon="ui-icon-check" >
+							<f:setPropertyActionListener target="#{emprestimoChaveBean.telefone}"
+								value="#{tel}" />
+							<f:ajax event="click" listener="#{emprestimoChaveBean.removerTel(tel)}"
+								execute="removerTel" render="tableTel" />
+						</p:commandButton>
+					</p:dataList>
+				</p:outputPanel>
+
+			</div>
+			<!-- Detalhes do Endereço -->
+
+
+			<div class="row">
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Detalhes do Endereço</h4>
+				</div>
+				<h:panelGrid columns="3">
+					<h:outputLabel value="Cep:" for="cep"
+						style="font-weight:bold; padding-right: 5px; float: right;" />
+					<p:inputMask id="cep" label="cepPJ" mask="99.999-999"
+						value="#{emprestimoChaveBean.endereco.endCep}" size="10" required="true"
+						requiredMessage="Falta o CEP">
+						<f:validateLength minimum="0" maximum="10" />
+					</p:inputMask>
+
+
+					<p:commandButton value="Pesquisar" icon="ui-icon-search" process="@this,cep" class="btn btn-primary"
+					update="growl,end,cidade,estado,bairro,numEnd" action="#{emprestimoChaveBean.encontraCEP}"/>
+				</h:panelGrid>
+
+				<h:outputLabel value="Endereço:" for="end" />
+				<h:inputText id="end" label="endereco"
+					requiredMessage="Falta o Endereço" required="true"
+					value="#{emprestimoChaveBean.endereco.endNome}" size="35" maxlength="35">
+				</h:inputText>
+				
+				<h:outputLabel value="Nº:" for="numEnd" />
+				<h:inputText id="numEnd" label="numEnd" requiredMessage="Falta o nº"
+					required="true" value="#{emprestimoChaveBean.endereco.endNumero}" size="6"
+					maxlength="6">
+				</h:inputText>
+				
+				<h:outputLabel value="Bairro: " />
+				<h:inputText id="bairro" size="35"
+					value="#{emprestimoChaveBean.bairro.baiNome}"
+					requiredMessage="Falta o Bairro" required="true" />
+
+				<h:outputLabel value="Cidade:" for="cidade" />
+				<h:inputText id="cidade" label="Cidade" disabled="true"
+					value="#{emprestimoChaveBean.cidade.cidNome}" size="35" maxlength="35">
+				</h:inputText>
+
+				<h:outputLabel value="Estado:" for="estado" />
+				<h:inputText id="estado" label="Estado" disabled="true"
+					value="#{emprestimoChaveBean.cidade.cidUf}" size="5">
+				</h:inputText>
+
+				<h:outputLabel value="Complemento:" for="complemento" />
+				<h:inputText id="complemento" label="Complemento"
+					value="#{emprestimoChaveBean.endereco.endComplemento}" size="30"
+					maxlength="30"
+					requiredMessage="Falta o nome complemento do Endereço da Pessoa !">
+					<f:validateLength minimum="0" maximum="60" />
+				</h:inputText>
+
+				<h:outputLabel value="Zona:" for="zona" />
+				<p:selectOneMenu id="zona" value="#{emprestimoChaveBean.endereco.endZona}">
+					<f:converter converterId="javax.faces.Character" />
+					<f:selectItem itemValue="R" itemLabel="Zona Urbana" />
+					<f:selectItem itemValue="U" itemLabel="Zona Rural" />
+				</p:selectOneMenu>
+
+
+
+				<h:outputLabel value="OBS:" for="obs" />
+				<p:inputTextarea class="col-sm-10" id="obs" rows="5" cols="60"
+					maxlength="199" counter="counter" autoResize="false"
+					counterTemplate="{0} caracteres restantes"
+					value="#{emprestimoChaveBean.pessoa.pesObservacao}" />
+				<br />
+				<h:outputText id="counter" />
+			</div>
+
+			<div class="row">
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Capturar imagem</h4>
+				</div>
+				<h:panelGrid columns="2">
+				<p:panel id="panelFotoId" header="Foto"
+							style="width: 360px;height: 300px;">
+									<p:imageCropper value="#{emprestimoChaveBean.imagemRecortada}"
+								initialCoords="225,75,300,125" id="imageCropperFotoId"
+								rendered="#{emprestimoChaveBean.exibeImagemCapturada}"
+								image="/resources/fotosPessoas/temporarias/#{emprestimoChaveBean.foto}" />
+						</p:panel>
+						<p:panel id="panelFotoRecortadaId" header="Foto Recortada"
+							style="width: 360px;height: 300px;">
+							<p:graphicImage
+								value="/resources/fotosPessoas/#{emprestimoChaveBean.fotoRecortada}"
+								cache="false" />
+						</p:panel>
+						<h:column>
+							<p:commandLink id="webcamId" onclick="dialogCamera.show();">
+
+								<p:graphicImage
+									library="#{pageContext.servletContext.contextPath}imagens2"
+									name="webcam.png" style="border: none;" />
+							</p:commandLink>
+
+							<p:commandLink id="recortarId"
+								action="#{emprestimoChaveBean.recortar()}"
+								process="@this imageCropperFotoId"
+								update="growl panelFotoRecortadaId"
+								style="margin-left: 10px;"
+								disabled="#{not emprestimoChaveBean.exibeImagemCapturada}">
+								<p:graphicImage
+									library="#{pageContext.servletContext.contextPath}imagens2"
+									name="tesoura.png" style="border: none;" />
+							</p:commandLink>
+						</h:column>
+					</h:panelGrid>
+					<p:dialog widgetVar="dialogCamera" resizable="false"
+						showHeader="false" width="360" height="300">
+
+						<h:panelGrid>
+							<p:photoCam widgetVar="photoCam"
+								update="growl panelFotoId recortarId"
+								listener="#{emprestimoChaveBean.oncapture}" />
+							<h:panelGrid columns="2">
+								<p:commandButton value="Capturar" type="button"
+									onclick="photoCam.capture();" />
+								<p:commandButton value="Fechar" type="button"
+									onclick="dialogCamera.hide();" />
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:dialog>
+					<p:ajaxStatus onstart="dialogAguarde.show()"
+						oncomplete="dialogAguarde.hide();" />
+					<p:dialog widgetVar="dialogAguarde" showHeader="false"
+						resizable="false" closable="false">
+                Aguarde...
+            </p:dialog>
+					<p:tooltip for="webcamId" value="Exibir Webcam " />
+					<p:tooltip for="recortarId" value="Recortar Imagem" />
+
+					<p:separator />
+
+			</div>
+
+			<div class="row">
+				<div class="bs-callout bs-callout-info">
+					<h4>Detalhes do empréstimo</h4>
+				</div>
+				<h:outputLabel value="Devolução prevista:" for="data"
+					style="text-align:right" />
+				<p:calendar locale="pt_BR" id="data" showButtonPanel="true"
+				pattern="dd/MM/yyyy HH:mm"  
+                 minHour="00" maxHour="24"
+					value="#{emprestimoChaveBean.emprestimoChave.empDataLimiteDevolucao}" navigator="true"
+					showOn="button" size="16" maxlength="10">
+					<h:outputScript name="js/calendario_pt_BR.js" library="resources"></h:outputScript>
+				</p:calendar>
+				<h:outputLabel value="Observações para empréstimo" for="obsEmprestimo" />
+				<p:inputTextarea class="col-sm-10" id="obsEmprestimo" rows="5" cols="60"
+					maxlength="249" counter="counterEmprestimo" autoResize="false"
+					counterTemplate="{0} caracteres restantes"
+					value="#{emprestimoChaveBean.obsEmprestimo}" />
+				<br />
+				<h:outputText id="counterEmprestimo" />
+				
+			</div>
+
+			<div style="text-align: center">
+
+				<h:commandButton value="Cadastrar emprestimo" update="growl @form" actionListener="#{emprestimoChaveBean.salvar}" class="btn btn-primary btn-lg" />
+
+			</div>
+
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+</html>

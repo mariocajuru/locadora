@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="formulario" class="form-horizontal">
+									
+			<div class="row">
+				<div class="bs-example bs-example-tabs">
+					<ul id="myTab" class="nav nav-tabs">
+						<li><a href="consulta.jsf">Consulta de Pessoas</a></li>
+						<li class="active"><a>Cadastrar Pessoa</a></li>
+					</ul>
+				</div>
+			</div>
+			
+				<p:messages id="cadMenssagem" autoUpdate="true" closable="true"
+				errorClass="bs-callout bs-callout-info" />
+			
+			<br/>
+
+			<div class="bs-callout bs-callout-info">
+				<p>Dados Pessoais</p>
+			</div>
+
+			<ui:include src="/restrito/pessoa/fragments/dadosPessoais.xhtml" />
+
+			<p:outputPanel id="panelDadosBancariosProprietario">
+
+				<p:outputPanel id="panel" rendered="#{pessoaBean.pessoa.pesProprietario}" >
+
+					<div class="bs-callout bs-callout-info">
+						<p>Dados Bancários Proprietário</p>
+					</div>
+
+					<ui:include
+						src="/restrito/pessoa/fragments/dadosbancariosproprietario.xhtml" />
+
+				</p:outputPanel>
+
+			</p:outputPanel>
+			
+				<p:outputPanel id="panelImoveis" rendered="#{pessoaBean.alteracao and pessoaBean.pessoa.pesProprietario}" >
+
+					<div class="bs-callout bs-callout-info">
+						<p>Imóveis Proprietário</p>
+					</div>
+
+					<ui:include
+						src="/restrito/pessoa/fragments/imoveis-proprietario.xhtml" />
+
+				</p:outputPanel>
+
+			<div class="bs-callout bs-callout-info"> <p>Endereço</p> </div>
+
+			<ui:include src="/restrito/pessoa/fragments/endereco.xhtml" />
+
+			<div class="bs-callout bs-callout-info"> <p>Contatos</p> </div>
+
+			<ui:include src="/restrito/pessoa/fragments/contatos.xhtml" />
+
+			<div class="bs-callout bs-callout-info"> <p>Referências</p> </div>
+
+			<ui:include src="/restrito/pessoa/fragments/referencias.xhtml" />
+			
+			<div class="bs-callout bs-callout-info"> <p>Observações</p> </div>
+
+			<ui:include src="/restrito/pessoa/fragments/observacoes.xhtml" />
+
+			<hr />
+
+			<p:confirmDialog id="confirmDialog"
+				message="Esse item já está cadastrado para o Sr. #{pessoaBean.pessoaTemporaria.pesNome}. Deseja carregar suas informações?"
+				showEffect="bounce" hideEffect="explode" header="Confirmação"
+				severity="alert" widgetVar="confirmacao">
+
+				<p:commandButton value="SIM" oncomplete="confirmation.hide()"
+					 process="@this"
+					 onclick="javascript: window.open('#{request.contextPath}/restrito/pessoa/cadastro.jsf?id=#{pessoaBean.pessoaTemporaria.pesId}', '_self');"/>
+				<p:commandButton value="NÃO" onclick="confirmacao.hide()"
+					type="button" process="@this" update="cnpj panelEmail displayTelefone" />
+
+			</p:confirmDialog>
+		
+			<div class="row" style="text-align: center">
+
+				<div class="btn-group">
+
+					<h:commandButton value="Salvar" update="growl formulario"
+						actionListener="#{pessoaBean.gravar}"
+						class="btn btn-default btn-lg" />
+
+					<a class="btn btn-default btn-lg" href="javascript:void(0);" 
+						onclick="javascript: window.location.assign('cadastro.jsf');">Limpar</a>
+
+					<h:commandButton value="Excluir" class="btn btn-default btn-lg" disabled="true"/>
+
+				</div>
+
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

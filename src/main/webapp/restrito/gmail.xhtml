@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div class="page-header">
+			<h1>
+				Envio de E-mail <small>visão geral</small>
+			</h1>
+		</div>
+		<style>  
+      .coluna1 {text-align: right}  
+      .coluna2 {text-align: left}  
+    </style> 
+	<h:form id="formulario">
+		<p:messages closable="true"/>
+		<p:growl id="growl" sticky="true" showDetail="true" life="2000"/>
+			<p:panel header="Enviando E-Mail via Gmail">
+		<h:panelGrid columns="2" bgcolor="#FAFAD2"  columnClasses="coluna1, coluna2">
+			
+			<h:outputText value="Para:" />
+			<p:inputText id="mailC" label="E-Mail" required="true"
+									requiredMessage="Falta o E-Mail da Pessoa !"
+									value="#{gmailBean.para}" size="50"
+									maxlength="50" validatorMessage="Endereço de e-mail inválido">
+									<f:validateRegex
+										pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+								</p:inputText>
+								
+			
+			<h:outputText value="Assunto:" />
+			<h:inputText value="#{gmailBean.assunto}" id="assunto"	required="true" /></h:panelGrid>
+			
+			<p:editor width="600" value="#{gmailBean.mensagem}" 	id="mensagem" required="true" />
+		<p:commandButton action="#{gmailBean.enviarEmail}" value="Enviar" class="btn btn-primary" update="formulario"/>
+		
+		<p:commandButton value="Limpar" type="reset" class="btn btn-info"/>
+		
+			<p:ajaxStatus onstart="dialogAguarde.show()"
+						oncomplete="dialogAguarde.hide();" />
+					<p:dialog widgetVar="dialogAguarde" showHeader="false"
+						resizable="false" closable="false">
+                Aguarde...
+            </p:dialog>
+					<p:tooltip for="mailC" value="Destinatário " />
+					<p:tooltip for="assunto" value="Assunto tratado no E-mail" />
+					<p:tooltip for="mensagem" value="Conteúdo do E-mail" />
+			<p:ajaxStatus>
+				<f:facet name="start">
+					<p:outputLabel value="Enviando E-mail..." style="color: red; font-weight: bolder" />
+				</f:facet>
+				<f:facet name="complete">
+					<h:outputText value="" />
+				</f:facet>
+			</p:ajaxStatus>
+		</p:panel>
+	</h:form>
+	</ui:define>
+</ui:composition>
+</html>

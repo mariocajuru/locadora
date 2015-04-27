@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+	
+		<div class="col-xs-12">
+
+			<p:dataGrid value="#{parametroBean.listaReferenciaTemps}" var="referencia" 
+				paginator="false" columns="6" emptyMessage="">
+				
+					<div class="row">
+						<label class="col-xs-12 control-label labelRenovar" style="text-align: center;">#{referencia.nome}</label>
+					</div>
+					
+					<div class="row" style="padding-top: 5px;">
+						
+						<div class="col-xs-8 col-md-offset-2" style="text-align: center;">
+				
+								<h:selectOneMenu class="form-control input-sm"
+									value="#{referencia.grupoDeContas.gruConId}">
+									<f:selectItems value="#{grupoDeContasBean.listaGrupoDeContas}" var="g" itemLabel="#{g.gruConNome}" itemValue="#{g.gruConId}"/>
+								</h:selectOneMenu>
+							</div>
+						</div>
+			</p:dataGrid>
+			
+		</div>
+		
+	</div>
+	
+	<br/>
+
+</ui:composition>

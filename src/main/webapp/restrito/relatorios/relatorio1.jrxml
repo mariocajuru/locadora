@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio1" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d7d5453c-9a80-45d5-b2ff-4d87844abe78">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="codigoUsuario" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+     CIDADE."CID_UF" AS CIDADE_CID_UF,
+     BAIRRO."BAI_NOME" AS BAIRRO_BAI_NOME,
+     CIDADE."CID_NOME" AS CIDADE_CID_NOME,
+     ENDERECO."END_NOME" AS ENDERECO_END_NOME,
+     ENDERECO."END_CEP" AS ENDERECO_END_CEP,
+     ENDERECO."END_NUMERO" AS ENDERECO_END_NUMERO,
+     PESSOA."PES_NOME" AS PESSOA_PES_NOME
+FROM
+     "dbo"."BAIRRO" BAIRRO INNER JOIN "dbo"."ENDERECO" ENDERECO ON BAIRRO."BAI_ID" = ENDERECO."BAI_ID"
+     INNER JOIN "dbo"."CIDADE" CIDADE ON ENDERECO."CID_ID" = CIDADE."CID_ID"
+     INNER JOIN "dbo"."PESSOA" PESSOA ON ENDERECO."END_ID" = PESSOA."END_ID"
+     AND PESSOA."PES_ID" = ENDERECO."PES_ID"
+ORDER BY
+     PESSOA."PES_NOME" ASC]]>
+	</queryString>
+	<field name="CIDADE_CID_UF" class="java.lang.String"/>
+	<field name="BAIRRO_BAI_NOME" class="java.lang.String"/>
+	<field name="CIDADE_CID_NOME" class="java.lang.String"/>
+	<field name="ENDERECO_END_NOME" class="java.lang.String"/>
+	<field name="ENDERECO_END_CEP" class="java.lang.String"/>
+	<field name="ENDERECO_END_NUMERO" class="java.lang.Integer"/>
+	<field name="PESSOA_PES_NOME" class="java.lang.String"/>
+	<variable name="contador" class="java.lang.String" calculation="Count"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="ea786a56-ca22-4b97-b462-5e0fc18e2b3d"/>
+				<staticText>
+					<reportElement x="20" y="20" width="312" height="43" forecolor="#FFFFFF" uuid="f5e69df1-05db-4b37-840e-a9fce8338044"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Francisco Imóveis]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="0356e599-a300-4151-a750-354a28c70ec4"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Renovar Sistema]]></text>
+				</staticText>
+				<image>
+					<reportElement x="323" y="3" width="85" height="89" uuid="f5465bd8-d803-4c99-a8a7-ecfea68a83f7"/>
+					<imageExpression><![CDATA["C:\\Users\\desenvjava01\\Documents\\Projetos Eclipse\\Locadora\\WebContent\\resources\\imagens2\\renovar_logo.png"]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="41">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="c811d6e8-4ba3-45d3-b94c-5d0027376d25"/>
+			</line>
+			<staticText>
+				<reportElement x="18" y="2" width="100" height="20" uuid="ae16d691-4d55-4158-8bd3-5700f48a35f4"/>
+				<textElement>
+					<font fontName="Consolas" size="14"/>
+				</textElement>
+				<text><![CDATA[NOME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="2" width="100" height="20" uuid="815b2523-402d-41e2-914d-ebe6979d5968"/>
+				<textElement>
+					<font fontName="Consolas" size="14"/>
+				</textElement>
+				<text><![CDATA[ENDEREÇO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="227" y="2" width="58" height="20" uuid="ee199c5d-3e3e-41d2-982c-0620f4801082"/>
+				<textElement>
+					<font fontName="Consolas" size="14"/>
+				</textElement>
+				<text><![CDATA[Nº]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="2" width="100" height="20" uuid="3985adc1-22c2-443b-b270-fa249b324b38"/>
+				<textElement>
+					<font fontName="Consolas" size="14"/>
+				</textElement>
+				<text><![CDATA[BAIRRO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="388" y="2" width="100" height="20" uuid="1479bf42-7bcc-4f4b-a7cc-f7b38c98e232"/>
+				<textElement>
+					<font fontName="Consolas" size="14"/>
+				</textElement>
+				<text><![CDATA[CIDADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="488" y="2" width="100" height="20" uuid="2cd0add1-0993-4bf2-9788-41f71fb351e5"/>
+				<textElement>
+					<font fontName="Consolas" size="14"/>
+				</textElement>
+				<text><![CDATA[UF]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="c47bfd5b-8194-42e4-8c0d-076ada8c1b17"/>
+			</line>
+			<textField>
+				<reportElement x="18" y="0" width="100" height="20" uuid="8c0591c8-6526-448f-af0c-df2485527daf"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PESSOA_PES_NOME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="0" width="100" height="20" uuid="372bed88-3a37-45de-a38e-10a1da18a40e"/>
+				<textFieldExpression><![CDATA[$F{ENDERECO_END_NOME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="227" y="0" width="58" height="20" uuid="dc80c6f5-8991-48a9-83cc-a0a506201864"/>
+				<textFieldExpression><![CDATA[$F{ENDERECO_END_NUMERO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="285" y="0" width="100" height="20" uuid="900445d6-0be3-4a05-9f17-0cd60b145e13"/>
+				<textFieldExpression><![CDATA[$F{BAIRRO_BAI_NOME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="388" y="0" width="100" height="20" uuid="db8ae42b-1168-4db9-948e-acd9fe1d5b2c"/>
+				<textFieldExpression><![CDATA[$F{CIDADE_CID_NOME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="488" y="0" width="100" height="20" uuid="98f39fb9-e7ef-4c99-9cbd-cd930daf38b6"/>
+				<textFieldExpression><![CDATA[$F{CIDADE_CID_UF}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="8b8b1c1e-4958-4abc-b8a0-466805f6cd81"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="7c817b5f-1fce-4b51-ab93-2a1aa8a68035"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="16bab40b-72b2-43c0-b311-8cecb189df3f"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

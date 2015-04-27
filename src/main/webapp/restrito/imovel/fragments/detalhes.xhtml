@@ -1,0 +1,459 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+
+		<!-- Disponível para Locação -->
+		<label class="col-xs-1 control-label labelRenovar">LOCAÇÃO</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<h:selectBooleanCheckbox value="#{imovelBean.imovel.imoLocacao}" />
+
+			</div>
+		</div>
+
+		<!-- Disponível para Venda -->
+		<label class="col-xs-1 control-label labelRenovar">VENDA</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<h:selectBooleanCheckbox value="#{imovelBean.imovel.imoVenda}" />
+
+			</div>
+		</div>
+
+
+		<!-- Disponível na web -->
+		<label class="col-xs-1 control-label labelRenovar">WEB</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<h:selectBooleanCheckbox
+					value="#{imovelBean.imovel.imoDisponivelWeb}" />
+
+			</div>
+		</div>
+
+
+		<!-- Imóvel exclusivo -->
+		<label class="col-xs-1 control-label labelRenovar">EXCLUSIVO</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<h:selectBooleanCheckbox value="#{imovelBean.imovel.imoExclusivo}" />
+
+			</div>
+		</div>
+
+
+		<!-- Primeiro Aluguel -->
+		<label class="col-xs-1 control-label labelRenovar">1º ALUGUEL</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<h:selectBooleanCheckbox value="#{imovelBean.imovel.imoChave}" />
+
+			</div>
+		</div>
+
+		<label class="col-xs-1 control-label labelRenovar">PLACA</label>
+
+		<!-- Placa de publicidade-->
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<h:selectBooleanCheckbox value="#{imovelBean.imovel.imoPlaca}" />
+
+			</div>
+		</div>
+
+	</div>
+
+	<br />
+
+	<div class="row">
+
+		<!-- SITUAÇÃO -->
+		<label class="col-xs-1 control-label labelRenovar">SITUAÇÃO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:selectOneMenu id="situacao" class="form-control input-sm"
+					value="#{imovelBean.situacaoimovel.sitId}" required="true"
+					requiredMessage="Selecione uma situação">
+
+					<f:selectItem itemValue="0" itemLabel="Selecione..." />
+					<f:selectItems value="#{situacaoimovelBean.listaSituacaoImovels}"
+						var="sit" itemValue="#{sit.sitId}" itemLabel="#{sit.sitNome}" />
+
+				</h:selectOneMenu>
+
+			</div>
+		</div>
+
+
+		<!-- TIPO -->
+		<label class="col-xs-1 control-label labelRenovar">TIPO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:selectOneMenu id="tipo" class="form-control input-sm"
+					value="#{imovelBean.tipoimovel.tipId}" required="true"
+					requiredMessage="Selecione um tipo">
+
+					<f:selectItem itemValue="0" itemLabel="Selecione..." />
+					<f:selectItems value="#{tipoImovelBean.listaTipoImoveis}" var="tip"
+						itemValue="#{tip.tipId}" itemLabel="#{tip.tipNome}" />
+
+				</h:selectOneMenu>
+
+			</div>
+		</div>
+
+		<!-- Categoria -->
+		<label class="col-xs-1 control-label labelRenovar">CATEGORIA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:selectOneMenu id="categoria" class="form-control input-sm"
+					value="#{imovelBean.imovel.imoCategoria}" required="true"
+					requiredMessage="Selecione a categoria">
+					<f:selectItem itemValue="RESIDENCIAL" itemLabel="RESIDENCIAL" />
+					<f:selectItem itemValue="COMERCIAL" itemLabel="COMERCIAL" />
+					<f:selectItem itemValue="COMERCIAL_RESIDENCIAL"
+						itemLabel="COMERCIAL-RESIDENCIAL" />
+				</h:selectOneMenu>
+
+			</div>
+		</div>
+
+
+		<!-- ÁREA DO IMÓVEL -->
+		<label class="col-xs-1 control-label labelRenovar">ÁREA CONST.</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<pe:inputNumber id="area" value="#{imovelBean.imovel.imoAreaImovel}"
+					size="6" maxlength="6" required="false" decimalPlaces="0">
+					<f:validateLength minimum="0" maximum="6" />
+					<f:converter converterId="javax.faces.Integer" />
+				</pe:inputNumber>
+
+			</div>
+		</div>
+
+
+		<!-- ÁREA DO TERRENO -->
+		<label class="col-xs-1 control-label labelRenovar">ÁREA
+			TERRENO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<pe:inputNumber id="areaTerreno"
+					value="#{imovelBean.imovel.imoAreaTerreno}" size="6" maxlength="6"
+					required="false" decimalPlaces="0">
+					<f:validateLength minimum="0" maximum="6" />
+					<f:converter converterId="javax.faces.Integer" />
+				</pe:inputNumber>
+
+			</div>
+		</div>
+
+
+		<!-- Codigo de Luz -->
+		<label class="col-xs-1 control-label labelRenovar">CÓD. LUZ</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:inputText id="codigoLuz" class="form-control input-sm"
+					value="#{imovelBean.imovel.imoIdluz}" size="49" maxlength="49"
+					required="false">
+					<f:validateLength minimum="0" maximum="49" />
+				</h:inputText>
+
+			</div>
+		</div>
+
+
+		<!-- Código de Água -->
+		<label class="col-xs-1 control-label labelRenovar">CÓD. ÁGUA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:inputText id="codigoAgua" class="form-control input-sm"
+					value="#{imovelBean.imovel.imoIdagua}" size="49" maxlength="49"
+					required="false">
+					<f:validateLength minimum="0" maximum="49" />
+				</h:inputText>
+
+			</div>
+		</div>
+
+
+		<!-- Garantia -->
+		<label class="col-xs-1 control-label labelRenovar">GARANTIA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:inputText id="garantia" class="form-control input-sm"
+					value="#{imovelBean.imovel.imoGarantia}" size="30" maxlength="30"
+					required="false">
+					<f:validateLength minimum="0" maximum="30" />
+				</h:inputText>
+
+			</div>
+		</div>
+
+
+		<!-- Imóvel com pendências-->
+		<label class="col-xs-1 control-label labelRenovar">PENDÊNCIAS</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:inputText id="pendencia" class="form-control input-sm"
+					value="#{imovelBean.imovel.imoPedencia}" size="50" maxlength="50"
+					required="false">
+					<f:validateLength minimum="0" maximum="50" />
+				</h:inputText>
+
+			</div>
+		</div>
+
+
+		<!-- Posição de chegada da Francisco -->
+		<label class="col-xs-1 control-label labelRenovar">CHEGADA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:selectOneMenu class="form-control input-sm"
+					value="#{imovelBean.imovel.imoPosicao}">
+					<f:selectItem itemLabel="1ª " itemValue="1" />
+					<f:selectItem itemLabel="2ª " itemValue="2" />
+					<f:selectItem itemLabel="3ª " itemValue="3" />
+					<f:selectItem itemLabel="4ª " itemValue="4" />
+					<f:selectItem itemLabel="5ª " itemValue="5" />
+					<f:selectItem itemLabel="6ª " itemValue="6" />
+				</h:selectOneMenu>
+
+			</div>
+		</div>
+
+		<label class="col-xs-1 control-label labelRenovar">CAPTADO</label>
+
+		<!-- Captado -->
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:selectOneMenu class="form-control input-sm"
+					value="#{imovelBean.imovel.imoQtdCaptado}">
+					<f:selectItem itemLabel="1ª Vez" itemValue="1" />
+					<f:selectItem itemLabel="2ª Vez" itemValue="2" />
+					<f:selectItem itemLabel="3ª Vez" itemValue="3" />
+					<f:selectItem itemLabel="4ª Vez" itemValue="4" />
+					<f:selectItem itemLabel="5ª Vez" itemValue="5" />
+					<f:selectItem itemLabel="6ª Vez" itemValue="6" />
+				</h:selectOneMenu>
+
+			</div>
+		</div>
+
+		<!-- Chave -->
+		<label class="col-xs-1 control-label labelRenovar">QUANT.
+			CHAVES</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<pe:inputNumber id="qtdChave"
+					value="#{imovelBean.imovel.imoChaveQtd}" size="10" maxlength="5"
+					required="true" decimalPlaces="0"
+					requiredMessage="Quantidade de chave obrigatorio">
+					<f:validateLength minimum="0" maximum="5" />
+					<f:converter converterId="javax.faces.Integer" />
+				</pe:inputNumber>
+
+			</div>
+		</div>
+
+
+	</div>
+
+	<div class="row">
+		<!-- Valor de mercado -->
+		<label class="col-xs-1 control-label labelRenovar">VAL.IMÓVEL</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<pe:inputNumber id="valorMercado" requiredMessage="Valor do imóvel obrigatório"
+					value="#{imovelBean.imovel.imoValorMercado}" size="15"
+					maxlength="15" required="true" symbol="R$ " decimalPlaces="0">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Integer" />
+				</pe:inputNumber>
+
+			</div>
+		</div>
+
+
+		<!-- Valor do condomínio -->
+		<label class="col-xs-1 control-label labelRenovar">CONDOMÍNIO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<pe:inputNumber id="condominio"
+					value="#{imovelBean.imovel.imoValorCondominio}" size="10"
+					maxlength="10" required="false" symbol="R$ ">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>
+
+
+			</div>
+		</div>
+
+
+		<!-- Taxa -->
+		<label class="col-xs-1 control-label labelRenovar">TAXA ADM %</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<pe:inputNumber id="taxa" value="#{imovelBean.imovel.imoTaxa}"
+					size="10" maxlength="10" required="true"
+					requiredMessage="Taxa administrativa obrigatoria">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>
+
+			</div>
+		</div>
+
+		<!-- Valor de aluguel -->
+		<label class="col-xs-1 control-label labelRenovar">VAL.ALUGUEL</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<pe:inputNumber id="valorAluguel" requiredMessage="Valor do aluguel obrigatório"
+					value="#{imovelBean.imovel.imoValorAluguel}" size="15"
+					maxlength="15" required="true" symbol="R$ " decimalSeparator=","
+					thousandSeparator=".">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.BigDecimal" />
+				</pe:inputNumber>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+
+
+		<!-- Data da construção -->
+		<label class="col-xs-1 control-label labelRenovar">CONSTRUÇÃO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group data">
+
+				<p:calendar id="dataConstrução"
+					value="#{imovelBean.imovel.imoDataConstrucao}" locale="pt_BR"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true">
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+				</p:calendar>
+
+			</div>
+		</div>
+
+
+		<!-- Data da captação -->
+		<label class="col-xs-1 control-label labelRenovar">DT.
+			CAPTAÇÃO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group data">
+
+				<p:calendar id="dataCaptacao"
+					value="#{imovelBean.imovel.imoDataCaptacao}" locale="pt_BR"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true"
+					disabled="#{imovelBean.alteracao}">
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+				</p:calendar>
+
+			</div>
+		</div>
+
+
+		<!-- Vago Desde -->
+		<label class="col-xs-1 control-label labelRenovar">VAGO DESDE</label>
+
+		<div class="col-xs-2">
+			<div class="form-group data">
+
+				<p:calendar id="vagoDesde" value="#{imovelBean.imovel.imoVagoDesde}"
+					locale="pt_BR" pattern="dd/MM/yyyy" minlength="10" maxlength="10"
+					navigator="true" disabled="#{imovelBean.alteracao}">
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+				</p:calendar>
+
+			</div>
+		</div>
+
+
+		<!-- Início Locação -->
+		<label class="col-xs-1 control-label labelRenovar">INIC.
+			LOCAÇÃO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group data">
+
+				<p:calendar id="inicioLocacao"
+					value="#{imovelBean.imovel.imoDataInicioLocacao}" locale="pt_BR"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true"
+					disabled="true">
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+				</p:calendar>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+	
+	<!-- PERÍODO DE CADASTRO DO IMÓVEL -->
+		<label class="col-xs-2 control-label labelRenovar">DIAS DE CADASTRO</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<pe:inputNumber id="periodoCadastro" value="#{imovelBean.imovel.imoDiasDeCadastro}" 
+				 required="true" decimalPlaces="0" maxValue="31" requiredMessage="DIAS DE CADASTRO obrigatorio ">
+					<f:converter converterId="javax.faces.Integer" />
+				</pe:inputNumber>
+
+			</div>
+		</div>
+	</div>
+</ui:composition>

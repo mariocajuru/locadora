@@ -1,0 +1,122 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+
+		<!-- ANO -->
+		<label class="col-xs-1 control-label labelRenovar">ANO</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<pe:inputNumber id="ano" maxValue="2030" thousandSeparator=""
+					decimalSeparator="" value="#{imovelBean.iptu.iptAno}"
+					decimalPlaces="0">
+				</pe:inputNumber>
+
+			</div>
+		</div>
+
+		<label class="col-xs-1 control-label labelRenovar">VALOR</label>
+		<!-- Valor -->
+		<div class="col-xs-1">
+			<div class="form-group">
+				<pe:inputNumber id="valor" requiredMessage="Insira o valor" maxValue="10000"
+					value="#{imovelBean.iptu.iptValor}" size="15" maxlength="15"
+					required="false" symbol="R$" decimalPlaces="2">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>
+			</div>
+		</div>
+
+		<label class="col-xs-2 control-label labelRenovar">Nº PARCELAS</label>
+
+		<div class="col-xs-1">
+			<div class="form-group data">
+				<pe:inputNumber id="parcelas" maxValue="12" thousandSeparator=""
+					decimalSeparator="" value="#{imovelBean.iptu.iptParcelas}"
+					decimalPlaces="0">
+				</pe:inputNumber>
+
+			</div>
+		</div>
+
+		<label class="col-xs-2 control-label labelRenovar">CODIGO
+			REDUZIDO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group ">
+				<p:inputText id="codigoReduzido" class="form-control input-sm"
+					value="#{imovelBean.iptu.iptCodigoReduzido}" size="35"
+					maxlength="35" />
+			</div>
+		</div>
+		
+		</div>
+		
+		<div class="row" style="text-align: center">
+
+				<div class="btn-group">
+				
+				<p:commandButton id="adicionar" class="btn btn-default btn-lg" 
+					action="#{imovelBean.adicionarIPTU}" update="ano,valor,parcelas,codigoReduzido,tabelaIPTU"
+					process="@this,ano,valor,parcelas,codigoReduzido" value="Adicionar" />
+			</div>
+		</div>
+		
+		<br/>
+		
+		<div class="row">
+		
+		<div class="panel panel-default">
+				<div class="panel-footer">VALORES</div>
+
+			<p:dataTable id="tabelaIPTU" editable="false"
+				value="#{imovelBean.listaIptu}" var="val" type="definition"
+				emptyMessage="Não há IPTU para esse imóvel">
+
+				<p:column style="text-align: center" headerText="ANO"
+					styleClass="control-label labelRenovar">
+					<p:outputLabel value="#{val.iptAno}" class="form-control input-sm">
+					</p:outputLabel>
+				</p:column>
+				<p:column style="text-align: center" headerText="VALOR"
+					styleClass="control-label labelRenovar">
+					<p:outputLabel value="#{val.iptValor}"
+						class="form-control input-sm">
+						<f:convertNumber currencySymbol="R$" type="currency"
+							maxFractionDigits="2" locale="pt_BR" />
+					</p:outputLabel>
+				</p:column>
+				<p:column style="text-align: center" headerText="Nº PARCELAS"
+					styleClass="control-label labelRenovar">
+					<p:outputLabel value="#{val.iptParcelas}"
+						class="form-control input-sm">
+					</p:outputLabel>
+				</p:column>
+				<p:column style="text-align: center" headerText="CODIGO REDUZIDO"
+					styleClass="control-label labelRenovar">
+					<p:outputLabel value="#{val.iptCodigoReduzido}"
+						class="form-control input-sm">
+					</p:outputLabel>
+				</p:column>
+				<p:column style="width:32px">
+					<p:commandButton action="#{imovelBean.removerIPTU}" value="Remover"
+						process="@this" icon="ui-icon-close"
+						class="btn btn-default btn-xs" update="@this,tabelaIPTU">
+						<f:setPropertyActionListener target="#{imovelBean.iptu}"
+							value="#{val}" />
+							<f:setPropertyActionListener target="#{imovelBean.imovel}"
+							value="#{val.imovel}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+		</div>
+				</div>
+</ui:composition>

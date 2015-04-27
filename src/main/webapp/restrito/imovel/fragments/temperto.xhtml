@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+	
+		<div class="col-xs-12">
+
+			<p:dataGrid value="#{imovelBean.listaOQueTemPerto}" var="temPerto" 
+				paginator="false" columns="6">
+				
+				<div class="row">
+					<label class="col-xs-12 control-label labelRenovar" style="text-align: center;">#{temPerto.nome}</label>
+				</div>
+				
+				<div class="row" style="padding-top: 5px;">
+					
+					<div class="col-xs-8 col-md-offset-2" style="text-align: center;">
+						<h:selectBooleanCheckbox
+							value="#{temPerto.selecionado}" />
+					</div>
+					
+				</div>
+			</p:dataGrid>
+			
+		</div>
+		
+	</div>
+	
+	<br/>
+
+</ui:composition>

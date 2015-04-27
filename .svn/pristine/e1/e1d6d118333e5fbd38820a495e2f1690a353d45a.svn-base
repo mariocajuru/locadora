@@ -1,0 +1,153 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+
+	<p:focus for="idFilial"/>
+		<!-- ID -->
+		<label class="col-xs-1 control-label labelRenovar">FILIAL ID</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:inputText id="idFilial" class="form-control input-sm"
+					value="#{emprestimoChaveBean.filial.filId}" />
+
+			</div>
+		</div>
+
+		<!-- PROCURAR FILIAL -->
+		<div class="col-xs-2">
+			<div class="form-group"
+				style="text-align: center; padding-left: 10px;">
+
+				<input type="button" class="btn btn-default btn-sm btn-block"
+					onclick="javascript:openGridFiliais();" value="Procurar" />
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+
+		<!-- NOME -->
+		<label class="col-xs-1 control-label labelRenovar">FILIAL</label>
+
+		<div class="col-xs-5">
+			<div class="form-group">
+				<h:inputText id="nomeFilial" class="form-control input-sm"
+					value="#{emprestimoChaveBean.filial.filNome}" disabled="true" />
+			</div>
+		</div>
+
+
+		<!-- CPFJ -->
+		<label class="col-xs-1 control-label labelRenovar">CNPJ</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="cnpj" class="form-control input-sm"
+					value="#{emprestimoChaveBean.filial.filCnpj}" disabled="true" />
+			</div>
+		</div>
+
+	</div>
+	<script type="text/javascript">		
+			
+		$(function () {		
+			// widget configuration
+			var configFiliais = {
+				layout: {
+					name: 'layout',
+					padding: 0,
+					panels: [
+						{ type: 'main', minSize: 350, overflow: 'hidden' }
+					]
+				},
+				grid: { 
+					name: 'gridFiliais',
+					style: 'border: 0px; border-left: 1px solid silver',
+					show: {
+						header 		: false,
+						toolbar 	: true,
+						footer		: false,
+						lineNumbers	: false,
+						selectColumn: false,
+						expandColumn: false
+					},
+					columns: [
+						{ field: 'recid', caption: 'Código', size: '60px', sortable: true, resizable: true },
+					    { field: 'nome', caption: 'FILIAL', size: '280px', sortable: true, resizable: true },
+					    { field: 'cpfcnpj', caption: 'CNPJ', size: '100px', sortable: true, resizable: true }
+					],
+					searches: [
+						{ type: 'int',  field: 'recid', caption: 'Código' },
+						{ type: 'text',  field: 'nome', caption: 'FILIAL' },
+						{ type: 'text',  field: 'cpfcnpj', caption: 'CNPJ' },
+					],
+					records: [
+								
+						<ui:repeat value="#{emprestimoChaveBean.listaFiliaisTemChave}" var="fil">
+							{ 
+								recid: #{fil.getFilId()}, 
+								nome: '#{fil.getFilNome()}', 
+								cpfcnpj: '#{fil.getFilCnpj()}',
+							 },
+						</ui:repeat>
+							
+					],
+					onDblClick: function(event) {
+						var id = event.recid;
+	
+						var obj = w2ui['gridFiliais'].get(id);
+	
+						w2popup.close();
+						
+						if (obj != null) {
+							console.log(w2ui['gridFiliais'].get(id));
+							
+							document.getElementById('formulario:idFilial').value   = obj.recid    + "";
+							document.getElementById('formulario:nomeFilial').value = obj.nome     + "";
+							document.getElementById('formulario:cnpj').value  = obj.cpfcnpj  + "";
+						}
+					}					
+				}
+			}
+			
+			// initialization in memory
+			$().w2layout(configFiliais.layout);
+			$().w2grid(configFiliais.grid);
+		});
+
+		function openGridFiliais() {
+			w2popup.open({
+				title 	: 'Selecione a Filial que cederá a chave para o emprestimo',
+				width	: 800,
+				height	: 600,
+				showMax : true,
+				body 	: '<div id="main" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px;"></div>',
+				onOpen  : function (event) {
+					event.onComplete = function () {
+						$('#w2ui-popup #main').w2render('layout');
+						w2ui.layout.content('main', w2ui['gridFiliais']);
+					}
+				},
+				onMax : function (event) { 
+					event.onComplete = function () {
+						w2ui.layout.resize();
+					}
+				},
+				onMin : function (event) {
+					event.onComplete = function () {
+						w2ui.layout.resize();
+					}
+				}		
+			});
+		}		
+	</script>
+
+</ui:composition>

@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div class="page-header">
+			<h1>
+				Agendar Vistoria <small>visão geral</small>
+			</h1>
+		</div>
+
+		<script type="text/javascript">  
+        PrimeFaces.locales['pt'] = {  
+                        closeText: 'Fechar',  
+                        prevText: 'Anterior',  
+                        nextText: 'Próximo',  
+                        currentText: 'Começo',  
+                        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],  
+                        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],  
+                        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],  
+                        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],  
+                        dayNamesMin: ['D','S','T','Q','Q','S','S'],  
+                        weekHeader: 'Semana',  
+                        firstDay: 1,  
+                        isRTL: false,  
+                        showMonthAfterYear: false,  
+                        yearSuffix: '',  
+                        timeOnlyTitle: 'Só Horas',  
+                        timeText: 'Tempo',  
+                        hourText: 'Hora',  
+                        minuteText: 'Minuto',  
+                        secondText: 'Segundo',  
+                        currentText: 'Data Atual',  
+                        ampm: false,  
+                        month: 'Mês',  
+                        week: 'Semana',  
+                        day: 'Dia',  
+                        allDayText : 'Todo Dia'
+                    };  
+</script>
+		<style type="text/css">
+.coluna1 {
+	width: 700px;
+}
+</style>
+		<h:form id="form">
+
+			<p:growl id="messages" showDetail="true" />
+
+			<p:schedule id="schedule" value="#{vistoriaBean.eventModel}"
+				widgetVar="myschedule" locale="pt" axisFormat="H:mm"
+				timeFormat="H:mm">
+
+				<p:ajax event="dateSelect" listener="#{vistoriaBean.onDateSelect}"
+					update="tabelaImovel" oncomplete="PF('eventDialog').show()">
+				</p:ajax>
+
+				<p:ajax event="eventSelect" listener="#{vistoriaBean.onEventSelect}"
+					update="red" oncomplete="PF('reditar').show()" />
+
+				<p:ajax event="eventMove" listener="#{vistoriaBean.onEventMove}"
+					update="messages" />
+				<p:ajax event="eventResize" listener="#{vistoriaBean.onEventResize}"
+					update="messages" />
+
+			</p:schedule>
+
+			<p:dialog widgetVar="reditar" header="Verificar agenda"
+				showEffect="clip" hideEffect="clip" styleClass="coluna1">
+				<h:panelGrid id="red" columns="2" styleClass="coluna1">
+
+
+					<h:outputText value="Endereço:" />
+					<br />
+					<h:outputText
+						value="#{vistoriaBean.vistoria.imovel.endereco.endNome} Nº: #{vistoriaBean.vistoria.imovel.endereco.endNumero} 
+					CEP: #{vistoriaBean.vistoria.imovel.endereco.endCep} Bairro: #{vistoriaBean.vistoria.imovel.endereco.bairro.baiNome} 
+					Cidade: #{vistoriaBean.vistoria.imovel.endereco.cidade.cidNome}"
+						style="font-weight:bold" />
+					<br />
+
+					<h:outputLabel value="Visita Pendente" for="visita" />
+					<br />
+					<h:selectOneMenu id="visita"
+						value="#{vistoriaBean.vistoria.visPendente}">
+						<f:converter converterId="javax.faces.Character" />
+						<f:selectItem itemValue="S" itemLabel="Sim" />
+						<f:selectItem itemValue="N" itemLabel="Não" />
+						<f:ajax render="red" />
+					</h:selectOneMenu>
+					<br />
+					<h:outputLabel value="Imóvel efetivo para contrato" for="rejeitar"
+						rendered="#{vistoriaBean.vistoria.visPendente == 'N'}" /><br/>
+					<h:selectOneMenu id="rejeitar"
+						rendered="#{vistoriaBean.vistoria.visPendente == 'N'}"
+						value="#{vistoriaBean.vistoria.imovel.imoEfetivo}">
+						<f:converter converterId="javax.faces.Character" />
+						<f:selectItem itemLabel="Selecione uma opção" />
+						<f:selectItem itemValue="S" itemLabel="Sim" />
+						<f:selectItem itemValue="N" itemLabel="Não" />
+					</h:selectOneMenu>
+					<br/>
+
+					<h:outputLabel value="Data e hora que foi visitada" for="visitada"
+						rendered="#{vistoriaBean.vistoria.visPendente == 'N'}" />
+					<br />
+					<p:calendar id="visitada"
+						value="#{vistoriaBean.vistoria.visDataVisita}" locale="pt"
+						pattern="dd/MM/yyyy"
+						rendered="#{vistoriaBean.vistoria.visPendente == 'N'}">
+						<p:ajax event="dateSelect" update="red" />
+					</p:calendar>
+					<br />
+					<h:outputLabel value="Agendado para" for="agen" />
+					<br />
+					<p:calendar id="agen"
+						value="#{vistoriaBean.vistoria.visDataAgenda}" locale="pt"
+						pattern="dd/MM/yyyy HH:mm" />
+					<br />
+					<h:outputLabel value="OBS da Vistoria" for="obsReditar" />
+					<br />
+					<p:inputTextarea class="col-sm-10" id="obsReditar" rows="5"
+						cols="100" maxlength="199" counter="counter" autoResize="false"
+						counterTemplate="{0} caracteres restantes"
+						value="#{vistoriaBean.vistoria.visObservacao}">
+						<f:ajax render="red" />
+					</p:inputTextarea>
+					<br />
+					<h:outputText id="counter" />
+					<br />
+
+
+				</h:panelGrid>
+
+				<h:commandButton actionListener="#{vistoriaBean.salvarReditar}"
+					value="Salvar" class="btn btn-primary">
+					<f:setPropertyActionListener target="#{vistoriaBean.vistoria}"
+						value="#{vistoriaBean.vistoria}" />
+					<f:setPropertyActionListener target="#{vistoriaBean.diaVisita}"
+						value="#{vistoriaBean.diaVisita}" />
+					<f:ajax render="@form" />
+				</h:commandButton>
+				<h:commandButton value="Limpar" type="reset" class="btn btn-info"></h:commandButton>
+				<h:commandButton global="false" process="@this" readonly="true"
+					transient="true" immediate="true" value="Fechar"
+					class="btn btn-default" onclick="reditar.hide();return false;" />
+			</p:dialog>
+
+			<p:dialog widgetVar="eventDialog" header="Cadastrar visita"
+				showEffect="clip" hideEffect="clip">
+
+				<p:dataTable value="#{imovelBean.listaImoveis}" var="imo"
+					id="tabelaImovel" paginator="true" rows="5" styleClass="coluna1"
+					emptyMessage="Não há registro dessa Imovel"
+					selection="#{vistoriaBean.imovel}" rowKey="#{imo.imoId}">
+
+
+					<p:column selectionMode="single" style="width:2%" />
+
+					<p:column headerText="Codigo" filterBy="#{imo.imoId}">
+						<h:outputText value="#{imo.imoId}" />
+					</p:column>
+
+					<p:column headerText="Tipo do Imovel"
+						filterBy="#{imo.tipoimovel.tipNome}">
+						<h:outputText value="#{imo.tipoimovel.tipNome}" />
+					</p:column>
+
+					<p:column headerText="Endereço" filterBy="#{imo.endereco.endNome}">
+						<h:outputText value="#{imo.endereco.endNome}" />
+					</p:column>
+
+					<p:column headerText="Numero" filterBy="#{imo.endereco.endNumero}">
+						<h:outputText value="#{imo.endereco.endNumero}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton id="viewButton" value="Agendar"
+							icon="ui-icon-search" update=":form:displaySingle"
+							oncomplete="PF('singleCarDialog').show()" />
+
+						<p:commandButton global="false" process="@this" readonly="true"
+							transient="true" immediate="true" value="Fechar"
+							onclick="eventDialog.hide();return false;" />
+					</f:facet>
+				</p:dataTable>
+			</p:dialog>
+
+
+			<p:dialog id="dialog" header="Dados da Visita" styleClass="coluna1"
+				widgetVar="singleCarDialog" resizable="false" showEffect="fade"
+				hideEffect="explode">
+
+				<h:panelGrid id="displaySingle" columns="2" cellpadding="4"
+					styleClass="coluna1">
+
+
+
+
+					<h:outputText value="Endereço:" />
+					<h:outputText
+						value="#{vistoriaBean.imovel.endereco.endNome} Nº: #{vistoriaBean.imovel.endereco.endNumero} 
+					CEP: #{vistoriaBean.imovel.endereco.endCep}"
+						style="font-weight:bold" />
+
+					<h:outputText value="Data:" />
+					<h:outputText value="#{vistoriaBean.event.getEndDate()}"
+						style="font-weight:bold">
+						<f:convertDateTime locale="pt" pattern="dd/MM/yyyy HH:mm"></f:convertDateTime>
+					</h:outputText>
+
+					<h:outputLabel value="OBS da Vistoria" for="obs" />
+					<p:inputTextarea class="col-sm-10" id="obs" rows="5" cols="200"
+						maxlength="199" counter="counterP" autoResize="false"
+						counterTemplate="{0} caracteres restantes"
+						value="#{vistoriaBean.vistoria.visObservacao}">
+						<f:ajax render="displaySingle" />
+					</p:inputTextarea>
+					<br />
+					<h:outputText id="counterP" />
+				</h:panelGrid>
+				<h:commandButton action="#{vistoriaBean.salvar}" value="Salvar"
+					update="schedule" class="btn btn-primary">
+					<f:ajax render="@form" />
+				</h:commandButton>
+				<h:commandButton value="Limpar" type="reset" class="btn btn-info"></h:commandButton>
+
+				<h:commandButton global="false" process="@this" readonly="true"
+					transient="true" immediate="true" value="Fechar"
+					class="btn btn-default"
+					onclick="singleCarDialog.hide();return false;" />
+
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

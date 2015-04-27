@@ -1,0 +1,581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="form">
+				<p:growl id="msg" showDetail="true" escape="false" life="2000"/>
+				<p:messages id="mensagens" autoUpdate="true" showDetail="true" />
+			<div class="bs-callout bs-callout-info">
+				<h4>Pesquisa de imóvel</h4>
+			</div>
+
+			<p:tabView id="tabView" effect="blind" effectDuration="fast"
+					dynamic="true" cache="false" scrollable="true">
+					<p:ajax event="tabChange" update="displayLoca,displayVend"
+						listener="#{criterioBean.mudarTap()}" immediate="true"/>
+						
+					<p:tab id="tabLocacao" title="Locação" >
+
+						<h:outputText value="Pesquisar por Região: " />
+						<p:selectBooleanCheckbox id="booleanRegiaoBairroLocacao"
+							value="#{criterioBean.regiaoBairro}">
+							<p:ajax update="displayLoca" />
+						</p:selectBooleanCheckbox>
+
+						<p:outputPanel id="displayLoca"
+							style="display:block;margin-top:10px;">
+
+							<p:selectCheckboxMenu label="Região:" id="selectRegiaoLocacao"
+								value="#{criterioBean.listaRegioes}" showCheckbox="true"
+								filterMatchMode="contains"
+								rendered="#{criterioBean.regiaoBairro}">
+								<f:selectItems value="#{regiaoBean.listaRegioes}"
+									var="regLocacao" itemLabel="#{regLocacao.regNome}"
+									itemValue="#{regLocacao.regId}" />
+							</p:selectCheckboxMenu>
+
+							<!-- <p:outputLabel value="Bairros:" for="selectBairroVenda" /> -->
+							<p:selectCheckboxMenu label="Bairros:" id="selectBairroLocacao"
+								rendered="#{!criterioBean.regiaoBairro}"
+								value="#{criterioBean.listaBairros}" showCheckbox="true"
+								filterMatchMode="contains" converter="converteBairro">
+								<f:selectItems value="#{bairroBean.listaBairros}"
+									var="bairroLocacao" itemLabel="#{bairroLocacao.baiNome}"
+									itemValue="#{bairroLocacao}" />
+							</p:selectCheckboxMenu>
+
+							<!-- <p:outputLabel value="Cidades:" for="selectCidadeVenda" /> -->
+							<p:selectCheckboxMenu id="selectCidadeLocacao"
+								value="#{criterioBean.listaCidades}" label="Cidades:"
+								showCheckbox="true" filterMatchMode="contains"
+								converter="converteCidade">
+								<f:selectItems value="#{cidadeBean.listaCidades}"
+									var="cidLocacao" itemLabel="#{cidLocacao.cidNome}"
+									itemValue="#{cidLocacao}" />
+							</p:selectCheckboxMenu>
+
+							<!-- <p:outputLabel value="Tipo do imóvel" for="selectTipoVenda" /> -->
+							<p:selectCheckboxMenu id="selectTipoLocacao"
+								value="#{criterioBean.listaTipos}" label="Tipo do imóvel"
+								showCheckbox="true" filter="true" filterText="Filter"
+								filterMatchMode="startsWith" panelStyle="width:220px">
+								<f:selectItems value="#{tipoImovelBean.listaTipoImoveis}"
+									var="tipoLocacao" itemLabel="#{tipoLocacao.tipNome}"
+									itemValue="#{tipoLocacao.tipId}" />
+							</p:selectCheckboxMenu>
+
+							<!-- <p:outputLabel value="Detalhe do imóvel" for="selectDetalheVenda" /> -->
+							<p:selectCheckboxMenu id="selectDetalheLocacao"
+								value="#{criterioBean.listaDetalhes}" label="Detalhe do imóvel"
+								showCheckbox="true" filter="true" filterText="Filter"
+								filterMatchMode="startsWith" panelStyle="width:220px">
+								<f:selectItems value="#{criterioBean.listaDetalhesSemQuarto}"
+									var="detaLocacao" itemLabel="#{detaLocacao.carNome}"
+									itemValue="#{detaLocacao.carId}" />
+							</p:selectCheckboxMenu>
+
+						<!-- 	  <p:outputLabel value="Quartos" for="selectQtdQuartos" />  
+							<p:selectOneMenu value="#{criterioBean.qtdQuartos}"
+								label="QuartosLocacao" id="selectQtdQuartosLocacao"
+								effect="fade" filterMatchMode="contains">
+								<f:selectItem id="val0" itemValue="0" itemLabel="Qtd de quartos"></f:selectItem>
+								<f:selectItem id="val1" itemValue="1" itemLabel="1"></f:selectItem>
+								<f:selectItem id="val2" itemValue="2" itemLabel="2"></f:selectItem>
+								<f:selectItem id="val3" itemValue="3" itemLabel="3"></f:selectItem>
+								<f:selectItem id="val4" itemValue="4" itemLabel="4"></f:selectItem>
+								<f:selectItem id="val5" itemValue="5" itemLabel="5 ou mais"></f:selectItem>
+							</p:selectOneMenu> -->
+							<p:separator style="margin-bottom:10px" />
+						<div class="row" style="margin-bottom: 30px;">
+							<div class="col-sm-3 form-group" style="padding-left: 0px;">
+								<label class="control-label">Quartos de </label>
+							</div>
+							<p:inputText value="#{criterioBean.quartoDe}" id="quartoDe">
+							</p:inputText><h:outputLabel value="até" for="quartoAte"/>
+							<p:inputText value="#{criterioBean.quartoAte}" id="quartoAte"></p:inputText>
+						</div>
+						<div class="row" style="margin-bottom: 30px;">
+							<div class="col-sm-3 form-group" style="padding-left: 0px;">
+								<label class="control-label">Valor minimo</label>
+								<p:inputText id="valMinimoLocacao" label="Valor minimo"
+									value="#{criterioBean.valorMinimo}" size="9" maxlength="9"
+									validatorMessage=" somente numeros" class="form-control">
+								</p:inputText>
+							</div>
+
+							<div class="col-sm-3 form-group" style="padding-left: 0px;">
+								<label class="control-label">Valor máximo</label>
+								<p:inputText id="valMaximoLocacao" label="Valor maximo"
+									validatorMessage=" somente numeros" class="form-control"
+									value="#{criterioBean.valorMaximo}" size="9" maxlength="9">
+								</p:inputText>
+							</div>
+							
+							<div class="col-sm-3 form-group text-center">
+								<p:commandButton id="citySubmitLocacao" value="Pesquisar"
+									styleClass="ui-priority-primary" update="@form,registrarPesquisa"
+									oncomplete="PF('DialogLocacao').show()"  
+process="@this,booleanRegiaoBairroLocacao,selectRegiaoLocacao,selectBairroLocacao,selectCidadeLocacao,selectTipoLocacao,selectDetalheLocacao,
+valMinimoLocacao,valMaximoLocacao,quartoDe,quartoAte"
+									action="#{criterioBean.pesquisaLocacao}" icon="ui-icon-search" />
+								<p:tooltip for="citySubmitLocacao"
+									value="Pesquisar imóvel para locação" />
+							</div>
+							<div class="col-sm-3 form-group text-center">
+								<p:commandButton id="registrarPesquisa" type="button" 
+									value="Registrar Pesquisa" rendered="#{criterioBean.visivelBotaoRegistraPesquisa}"
+									onclick="PF('registrarPesquisar').show()" icon="ui-icon-extlink"
+process="@this,booleanRegiaoBairroLocacao,selectRegiaoLocacao,selectBairroLocacao,selectCidadeLocacao,selectTipoLocacao,
+selectDetalheLocacao,valMinimoLocacao,valMaximoLocacao,quartoDe,quartoAte"									
+									  />
+							</div>
+						</div>
+						<p:dialog id="dialogRegistrar" width="935px" height="452px" modal="true"
+							showEffect="fade" hideEffect="fade" widgetVar="registrarPesquisar"
+							closable="true" closeOnEscape="true" maximizable="true"
+							minimizable="false">
+							<h:form id="form_registrar">
+							<div class="row">
+
+								<div class="bs-callout bs-callout-info">
+									<h4>Informações Pessoais</h4>
+								</div>
+
+							
+
+								<h:outputLabel value="Nome:" for="nome"  />
+								<h:inputText id="nome" label="Nome da pessoa"
+									requiredMessage="Falta o nome da pessoa !" required="false"
+									value="#{criterioBean.pessoa.pesNome}" size="30" maxlength="30"/>
+
+								<h:outputLabel value="Ramo de atividade: " for="SelectRamo" />
+								<h:selectOneMenu id="SelectRamo"
+									value="#{criterioBean.ramo.ramId}">
+									<f:selectItems value="#{ramoBean.listaRamos}" var="ram"
+										itemLabel="#{ram.ramNome}" itemValue="#{ram.ramId}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="row">
+
+								<div class="bs-callout bs-callout-info">
+									<h4>Detalhes de Contato</h4>
+								</div>
+
+								<p:commandButton id="addEmail" type="button"
+									value="Adicionar Email" onclick="PF('dialogEmail').show()"
+									icon="ui-icon-extlink" update="displayEmail"
+									process="@this" />
+
+								<p:dialog header="Adicionar Email" widgetVar="dialogEmail"
+									resizable="false" id="dialogAddEmail">
+
+									<p:growl id="growlEmail" showDetail="true" sticky="true" />
+									<h:panelGrid id="panelCadastrarEmail" columns="2"
+										style="margin-bottom:10px">
+
+
+										<h:outputLabel value="E-Mail:" for="mailC" />
+										<p:inputText id="mailC" label="E-Mail" required="false"
+											requiredMessage="Falta o E-Mail da Pessoa !"
+											value="#{criterioBean.email.emaEndereco}" size="50"
+											maxlength="50"
+											validatorMessage="E-mail inválido, digite um e-mail valido">
+											<f:validateRegex
+												pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+										</p:inputText>
+
+										<h:outputLabel value="Spam:" for="spamC" />
+										<h:selectOneMenu id="spamC"
+											value="#{criterioBean.email.emaSpam}">
+											<f:converter converterId="javax.faces.Character" />
+											<f:selectItem itemValue="S" itemLabel="Sim" />
+											<f:selectItem itemValue="N" itemLabel="Não" />
+										</h:selectOneMenu>
+										<p:commandButton id="submitEmail" value="Adicionar"
+											update="displayEmail,growlEmail,dialogAddEmail,panelCadastrarEmail"
+											process="@this,mailC,spamC" icon="ui-icon-check"
+											actionListener="#{criterioBean.addEmail}">
+										</p:commandButton>
+										<p:commandButton global="false" process="@this"
+											readonly="true" transient="true" immediate="true"
+											value="Fechar" onclick="PF('dialogEmail').hide();"
+											class="btn btn-default" />
+									</h:panelGrid>
+
+								</p:dialog>
+								<p:outputPanel id="displayEmail"
+									style="display:block;margin-top:10px;">
+									<p:dataList value="#{criterioBean.listaEmail}" var="mail"
+										itemType="circle" emptyMessage="Vazio." 
+										 id="tableEmail">
+										<f:facet name="header">  
+           					     Lista de E-mail  
+          						  </f:facet> 
+  								 E-Mail: #{mail.emaEndereco}, Spam: #{mail.emaSpam == 'S' ? 'SIM' : 'NÂO'} 
+   								 <p:commandButton id="removerMail" value="Remover" process="@this"
+												icon="ui-icon-check" action="#{criterioBean.removerEmail(mail)}"
+												update="tableEmail">
+											<f:setPropertyActionListener target="#{criterioBean.email}"
+												value="#{mail}" />
+											
+										</p:commandButton>
+									</p:dataList>
+								</p:outputPanel>
+
+								<br />
+								<p:commandButton id="showDialogButton" type="button"
+									value="Adcionar Telefone" onclick="PF('dialogTelefone').show()"
+									icon="ui-icon-extlink" process="@this" />
+
+								<p:dialog header="Adcionar Telefone" widgetVar="dialogTelefone"
+									resizable="false" id="dialogAddTelefone">
+
+									<p:growl id="growlAddTelefone" showDetail="true" sticky="true" />
+									<p:panelGrid id="panelCadastrarTelefone" columns="2"
+										style="margin-bottom:10px">
+										<h:outputLabel value="Numero de telefone:" for="telefone" />
+										<p:inputMask id="telefone" label="Numero de telefone"
+											required="false" value="#{criterioBean.telefone.telNumero}"
+											size="15" maxlength="15"
+											requiredMessage="Falta o Telefone da pessoa !"
+											mask="(999) 9999-9999">
+											<f:validateLength minimum="0" maximum="15" />
+										</p:inputMask>
+
+										<h:outputLabel value="SMS:" for="sms" />
+										<h:selectOneMenu id="sms"
+											value="#{criterioBean.telefone.telSms}">
+											<f:converter converterId="javax.faces.Character" />
+											<f:selectItem itemValue="S" itemLabel="Sim" />
+											<f:selectItem itemValue="N" itemLabel="Não" />
+										</h:selectOneMenu>
+
+										<h:outputLabel value="Tipo do telefone:" for="tipotelefone" />
+										<h:selectOneMenu id="tipotelefone"
+											value="#{criterioBean.telefone.telTipo}">
+											<f:selectItem itemValue="CELULAR" itemLabel="Celular" />
+											<f:selectItem itemValue="RESIDENCIAL" itemLabel="Residencial" />
+											<f:selectItem itemValue="COMERCIAL" itemLabel="Comercial" />
+											<f:selectItem itemValue="RECADO" itemLabel="Recado" />
+										</h:selectOneMenu>
+
+										<p:commandButton id="submitTelefone" value="Adicionar"
+											update="displayTelefone,growlAddTelefone,panelCadastrarTelefone"
+											process="@this,telefone,sms,tipotelefone"
+											icon="ui-icon-check" actionListener="#{criterioBean.addTel}">
+										</p:commandButton>
+										<p:commandButton global="false" process="@this"
+											readonly="true" transient="true" immediate="true"
+											value="Fechar" onclick="PF('dialogTelefone').hide();"
+											class="btn btn-default" />
+									</p:panelGrid>
+
+
+								</p:dialog>
+								<p:outputPanel id="displayTelefone"
+									style="display:block;margin-top:10px;">
+									<p:dataList value="#{criterioBean.listaTel}" var="tel"
+										itemType="circle" 
+										id="tableTel" emptyMessage="Vazio." >
+										<f:facet name="header">  
+                Lista de Telefones  
+            </f:facet>
+   Numero: #{tel.telNumero}, Tipo: #{tel.telTipo}, Sms: #{tel.telSms == 'S' ? 'SIM' :'NÂO'} 
+   
+    <p:commandButton id="removerTel" value="Remover" process="@this"
+											icon="ui-icon-check">
+											<f:setPropertyActionListener target="#{criterioBean.telefone}"
+												value="#{tel}" />
+											<f:ajax event="click"
+												listener="#{criterioBean.removerTel(tel)}"
+												execute="removerTel" render="tableTel" />
+										</p:commandButton>
+									</p:dataList>
+								</p:outputPanel>
+
+							</div>
+							
+							<div class="row">
+
+								<div class="bs-callout bs-callout-info">
+									<h4>Detalhes do imóvel</h4>
+								</div>
+									<p:outputLabel value="Àrea do imóvel" for="areaImovel" />
+									<p:inputText id="areaImovel"
+										value="#{criterioBean.imovelDesejado.imoDesAreaImovel}"></p:inputText>
+									<p:outputLabel value="Àrea do terreno" for="areaTerreno" />
+									<p:inputText id="areaTerreno"
+										value="#{criterioBean.imovelDesejado.imoDesAreaTerreno}"></p:inputText>
+										<p:outputLabel value="Valor condomínio" for="valCondominio" />
+									<p:inputText id="valCondominio"
+										value="#{criterioBean.imovelDesejado.imoDesValorCondominio}">
+										<f:validateDoubleRange />
+									</p:inputText>
+									<p:outputLabel value="Valor de mercado" for="valMercado" />
+									<p:inputText id="valMercado"
+										value="#{criterioBean.imovelDesejado.imoDesValorMercado}" />
+
+									<p:outputLabel value="Data construção" for="nas"
+										style="text-align:right" />
+									<p:calendar locale="pt_BR" id="nas" showButtonPanel="true"
+										value="#{criterioBean.imovelDesejado.imoDesDataConstrucao}"
+										navigator="true" showOn="button" pattern="dd/MM/yyyy"
+										size="10" maxlength="10">
+										<h:outputScript name="js/calendario_pt_BR.js"
+											library="resources"></h:outputScript>
+									</p:calendar>
+
+								</div>
+								<div class="row">
+
+									<div class="bs-callout bs-callout-info">
+										<h4>Endereço do imóvel desejado</h4>
+									</div>
+									<p:outputLabel value="Cep" for="cep" />
+									<p:inputText id="cep"
+										value="#{criterioBean.enderecoImovelDesejado.endImoDesCep}" />
+									<p:outputLabel value="Numero" for="numero" />
+									<p:outputLabel value="Rua" for="rua" />
+									<p:inputText id="rua"
+										value="#{criterioBean.enderecoImovelDesejado.endImoDesNome}" />
+									<p:outputLabel value="Numero" for="numero" />
+									<p:inputText id="numero"
+										value="#{criterioBean.enderecoImovelDesejado.endImoDesNumero}" />
+
+									<p:outputLabel value="Zona" for="zona" />
+									<p:selectOneMenu id="zona"
+										value="#{criterioBean.enderecoImovelDesejado.endImoDesZona}">
+										<f:converter converterId="javax.faces.Character" />
+										<f:selectItem itemValue="R" itemLabel="Zona Urbana" />
+										<f:selectItem itemValue="U" itemLabel="Zona Rural" />
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Bairro" for="bairro" />
+									<p:selectOneMenu id="bairro" label="Bairro" value="#{criterioBean.bairro.baiId}">
+										<f:selectItems value="#{bairroBean.listaBairros}" var="bai" itemLabel="#{bai.baiNome}" itemValue="#{bai.baiId}"/>
+									</p:selectOneMenu>
+									<p:outputLabel value="Cidade" for="cidade" />
+									<p:selectOneMenu id="cidade" label="Cidade" value="#{criterioBean.cidade.cidId}">
+										<f:selectItems value="#{cidadeBean.listaCidades}" var="cid" itemLabel="#{cid.cidNome}" itemValue="#{cid.cidId}"/>
+									</p:selectOneMenu>
+
+								</div>
+								
+								<div class="row">
+
+								<div class="bs-callout bs-callout-info">
+									<h4>Observações</h4>
+								</div>
+								<p:outputLabel value="Observações" for="obs"/>
+								<p:inputTextarea class="col-sm-10" id="obs" rows="5"
+									cols="100" autoResize="false" maxlength="249"
+									counter="counter"
+									counterTemplate="{0} caracteres restantes"
+									value="#{criterioBean.imovelDesejado.imoDesObservacao}" />
+								<br />
+								<br />
+								<h:outputText id="counter" />
+								</div>
+
+							<div style="text-align: center">
+								<h:commandButton icon="ui-icon-disk" value="Cadastrar Pessoa"
+									update="growl form"
+									actionListener="#{criterioBean.salvar}"
+									class="btn btn-primary btn-lg" />
+							
+
+								<p:commandButton global="false" process="@this" readonly="true"
+									transient="true" immediate="true" value="Fechar"
+									onclick="registrarPesquisar.hide();return false;"
+									class="btn btn-default" />
+							</div>
+							</h:form>
+						</p:dialog>
+						<p:dialog width="935px" height="452px" modal="true" showEffect="fade" hideEffect="fade"
+								widgetVar="DialogLocacao" closable="true" closeOnEscape="true"
+								maximizable="true" minimizable="false">
+								<div class="bs-callout bs-callout-info">
+									<h4>Imóveis</h4>
+								</div>
+								<ui:repeat value="#{criterioBean.listImoveisPesquisadosLocacao}"
+									var="itemLocacao">
+									<ul class="list-group">
+										<li class="list-group-item active">
+											<h4 class="list-group-item-heading">#{itemLocacao.tipoimovel.tipNome}</h4>
+											<p class="list-group-item-text">Codigo:<kbd>#{itemLocacao.imoId}</kbd></p>
+											<p class="list-group-item-text">#{itemLocacao.imoObservacao}</p>
+										</li>
+									</ul>
+								</ui:repeat>
+							<center>
+
+								<p:commandButton global="false" process="@this" readonly="true"
+									transient="true" immediate="true" value="Fechar" update="registrarPesquisa"
+									onclick="DialogLocacao.hide();return false;"
+									class="btn btn-default" />
+							</center>
+						</p:dialog><!-- 
+						<p:ajaxStatus onstart="dialogAguarde.show()"
+							oncomplete="dialogAguarde.hide();" />
+						<p:dialog widgetVar="dialogAguarde" showHeader="false"
+							resizable="false" closable="false">
+              Aguarde...
+          </p:dialog> -->
+						<!-- 	<p:ajaxStatus>
+								<f:facet name="start">
+									<h:outputText value="Pesquisando imóveis..." />
+								</f:facet>
+								<f:facet name="complete">
+									<h:outputText value="" />
+								</f:facet>
+							</p:ajaxStatus> -->
+						</p:outputPanel>
+					</p:tab>
+					<p:tab title="Venda" id="tabVenda">
+
+						<h:outputText value="Pesquisar por Região: " />
+						<p:selectBooleanCheckbox id="booleanRegiaoBairro"
+							value="#{criterioBean.regiaoBairro}">
+							<p:ajax update="displayVend" />
+						</p:selectBooleanCheckbox>
+
+						<p:outputPanel id="displayVend"
+							style="display:block;margin-top:10px;">
+
+							<p:selectCheckboxMenu label="Região:" id="selectRegiaoVenda"
+								value="#{criterioBean.listaRegioes}" showCheckbox="true"
+								filterMatchMode="contains"
+								rendered="#{criterioBean.regiaoBairro}">
+								<f:selectItems value="#{regiaoBean.listaRegioes}" var="regVenda"
+									itemLabel="#{regVenda.regNome}" itemValue="#{regVenda.regId}" />
+							</p:selectCheckboxMenu>
+
+							<!-- <p:outputLabel value="Bairros:" for="selectBairroVenda" /> -->
+							<p:selectCheckboxMenu label="Bairros:" id="selectBairroVenda"
+								rendered="#{!criterioBean.regiaoBairro}"
+								value="#{criterioBean.listaBairros}" showCheckbox="true"
+								filterMatchMode="contains" converter="converteBairro">
+								<f:selectItems value="#{bairroBean.listaBairros}"
+									var="bairroVenda" itemLabel="#{bairroVenda.baiNome}"
+									itemValue="#{bairroVenda}" />
+							</p:selectCheckboxMenu>
+
+							<!-- <p:outputLabel value="Cidades:" for="selectCidadeVenda" /> -->
+							<p:selectCheckboxMenu id="selectCidadeVenda"
+								value="#{criterioBean.listaCidades}" label="Cidades:"
+								showCheckbox="true" filterMatchMode="contains"
+								converter="converteCidade">
+								<f:selectItems value="#{cidadeBean.listaCidades}" var="cidVenda"
+									itemLabel="#{cidVenda.cidNome}" itemValue="#{cidVenda}" />
+							</p:selectCheckboxMenu>
+
+							<!-- <p:outputLabel value="Tipo do imóvel" for="selectTipoVenda" /> -->
+							<p:selectCheckboxMenu id="selectTipoVenda"
+								value="#{criterioBean.listaTipos}" label="Tipo do imóvel"
+								showCheckbox="true" filter="true" filterText="Filter"
+								filterMatchMode="startsWith" panelStyle="width:220px">
+								<f:selectItems value="#{tipoImovelBean.listaTipoImoveis}"
+									var="tipoVenda" itemLabel="#{tipoVenda.tipNome}"
+									itemValue="#{tipoVenda.tipId}" />
+							</p:selectCheckboxMenu>
+
+							<!-- <p:outputLabel value="Detalhe do imóvel" for="selectDetalheVenda" /> -->
+							<p:selectCheckboxMenu id="selectDetalheVenda"
+								value="#{criterioBean.listaDetalhes}" label="Detalhe do imóvel"
+								showCheckbox="true" filter="true" filterText="Filter"
+								filterMatchMode="startsWith" panelStyle="width:220px">
+								<f:selectItems value="#{criterioBean.listaDetalhesSemQuarto}"
+									var="detaVenda" itemLabel="#{detaVenda.detNome}"
+									itemValue="#{detaVenda.detId}" />
+							</p:selectCheckboxMenu>
+
+							<!--  <p:outputLabel value="Quartos" for="selectQtdQuartos" />  -->
+							<p:selectOneMenu value="#{criterioBean.qtdQuartos}"
+								label="Quartos" id="selectQtdQuartos" effect="fade"
+								filterMatchMode="contains">
+								<f:selectItem itemValue="0" itemLabel="Qtd de quartos"></f:selectItem>
+								<f:selectItem itemValue="1" itemLabel="1"></f:selectItem>
+								<f:selectItem itemValue="2" itemLabel="2"></f:selectItem>
+								<f:selectItem itemValue="3" itemLabel="3"></f:selectItem>
+								<f:selectItem itemValue="4" itemLabel="4"></f:selectItem>
+								<f:selectItem itemValue="5" itemLabel="5 ou mais"></f:selectItem>
+							</p:selectOneMenu>
+
+							<p:separator style="margin-bottom:10px" />
+
+							<div class="row" style="margin-bottom: 30px;">
+							<div class="col-sm-3 form-group" style="padding-left: 0px;">
+								<label class="control-label">Valor minimo</label>
+							<p:inputText id="valMinimo" label="Valor minimo"
+								value="#{criterioBean.valorMinimo}" size="9" maxlength="9"
+								validatorMessage=" somente numeros" class="form-control">
+							</p:inputText>
+							</div>
+
+							<div class="col-sm-3 form-group" style="padding-left: 0px;">
+								<label class="control-label">Valor máximo</label>
+							<p:inputText id="valMaximo" label="Valor maximo"
+								validatorMessage=" somente numeros" class="form-control"
+								value="#{criterioBean.valorMaximo}" size="9" maxlength="9">
+							</p:inputText>
+</div>
+							<p:commandButton id="citySubmitVenda" value="Pesquisar"
+								style="margin-top:5px" update="displayVend" 
+								oncomplete="PF('DialogVenda').show()" styleClass="ui-priority-primary"
+								action="#{criterioBean.pesquisaVenda}" icon="ui-icon-search" />
+								<p:tooltip for="citySubmitVenda" value="Pesquisar imóvel para venda " />
+</div>
+							<p:dialog width="935px" height="452px"  modal="true" showEffect="fade" hideEffect="fade"
+								widgetVar="DialogVenda" closable="true" closeOnEscape="true"
+								maximizable="true" minimizable="false">
+								<div class="bs-callout bs-callout-info">
+									<h4>Imóveis</h4>
+								</div>
+									<ui:repeat value="#{criterioBean.listImoveisPesquisadosVenda}"
+										var="itemVenda">
+											<ul class="list-group">
+										<li class="list-group-item active">
+											<h4 class="list-group-item-heading">#{itemVenda.tipoimovel.tipNome}</h4>
+											<p class="list-group-item-text">Codigo:#{itemVenda.imoId}</p>
+											<p class="list-group-item-text">#{itemVenda.imoObservacao}</p>
+										</li>
+									</ul>
+									</ui:repeat>
+							<center>
+
+								<p:commandButton global="false" process="@this" readonly="true"
+									transient="true" immediate="true" value="Fechar"
+									onclick="DialogVenda.hide();return false;"
+									class="btn btn-default" />
+							</center>
+						</p:dialog>
+
+						<p:ajaxStatus onstart="dialogAguarde.show()"
+							oncomplete="dialogAguarde.hide();" />
+						<p:dialog widgetVar="dialogAguarde" showHeader="false"
+							resizable="false" closable="false">
+                Aguarde...
+            </p:dialog>
+
+
+
+						<!-- 	<p:ajaxStatus>
+								<f:facet name="start">
+									<h:outputText value="Pesquisando a Venda..." />
+								</f:facet>
+								<f:facet name="complete">
+									<h:outputText value="" />
+								</f:facet>
+							</p:ajaxStatus>
+ -->
+						</p:outputPanel>
+					</p:tab>
+				</p:tabView>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

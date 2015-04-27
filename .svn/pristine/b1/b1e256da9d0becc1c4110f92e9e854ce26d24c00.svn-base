@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="formulario" class="form-horizontal">
+			
+			<h3>Grupo de Contas</h3>
+			
+			<div class="row">
+				<div class="bs-example bs-example-tabs">
+					<ul id="myTab" class="nav nav-tabs">
+						<li><a href="consulta.jsf">CONSULTA</a></li>
+						<li class="active"><a href="#">CADASTRO</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true" closable="true" errorClass="bs-callout bs-callout-info" />
+					
+			<br/>
+			
+			<div class="row">
+			
+				<label class="col-md-2 control-label labelRenovar">CÓDIGO</label>
+			
+				<div class="col-md-2 form-group">
+					<h:inputText id="id" class="form-control input-sm"
+						value="#{grupoDeContasBean.grupoDeContas.gruConId}" disabled="true" />
+				</div>
+				
+			</div>
+			
+			<div class="row">
+			
+				<label class="col-md-2 control-label labelRenovar">DESCRIÇÂO</label>
+			
+				<div class="col-md-4 form-group">
+					<h:inputText id="nome" class="form-control input-sm"
+						value="#{grupoDeContasBean.grupoDeContas.gruConNome}" size="35" maxlength="60"
+						required="true" requiredMessage="A descrição não foi preenchido." />
+				</div>
+				
+				<label class="col-md-2 control-label labelRenovar">HISTÓRICO PADRÃO</label>
+			
+				<div class="col-md-4 form-group">
+					<h:inputText id="historicoPadrao" class="form-control input-sm"
+						value="#{grupoDeContasBean.grupoDeContas.gruConHistoricoPadrao}" size="35" maxlength="60"
+						required="true" requiredMessage="Historico padrão não foi preenchido." />
+				</div>
+				
+			</div>
+			
+			<div class="row">
+				<label class="col-xs-2 control-label labelRenovar">Gerar Acumulado de I.R.</label>
+				<div class="col-xs-2">
+					<div class="form-group">
+						<p:selectBooleanCheckbox id="gerarAcumuladoIR"
+							value="#{grupoDeContasBean.grupoDeContas.gruConGerarAcumuloIr}" />
+					</div>
+				</div>
+				<label class="col-xs-2 control-label labelRenovar">Cobra Acréscimos</label>
+				<div class="col-xs-2">
+					<div class="form-group">
+						<p:selectBooleanCheckbox id="cobraAcrescimo"
+							value="#{grupoDeContasBean.grupoDeContas.gruConCobrarAcrescimo}" />
+					</div>
+				</div>
+				<label class="col-xs-2 control-label labelRenovar">Gerar Dimob</label>
+				<div class="col-xs-2">
+					<div class="form-group">
+						<p:selectBooleanCheckbox id="gerarDimob"
+							value="#{grupoDeContasBean.grupoDeContas.gruConGerarDimob}" />
+					</div>
+				</div>
+				
+			</div>
+			
+				<div class="row">
+				
+			<!--CENTRO DE CUSTO -->
+		<label class="col-xs-2 control-label labelRenovar">CENTRO DE CUSTO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+			<h:selectOneMenu id="centroDeCusto" class="form-control input-sm"
+					value="#{grupoDeContasBean.centroDeCusto.cenCusId}" required="true"
+					requiredMessage="Selecione um central de custo" >
+					<f:selectItem itemLabel="Selecione ..." />	
+					<f:selectItems value="#{centroDeCustoBean.listaCentroDeCusto}" 
+					var="sta" itemValue="#{sta.cenCusId}" itemLabel="#{sta.cenCusNome}"/>
+				</h:selectOneMenu>
+					
+			</div>
+		</div>
+		</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="panel panel-default">
+						<div class="panel-footer">Contas Crédito</div>
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label class="control-label">Conta Corrente Créd. Ref. Fin 2001</label>
+								<h:selectOneMenu id="contaCorrenteCredRefFin"
+									class="form-control input-sm" required="true"
+					requiredMessage="Conta Corrente Créd. Ref. Fin 2001" converter="converteContasFinanceiro"
+									value="#{grupoDeContasBean.contasFinanceiroCredito}">
+									<f:selectItem itemLabel="Selecione ..." />
+									<f:selectItems
+										value="#{contasFinanceiroBean.listaContasFinanceiros}"
+										var="pla" itemValue="#{pla}"
+										itemLabel="#{pla.conFinNome}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label class="control-label">Grupo Contas Crédito Valor
+									Original</label>
+								<h:selectOneMenu id="grupoContasCreditoValorOriginal"
+									class="form-control input-sm" required="true"
+					requiredMessage="Grupo Contas Crédito Valor	Original" 
+									value="#{grupoDeContasBean.planoDeContasCreditoValor.plaConId}">
+									<f:selectItem itemLabel="Selecione ..." />
+									<f:selectItems
+										value="#{grupoDeContasBean.listaPlanoDeContasCreditoValor}"
+										var="plaValorCredito" itemValue="#{plaValorCredito.plaConId}"
+										itemLabel="#{plaValorCredito.plaConNome}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label class="control-label">Grupo Contas Crédito Multa</label>
+								<h:selectOneMenu id="grupoContasCreditoMulta"
+									class="form-control input-sm" required="true"
+					requiredMessage="Grupo Contas Crédito Multa"
+									value="#{grupoDeContasBean.planoDeContasCreditoMulta.plaConId}">
+									<f:selectItem itemLabel="Selecione ..." />
+									<f:selectItems
+										value="#{grupoDeContasBean.listaPlanoDeContasCreditoValor}"
+										var="pla" itemValue="#{pla.plaConId}"
+										itemLabel="#{pla.plaConNome}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+							<div class="col-xs-12">
+							<div class="form-group">
+								<label class="control-label">Grupo Contas Crédito Juros</label>
+								<h:selectOneMenu id="grupoContasCreditoJuros"
+									class="form-control input-sm" required="true"
+					requiredMessage="Grupo Contas Crédito Juros"
+									value="#{grupoDeContasBean.planoDeContasCreditoJuros.plaConId}">
+									<f:selectItem itemLabel="Selecione ..." />
+									<f:selectItems
+										value="#{grupoDeContasBean.listaPlanoDeContasCreditoValor}"
+										var="pla" itemValue="#{pla.plaConId}"
+										itemLabel="#{pla.plaConNome}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="panel panel-default">
+						<div class="panel-footer">Contas Débito</div>
+						
+								<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Contas Corrente Déb. Ref. Fin. 2001</label>
+								<h:selectOneMenu id="contasCorrenteDebRefFin"
+									class="form-control input-sm" required="true"
+					requiredMessage="Contas Corrente Déb. Ref. Fin. 2001" converter="converteContasFinanceiro"
+									value="#{grupoDeContasBean.contasFinanceiroDebito}">
+									<f:selectItem itemLabel="Selecione ..." />
+									<f:selectItems
+										value="#{contasFinanceiroBean.listaContasFinanceiros}"
+										var="plaDebito" itemValue="#{plaDebito}"
+										itemLabel="#{plaDebito.conFinNome}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Grupo Contas Débito Valor
+									Original</label>
+								<h:selectOneMenu id="grupoContasDebitoValorOriginal" 
+									class="form-control input-sm" required="true"
+					requiredMessage="Grupo Contas Débito Valor
+									Original" value="#{grupoDeContasBean.planoDeContasDebitoValor.plaConId}">
+									<f:selectItem itemLabel="Selecione ..." />
+									<f:selectItems
+										value="#{grupoDeContasBean.listaPlanoDeContasDebitoValor}"
+										var="plaValorDebito" itemValue="#{plaValorDebito.plaConId}"
+										itemLabel="#{plaValorDebito.plaConNome}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+							<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Grupo Contas Débito Multa</label>
+								<h:selectOneMenu id="grupoContasDebitoMultas"
+									class="form-control input-sm" required="true"
+					requiredMessage="Conta Corrente Créd. Ref. Fin 2001"
+									value="#{grupoDeContasBean.planoDeContasDebitoMulta.plaConId}">
+									<f:selectItem itemLabel="Selecione ..." />
+									<f:selectItems
+										value="#{grupoDeContasBean.listaPlanoDeContasDebitoValor}"
+										var="pla" itemValue="#{pla.plaConId}"
+										itemLabel="#{pla.plaConNome}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+							<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Grupo Contas Débito Juros</label>
+								<h:selectOneMenu id="grupoContasDebitoJuros"
+									class="form-control input-sm" required="true"
+					requiredMessage="Grupo Contas Débito Juros"
+									value="#{grupoDeContasBean.planoDeContasDebitoJuros.plaConId}">
+									<f:selectItem itemLabel="Selecione ..." />
+									<f:selectItems
+										value="#{grupoDeContasBean.listaPlanoDeContasDebitoValor}"
+										var="pla" itemValue="#{pla.plaConId}"
+										itemLabel="#{pla.plaConNome}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<hr />
+			
+			<div class="row" style="text-align: center">
+
+				<div class="btn-group">
+
+					<p:commandButton value="Salvar"
+						process="@this,nome,historicoPadrao,gerarAcumuladoIR,cobraAcrescimo,
+						gerarDimob,centroDeCusto,contaCorrenteCredRefFin,
+						grupoContasCreditoValorOriginal,grupoContasCreditoMulta,
+						grupoContasCreditoJuros,contasCorrenteDebRefFin,
+						grupoContasDebitoValorOriginal,grupoContasDebitoMultas,
+						grupoContasDebitoJuros"
+						action="#{grupoDeContasBean.salvar}"
+						class="btn btn-default btn-lg" />
+
+					<p:commandButton class="btn btn-default btn-lg" value="Limpar" 
+						onclick="javascript: window.location.assign('cadastro.jsf');"/>
+						
+					<p:commandButton class="btn btn-default btn-lg" value="Excluir" 
+						onclick="javascript: window.location.assign('excluir.jsf?id=#{grupoDeContasBean.grupoDeContas.gruConId}');"/>
+						
+				</div>
+
+			</div>
+			
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+</html>

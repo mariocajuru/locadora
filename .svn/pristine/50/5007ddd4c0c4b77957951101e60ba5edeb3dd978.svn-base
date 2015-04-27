@@ -1,0 +1,428 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="pesquisa_imovel">
+		
+		
+			<!-- Características -->
+
+
+			<div class="row">
+
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Pesquisa de Imóveis</h4>
+				</div>
+
+			</div>
+			
+			
+			<!-- Tipo -->
+
+
+			<div class="row">
+
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Tipo</h4>
+				</div>
+												
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Apartamento
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Apt. Cobertura
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Barracão
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Casa
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Casa Comercial
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Chácara/Fazenda/Sítio
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Galpão
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Kitnet
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Loja
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Lote
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Loteamento
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Prédio
+				    </label>
+			 	</div>
+				
+				<div class="col-sm-2">
+				    <label class="checkbox">
+				    	  <input type="checkbox"/> Sala
+				    </label>
+			 	</div>
+				
+			</div>
+		
+			
+			<!-- Características -->
+
+
+			<div class="row">
+
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Características</h4>
+				</div>
+				
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">BANHEIROS</label>
+					<select id="cad_imovel:j_idt83:0:detalhes" name="cad_imovel:j_idt83:0:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">QUARTOS</label>
+					<select id="cad_imovel:j_idt83:1:detalhes" name="cad_imovel:j_idt83:1:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">ÁREA DE SERVIÇO</label><select id="cad_imovel:j_idt83:2:detalhes" name="cad_imovel:j_idt83:2:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">VARANDA</label><select id="cad_imovel:j_idt83:3:detalhes" name="cad_imovel:j_idt83:3:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">Sala de jogos</label><select id="cad_imovel:j_idt83:4:detalhes" name="cad_imovel:j_idt83:4:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">GARAGEM</label><select id="cad_imovel:j_idt83:5:detalhes" name="cad_imovel:j_idt83:5:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">SUITES</label><select id="cad_imovel:j_idt83:6:detalhes" name="cad_imovel:j_idt83:6:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">SALAS </label><select id="cad_imovel:j_idt83:7:detalhes" name="cad_imovel:j_idt83:7:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">COPAS</label><select id="cad_imovel:j_idt83:8:detalhes" name="cad_imovel:j_idt83:8:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">COZINHA</label><select id="cad_imovel:j_idt83:9:detalhes" name="cad_imovel:j_idt83:9:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">SAUNA</label><select id="cad_imovel:j_idt83:10:detalhes" name="cad_imovel:j_idt83:10:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">QD. DE ESPORTES</label><select id="cad_imovel:j_idt83:11:detalhes" name="cad_imovel:j_idt83:11:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">ARÉA PRIVATIVA</label><select id="cad_imovel:j_idt83:12:detalhes" name="cad_imovel:j_idt83:12:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+
+				</div>
+				<div class="col-sm-2 form-group" style="padding-bottom: 10px;">
+
+					<label class="control-label">INTERFONES</label><select id="cad_imovel:j_idt83:13:detalhes" name="cad_imovel:j_idt83:13:detalhes" class="form-control" size="1">	<option value="0" selected="selected">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+							
+				</div>
+
+			</div>
+		
+			
+			<!-- Bairros -->
+
+
+			<div class="row">
+
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Bairros</h4>
+				</div>
+
+			</div>
+		
+			
+			<!-- Cidades -->
+
+
+			<div class="row">
+
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Cidades</h4>
+				</div>
+
+			</div>
+		
+			
+			<!-- Valores -->
+
+
+			<div class="row">
+
+
+				<div class="bs-callout bs-callout-info">
+					<h4>Valores</h4>
+				</div>
+				
+				
+				<div class="col-sm-6 form-group">
+					
+					<label class="control-label">Valor mínimo</label>
+
+					<input class="form-control"/>
+
+				</div>
+
+				<div class="col-sm-6 form-group" >
+					
+					<label class="control-label">Valor máximo</label>
+
+					<input class="form-control"/>
+
+				</div>
+				
+			</div>
+		
+			
+			<!-- Botões -->
+
+
+			<div class="row" style="margin-top: 40px;">
+			
+				<div style="text-align: center">
+					<a class="btn btn-primary btn-lg">Pesquisar Imóvel</a>
+				</div>
+
+			</div>
+						
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

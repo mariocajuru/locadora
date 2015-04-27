@@ -1,0 +1,678 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+		
+		
+		<h:form id="formulario" class="form-horizontal">
+
+			<!-- <p:growl id="growl" showDetail="true" life="2000" /> -->
+			<p:messages id="menssagem" autoUpdate="true" closable="true" showDetail="true" />
+			
+			#{pesquisaImovelBean.carregarDetalhesDoImovel()}
+			
+			<div class="row">
+				<div class="bs-callout bs-callout-info"> <p>Pesquisa de Imóveis</p> </div>
+			</div>
+			
+			<div class="row">
+			
+				<label class="col-md-1 control-label labelRenovar">NOME</label>
+
+				<div class="col-md-11">
+					<div class="form-group">
+					<p:focus for="nome"></p:focus>
+						<p:inputText id="nome" class="form-control input-sm"
+							value="#{pesquisaImovelBean.pessoa.pesNome}" size="20"
+							maxlength="80" required="true" requiredMessage="Nome e telefone obrigatorio"></p:inputText>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row">
+			
+				<label class="col-md-1 control-label labelRenovar">TELEFONE</label>
+				
+				<div class="col-md-5">
+					<div class="form-group">
+						<p:inputMask id="telefone" class="form-control input-sm"
+							value="#{pesquisaImovelBean.telPesquisa.telNumero}" maxlength="15"
+							mask="(99) 9999-9999" required="false" requiredMessage="Telefone brigatorio">
+							<f:validateLength minimum="0" maximum="15" />
+						</p:inputMask>
+					</div>
+				</div>
+
+				<label class="col-md-1 control-label labelRenovar">TIPO</label>
+				
+				<div class="col-md-5">
+					<div class="form-group">
+						<h:selectOneMenu id="tipotelefone" class="form-control input-sm"
+							value="#{pesquisaImovelBean.telPesquisa.telTipo}">
+							<f:selectItem itemValue="CELULAR" itemLabel="Celular" />
+							<f:selectItem itemValue="RESIDENCIAL" itemLabel="Residencial" />
+							<f:selectItem itemValue="COMERCIAL" itemLabel="Comercial" />
+							<f:selectItem itemValue="RECADO" itemLabel="Recado" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+				
+			</div>
+
+			<div class="row">
+				
+				<div class="col-md-12">
+					<div class="form-group" style="text-align: center">
+					
+						<p:commandButton id="submitTel" value="Adicionar"
+							class="btn btn-default btn-lg" icon="ui-icon-check"
+							action="#{pesquisaImovelBean.addTel}"
+							process="@this,nome,telefone,tipotelefone" update="@form" />
+						
+					</div>
+				</div>
+				
+			</div>
+
+
+			<!-- <p:outputLabel value="rendered='#{not empty pesquisaImovelBean.listaTelefones}'"></p:outputLabel> -->
+			<p:outputPanel id="displayRealizarPesquisa"
+				rendered="#{not empty pesquisaImovelBean.listaTelefones}">
+
+				<div class="row">
+					<div class="bs-callout bs-callout-info"> <p>Endereço</p> </div>
+				</div>
+			
+				<ui:include src="/restrito/consulta/fragments/endereco.xhtml" />
+
+				<div class="row">
+					<div class="bs-callout bs-callout-info"> <p>Detalhes</p> </div>
+				</div>
+
+				<ui:include src="/restrito/consulta/fragments/detalhes.xhtml" />
+
+				<div class="row">
+					<div class="bs-callout bs-callout-info"> <p>Características</p> </div>
+				</div>
+				
+				<ui:include src="/restrito/consulta/fragments/caracteristicas.xhtml" />
+
+
+				<hr />
+
+				<p:messages id="cadMenssagem" display="text" autoUpdate="true"
+					closable="true" errorClass="bs-callout bs-callout-info" />
+
+				<div class="row" style="text-align: center">
+
+					<div class="btn-group">
+
+						<p:commandButton id="botaoPesquisa" value="Pesquisa"
+							update="@form" action="#{pesquisaImovelBean.pesquisar}"
+							class="btn btn-default btn-lg"
+							oncomplete="PF('dialogPesquisa').show()" />
+							
+						<p:commandButton id="registrarPesquisa" type="button"
+							value="Registrar Pesquisa"
+							onclick="PF('registrarPesquisar').show()" icon="ui-icon-extlink"
+							process="@this" class="btn btn-default btn-lg"
+							update="dialogRegistrar" rendered="#{pesquisaImovelBean.registrarPesquisa}"/>
+					
+						<p:commandButton value="Limpar" type="reset"
+							class="btn btn-default btn-lg" />
+
+					</div>
+
+				</div>
+
+				<p:dialog id="idDialogImoveisPesquisa" width="825px" height="468px"
+					modal="true" showEffect="fade" hideEffect="fade"
+					widgetVar="dialogPesquisa" closable="true" closeOnEscape="true"
+					maximizable="true" minimizable="false">
+					<p:messages autoUpdate="true" closable="true" showDetail="true" />
+					<div class="bs-callout bs-callout-info">
+						<h4>Imóveis</h4>
+					</div>
+					<ui:repeat value="#{pesquisaImovelBean.listaImoveisEncontrados}"
+						var="imo">
+						<ul class="list-group">
+							<li class="list-group-item active">
+								<h4 class="list-group-item-heading">#{imo.tipoimovel.tipNome}</h4>
+								<p class="list-group-item-text">
+									Codigo:
+									<kbd>#{imo.imoId}</kbd>
+								</p>
+								<p class="list-group-item-text">
+									Chave na filial:
+									<kbd>#{pesquisaImovelBean.chaveNaFilial(imo)}</kbd>
+								</p>
+								<p class="list-group-item-text">#{imo.endereco.endNome} Nº#{imo.endereco.endNumero}, #{imo.endereco.bairro.baiNome}, #{imo.endereco.cidade.cidNome}-#{imo.endereco.cidade.cidUf}</p> 
+								<p:commandButton
+									id="emprestarChave" value="Emprestar Chave"
+									rendered="#{pesquisaImovelBean.botaoEmprestimoChave}"
+									oncomplete="window.open('#{request.contextPath}/restrito/consulta/emprestimochave.jsf?imovel=#{imo.imoId}&amp;nome=#{pesquisaImovelBean.pessoa.pesNome}&amp;pesId=#{pesquisaImovelBean.pessoa.pesId}&amp;tipoTel=#{pesquisaImovelBean.tipoTelParamentro}&amp;tel=#{pesquisaImovelBean.telefoneParamentro}', '_self');">
+									
+								
+								</p:commandButton> 
+								<p:commandButton
+									id="emprestarChaveEntreFiliais" value="Emprestar Chave Entre Filiais"
+									rendered="#{pesquisaImovelBean.botaoEmprestimoChaveEntreFiliais}"
+									oncomplete="window.open('#{request.contextPath}/restrito/consulta/emprestimochaveentrefiliais.jsf?imovel=#{imo.imoId}&amp;nome=#{pesquisaImovelBean.pessoa.pesNome}&amp;pesId=#{pesquisaImovelBean.pessoa.pesId}&amp;tipoTel=#{pesquisaImovelBean.tipoTelParamentro}&amp;tel=#{pesquisaImovelBean.telefoneParamentro}', '_self');"/>
+								
+								<p:commandButton id="detalhes" rendered="#{imo.imoId != '0'}"
+									value="Detalhes do imóvel" class="btn btn-info"
+									onclick="javascript: window.open('#{request.contextPath}/restrito/imovel/cadastro.jsf?id=#{imo.imoId}');" />
+
+								<!-- 	Mapa --> <p:dialog id="idDialogMapa"
+									header="Localização do imóvel" widgetVar="dialogMapa"
+									width="634px" height="465px" closable="true"
+									closeOnEscape="true" maximizable="true" minimizable="false">
+
+									<p:gmap id="mapa" model="#{pesquisaImovelBean.advancedModel}"
+										center="#{pesquisaImovelBean.latitude}, #{pesquisaImovelBean.longitude}"
+										zoom="15" type="HYBRID" style="width:600px;height:400px">
+
+										<p:ajax event="overlaySelect"
+											listener="#{pesquisaImovelBean.onMarkerSelect}" />
+
+										<p:gmapInfoWindow>
+											<p:outputPanel
+												style="text-align:center;display:block;margin:auto:">
+												<p:graphicImage library="resources/"
+													name="#{pesquisaImovelBean.marker.data}" height="150" />
+												<br />
+												<h:outputText value="#{pesquisaImovelBean.marker.title}" />
+											</p:outputPanel>
+
+										</p:gmapInfoWindow>
+
+									</p:gmap>
+									<center>
+										<p:commandButton global="false" process="@this"
+											readonly="true" transient="true" immediate="true"
+											value="Fechar mapa" onclick="dialogMapa.hide();return false;"
+											class="btn btn-default btn-lg" />
+									</center>
+								</p:dialog>
+
+							</li>
+						</ul>
+					</ui:repeat>
+					<center>
+
+						<p:commandButton id="botaoFechar" global="false" process="@this"
+							readonly="true" transient="true" immediate="true" value="Fechar"
+							update="registrarPesquisa"
+							onclick="dialogPesquisa.hide();return false;"
+							class="btn btn-default btn-lg" />
+
+					</center>
+
+				</p:dialog>
+
+				<p:dialog id="dialogRegistrar" width="935px" height="452px"
+					modal="true" showEffect="fade" hideEffect="fade"
+					widgetVar="registrarPesquisar" closable="true" closeOnEscape="true"
+					maximizable="true" minimizable="false">
+					<h:form id="form_registrar">
+						<div class="row">
+
+							<div class="bs-callout bs-callout-info">
+								<h4>Informações Pessoais</h4>
+							</div>
+						</div>
+
+						<div class="row">
+							<!-- Nome pessoa -->
+							<label class="col-md-1 control-label labelRenovar">Nome</label>
+							<div class="col-md-3 form-group">
+								<h:inputText id="nome" label="Nome da pessoa"
+									class="form-control input-sm"
+									requiredMessage="Falta o nome da pessoa !" required="false"
+									value="#{pesquisaImovelBean.pessoa.pesNome}" size="30"
+									maxlength="30" />
+							</div>
+						</div>
+						<div class="row">
+
+							<div class="bs-callout bs-callout-info">
+								<h4>Detalhes de Contato</h4>
+							</div>
+
+							<p:commandButton id="addEmail" type="button"
+								class="btn btn-default btn-lg" value="Adicionar Email"
+								onclick="PF('dialogEmail').show()" icon="ui-icon-extlink"
+								update="displayEmail" process="@this" />
+
+							<p:dialog header="Adicionar Email" widgetVar="dialogEmail"
+								resizable="false" id="dialogAddEmail">
+
+								
+								<p:messages id="growlEmail" autoUpdate="true" closable="true" showDetail="true" />
+								<h:panelGrid id="panelCadastrarEmail" columns="2"
+									style="margin-bottom:10px">
+
+
+									<h:outputLabel value="E-Mail:" for="mailC" />
+									<p:inputText id="mailC" label="E-Mail" required="false"
+										requiredMessage="Falta o E-Mail da Pessoa !"
+										value="#{pesquisaImovelBean.email.emaEndereco}" size="50"
+										maxlength="50"
+										validatorMessage="E-mail inválido, digite um e-mail valido">
+										<f:validateRegex
+											pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+									</p:inputText>
+
+									<h:outputLabel value="Spam:" for="spamC" />
+									<h:selectOneMenu id="spamC"
+										value="#{pesquisaImovelBean.email.emaSpam}">
+										<f:converter converterId="javax.faces.Character" />
+										<f:selectItem itemValue="S" itemLabel="Sim" />
+										<f:selectItem itemValue="N" itemLabel="Não" />
+									</h:selectOneMenu>
+									<p:commandButton id="submitEmail" value="Adicionar"
+										update="displayEmail,growlEmail,dialogAddEmail,panelCadastrarEmail"
+										process="@this,mailC,spamC" icon="ui-icon-check"
+										actionListener="#{pesquisaImovelBean.addEmail}">
+									</p:commandButton>
+									<p:commandButton global="false" process="@this" readonly="true"
+										transient="true" immediate="true" value="Fechar"
+										onclick="PF('dialogEmail').hide();" class="btn btn-default" />
+								</h:panelGrid>
+
+							</p:dialog>
+							<p:outputPanel id="displayEmail"
+								style="display:block;margin-top:10px;">
+								<p:dataList value="#{pesquisaImovelBean.listaEmais}" var="mail"
+									itemType="circle" emptyMessage="Vazio." id="tableEmail">
+									<f:facet name="header">  
+           					     Lista de E-mail  
+          						  </f:facet> 
+  								 E-Mail: #{mail.emaEndereco}, Spam: #{mail.emaSpam == 'S' ? 'SIM' : 'NÂO'} 
+   								 <p:commandButton id="removerMail" value="Remover"
+										process="@this" icon="ui-icon-check"
+										action="#{pesquisaImovelBean.removerEmail(mail)}"
+										update="tableEmail" class="btn btn-default">
+										<f:setPropertyActionListener
+											target="#{pesquisaImovelBean.email}" value="#{mail}" />
+
+									</p:commandButton>
+								</p:dataList>
+							</p:outputPanel>
+
+							<br />
+							<p:commandButton id="showDialogButton" type="button"
+								value="Adicionar Telefone" onclick="PF('dialogTelefone').show()"
+								icon="ui-icon-extlink" process="@this" class="btn btn-default" />
+
+							<p:dialog header="Adicionar Telefone" widgetVar="dialogTelefone"
+								resizable="false" id="dialogAddTelefone">
+
+								
+								<p:messages id="growlAddTelefone" autoUpdate="true" closable="true" showDetail="true" />
+								<p:panelGrid id="panelCadastrarTelefone" columns="2"
+									style="margin-bottom:10px">
+									<h:outputLabel value="Numero de telefone:" for="telefone" />
+									<p:inputMask id="telefone" label="Numero de telefone"
+										required="false"
+										value="#{pesquisaImovelBean.telefone.telNumero}" size="15"
+										maxlength="15" requiredMessage="Falta o Telefone da pessoa !"
+										mask="(999) 9999-9999">
+										<f:validateLength minimum="0" maximum="15" />
+									</p:inputMask>
+
+									<h:outputLabel value="SMS:" for="sms" />
+									<h:selectOneMenu id="sms"
+										value="#{pesquisaImovelBean.telefone.telSms}">
+										<f:converter converterId="javax.faces.Character" />
+										<f:selectItem itemValue="S" itemLabel="Sim" />
+										<f:selectItem itemValue="N" itemLabel="Não" />
+									</h:selectOneMenu>
+
+									<h:outputLabel value="Tipo do telefone:" for="tipotelefone" />
+									<h:selectOneMenu id="tipotelefone"
+										value="#{pesquisaImovelBean.telefone.telTipo}">
+										<f:selectItem itemValue="CELULAR" itemLabel="Celular" />
+										<f:selectItem itemValue="RESIDENCIAL" itemLabel="Residencial" />
+										<f:selectItem itemValue="COMERCIAL" itemLabel="Comercial" />
+										<f:selectItem itemValue="RECADO" itemLabel="Recado" />
+									</h:selectOneMenu>
+
+									<p:commandButton id="submitTelefone" value="Adicionar"
+										update="displayTelefone,growlAddTelefone,panelCadastrarTelefone"
+										process="@this,telefone,sms,tipotelefone" icon="ui-icon-check"
+										actionListener="#{pesquisaImovelBean.addTel}">
+									</p:commandButton>
+									<p:commandButton global="false" process="@this" readonly="true"
+										transient="true" immediate="true" value="Fechar"
+										onclick="PF('dialogTelefone').hide();" class="btn btn-default" />
+								</p:panelGrid>
+
+
+							</p:dialog>
+							<p:outputPanel id="displayTelefone"
+								style="display:block;margin-top:10px;">
+								<p:dataList value="#{pesquisaImovelBean.listaTelefones}"
+									var="tel" itemType="circle" id="tableTel" emptyMessage="Vazio.">
+									<f:facet name="header">  
+                Lista de Telefones  
+            </f:facet>
+   Numero: #{tel.telNumero}, Tipo: #{tel.telTipo}, Sms: #{tel.telSms == 'S' ? 'SIM' :'NÂO'} 
+   
+    <p:commandButton id="removerTel" value="Remover" process="@this"
+										icon="ui-icon-check" class="btn btn-default">
+										<f:setPropertyActionListener
+											target="#{pesquisaImovelBean.telefone}" value="#{tel}" />
+										<f:ajax event="click"
+											listener="#{pesquisaImovelBean.removerTel(tel)}"
+											execute="removerTel" render="tableTel" />
+									</p:commandButton>
+								</p:dataList>
+							</p:outputPanel>
+
+						</div>
+
+						<div class="row">
+
+							<div class="bs-callout bs-callout-info">
+								<h4>Detalhes do imóvel</h4>
+							</div>
+							<!-- Area do imovel -->
+							<label class="col-md-1 control-label labelRenovar">Área
+								do imóvel de</label>
+							<div class="col-md-3 form-group">
+								<p:inputText id="areaImovel" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesAreaImovelDe}"></p:inputText>
+							</div>
+
+							<!-- Area do imovel -->
+							<label class="col-md-1 control-label labelRenovar">Área
+								do imóvel até</label>
+							<div class="col-md-3 form-group">
+								<p:inputText id="areaImovelAte" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesAreaImovelAte}"></p:inputText>
+							</div>
+						</div>
+						<div class="row">
+							<!-- Valor do imovel -->
+							<label class="col-md-1 control-label labelRenovar">Valor
+								do imóvel de</label>
+							<div class="col-md-3 form-group">
+								<p:inputText id="valorImovelDe" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesValorMercadoDe}"></p:inputText>
+							</div>
+
+							<!-- Valor do imovel -->
+							<label class="col-md-1 control-label labelRenovar">Valor
+								do imóvel até</label>
+							<div class="col-md-3 form-group">
+								<p:inputText id="valorImovelAte" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesValorMercadoAte}"></p:inputText>
+							</div>
+						</div>
+						<div class="row">
+
+							<!-- Valor aluguel do imovel -->
+							<label class="col-md-1 control-label labelRenovar">Valor
+								do aluguel de</label>
+							<div class="col-md-3 form-group">
+								<p:inputText id="aluguelImovelDe" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesValorAluguelDe}"></p:inputText>
+							</div>
+
+							<!-- Valor aluguel do imovel -->
+							<label class="col-md-1 control-label labelRenovar">Valor
+								do aluguel até</label>
+							<div class="col-md-3 form-group">
+								<p:inputText id="aluguelImovelAte" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesValorAluguelAte}"></p:inputText>
+							</div>
+						</div>
+						<div class="row">
+
+							<!-- Quantidade de quartos -->
+							<label class="col-md-1 control-label labelRenovar">Quartos
+								de </label>
+							<div class="col-md-3 form-group">
+								<p:inputText id="quartoImovelDe" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesQuartosDe}"></p:inputText>
+							</div>
+
+							<!-- Quantidade de quartos -->
+							<label class="col-md-1 control-label labelRenovar">Quartos
+								até</label>
+							<div class="col-md-3 form-group">
+								<p:inputText id="quartoImovelAte" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesQuartosAte}"></p:inputText>
+							</div>
+
+						</div>
+
+						<div class="row">
+
+							<!-- Tipo -->
+							<label class="col-md-1 control-label labelRenovar">TIPO</label>
+							<div class="col-md-5 control-label labelRenovar">
+								<p:multiSelectListbox label="TIPO" id="selectTipo"
+									disabled="true">
+									<f:selectItems
+										value="#{pesquisaImovelBean.listaTipoImovelDesejador}"
+										var="tipo" itemLabel="#{tipo.tipNome}"
+										itemValue="#{tipo.tipId}" class="form-control input-sm"
+										itemDisabled="true" />
+								</p:multiSelectListbox>
+							</div>
+
+							<label class="col-md-2 control-label labelRenovar">Data
+								construção</label>
+							<div class="col-md-3 form-group">
+								<p:calendar locale="pt_BR" id="nas" showButtonPanel="true"
+									value="#{pesquisaImovelBean.imovelDesejado.imoDesDataConstrucao}"
+									navigator="true" showOn="button" pattern="dd/MM/yyyy" size="10"
+									maxlength="10">
+									<h:outputScript name="js/calendario_pt_BR.js"
+										library="resources"></h:outputScript>
+								</p:calendar>
+							</div>
+
+						</div>
+						<div class="row">
+
+							<div class="bs-callout bs-callout-info">
+								<h4>Endereço do imóvel desejado</h4>
+							</div>
+							<!-- CEP -->
+							<label class="col-md-1 control-label labelRenovar">CEP</label>
+
+							<div class="col-md-2 form-group">
+								<div class="input-group">
+									<p:inputMask id="cep" class="form-control" mask="99.999-999"
+										disabled="true"
+										value="#{pesquisaImovelBean.enderecoImovelDesejado.endImoDesCep}"
+										size="10">
+										<f:validateLength minimum="0" maximum="10" />
+									</p:inputMask>
+								</div>
+							</div>
+
+
+							<!-- ENDEREÇO -->
+							<label class="col-md-1 control-label labelRenovar">ENDEREÇO</label>
+
+							<div class="col-md-4 form-group">
+								<h:inputText id="end" class="form-control input-sm"
+									disabled="true"
+									value="#{pesquisaImovelBean.enderecoImovelDesejado.endImoDesNome}"
+									size="35" maxlength="35" />
+							</div>
+
+
+							<!-- NÚMERO -->
+							<label class="col-md-1 control-label labelRenovar">Nº</label>
+
+							<div class="col-md-1  form-group">
+								<h:inputText id="numEnd" class="form-control input-sm" size="6"
+									disabled="true" maxlength="6"
+									value="#{pesquisaImovelBean.enderecoImovelDesejado.endImoDesNumero}" />
+							</div>
+
+						</div>
+
+						<div class="row">
+
+							<!-- BAIRRO -->
+							<label class="col-md-1 control-label labelRenovar">BAIRRO</label>
+							<div class="col-md-2 control-label labelRenovar">
+								<p:multiSelectListbox label="Bairros" id="selectBairro"
+									disabled="true">
+									<f:selectItems
+										value="#{pesquisaImovelBean.listaBairrosDesejador}"
+										var="bairro" itemLabel="#{bairro.baiNome}"
+										itemValue="#{bairro.baiId}" itemDisabled="true" />
+								</p:multiSelectListbox>
+							</div>
+
+
+							<!-- CIDADE -->
+							<label class="col-md-1 control-label labelRenovar">CIDADE</label>
+
+							<div class="col-md-2 form-group">
+								<h:inputText id="Cidade" class="form-control input-sm"
+									value="#{pesquisaImovelBean.cidade.cidNome}" size="35"
+									maxlength="35" disabled="true" />
+							</div>
+							<!-- ESTADO -->
+							<label class="col-md-1 control-label labelRenovar">ESTADO</label>
+
+							<div class="col-md-1 form-group">
+								<h:inputText id="estado" class="form-control input-sm"
+									value="#{pesquisaImovelBean.cidade.cidUf}" size="5"
+									disabled="true" />
+							</div>
+
+
+							<!-- ZONA -->
+
+							<label class="col-md-1 control-label labelRenovar">ZONA</label>
+
+							<div class="col-md-2 form-group">
+								<h:selectOneMenu id="zona" class="form-control input-sm"
+									value="#{pesquisaImovelBean.endereco.endZona}" disabled="true">
+									<f:converter converterId="javax.faces.Character" />
+									<f:selectItem itemValue="R" itemLabel="ZONA URBANA" />
+									<f:selectItem itemValue="U" itemLabel="ZONA RURAL" />
+								</h:selectOneMenu>
+							</div>
+
+						</div>
+
+						<br />
+
+						<div class="row">
+							<div class="bs-callout bs-callout-info">
+								<h4>Caracteristicas do imóvel</h4>
+							</div>
+
+							<p:dataGrid
+								value="#{pesquisaImovelBean.listaCaracteristicasDesejadas}"
+								var="detalhe" columns="6" paginator="false"
+								class="renovar-DataGrid-Size-2">
+
+								<div class="col-sm-12 form-group">
+									<label class="control-label">#{detalhe.nome}</label>
+
+									<p:selectBooleanButton
+										class="form-control input-sm btn-default"
+										value="#{detalhe.selecionado}"
+										rendered="#{detalhe.unitario == true}" onLabel="Sim"
+										onIcon="ui-icon-check" offLabel="Não" offIcon="ui-icon-close"
+										disabled="true" />
+
+									<h:selectOneMenu class="form-control input-sm"
+										value="#{detalhe.quantidade}"
+										rendered="#{detalhe.unitario == false}" disabled="true">
+										<f:selectItem itemValue="0" itemLabel="" />
+										<f:selectItem itemValue="1" itemLabel="1" />
+										<f:selectItem itemValue="2" itemLabel="2" />
+										<f:selectItem itemValue="3" itemLabel="3" />
+										<f:selectItem itemValue="4" itemLabel="4" />
+										<f:selectItem itemValue="5" itemLabel="5" />
+										<f:selectItem itemValue="6" itemLabel="6" />
+										<f:selectItem itemValue="7" itemLabel="7" />
+										<f:selectItem itemValue="8" itemLabel="8" />
+										<f:selectItem itemValue="9" itemLabel="9" />
+										<f:selectItem itemValue="10" itemLabel="10" />
+										<f:selectItem itemValue="11" itemLabel="11" />
+										<f:selectItem itemValue="12" itemLabel="12" />
+										<f:selectItem itemValue="13" itemLabel="13" />
+										<f:selectItem itemValue="14" itemLabel="14" />
+										<f:selectItem itemValue="15" itemLabel="15" />
+										<f:selectItem itemValue="16" itemLabel="16" />
+										<f:selectItem itemValue="17" itemLabel="17" />
+										<f:selectItem itemValue="18" itemLabel="18" />
+									</h:selectOneMenu>
+
+								</div>
+							</p:dataGrid>
+						</div>
+
+						<div class="col-sm-10 form-group" style="padding-right: 0px;">
+
+							<label class="control-label">Observações</label>
+
+							<p:inputTextarea id="obs" class="autosize form-control" rows="5"
+								cols="100" maxlength="249" counter="counter"
+								counterTemplate="{0} caracteres restantes"
+								value="#{pesquisaImovelBean.imovelDesejado.imoDesObservacao}"
+								style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;" />
+
+							<h:outputText id="vazio" />
+
+							<div style="text-align: right; padding-top: 20px;">
+								<h:outputText id="counter" />
+							</div>
+
+						</div>
+
+						<div>
+							<p:messages autoUpdate="true" closable="true"></p:messages>
+						</div>
+						<div class="row" style="text-align: center">
+
+							<div class="btn-group">
+
+								<p:commandButton icon="ui-icon-disk" value="Cadastrar Pessoa"
+									update="@form" onclick="dialogRegistrar.hide();return false;"
+									actionListener="#{pesquisaImovelBean.salvar}"
+									class="btn btn-default btn-lg" />
+
+								<p:commandButton global="false" process="@this" readonly="true"
+									transient="true" immediate="true" value="Fechar"
+									onclick="dialogRegistrar.hide();return false;"
+									class="btn btn-default btn-lg" />
+							</div>
+						</div>
+					</h:form>
+				</p:dialog>
+
+			</p:outputPanel>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

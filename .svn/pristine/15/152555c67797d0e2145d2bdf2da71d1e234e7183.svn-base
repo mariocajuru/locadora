@@ -1,0 +1,86 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="formulario" class="form-horizontal">
+
+			<ul class="nav nav-tabs">
+				<li><a href="devolucaochave.jsf">DEVOLUÇÃO DE CHAVES</a></li>
+				<li class="active"><a href="#">PARECER DOS EMPRESTIMOS DE
+						CHAVES</a></li>
+			</ul>
+			<h:outputStylesheet library="plugins" name="w2ui/w2ui-1.3.2.css" />
+			<h:outputScript library="plugins" name="w2ui/w2ui-1.3.2.js" />
+
+			<div id="grid" style="width: 100%; height: 500px; overflow: hidden;"></div>
+			<script type="text/javascript">
+		$(function () {
+			$('#grid').w2grid({ 
+				name: 'grid', 
+				header: 'CONSULTA DE PARECERES',
+				show: {
+					header 		: true,
+					toolbar 	: true,
+					footer		: true,
+					lineNumbers	: true,
+					selectColumn: false,
+					expandColumn: true
+				},
+				columns: [
+				    { field: 'nome',    caption: 'Nome',    size: '140px', sortable: true, resizable: true },
+				    { field: 'funcionario',    caption: 'Funcionario',    size: '60px', sortable: true, resizable: true },
+				    { field: 'dataEmprestimo',    caption: 'Data Emprestimo',    size: '84px', sortable: true, resizable: true,style: 'text-align: right' },
+				    { field: 'dataDevolucao',    caption: 'Data Devolução', size: '84px', sortable: true, resizable: true },
+				    { field: 'end',    caption: 'Endereço do imóvel',    size: '350px', sortable: true, resizable: true },
+				    { field: 'tel',    caption: 'Contato',    size: '290px', sortable: true, resizable: true },
+				],
+				searches: [
+					{ type: 'int',   field: 'recid', caption: 'Código' },
+					{ type: 'text',   field: 'funcionario', caption: 'Funcionario' },
+					{ type: 'text',  field: 'nome',     caption: 'Nome' },
+					{ type: 'text',  field: 'end',     caption: 'Endereço do imóvel' },
+					{ type: 'date',  field: 'dataEmprestimo',     caption: 'Data Emprestimo' },
+					{ type: 'date',   field: 'dataDevolucao', caption: 'Data Devolução' },
+					{ type: 'text',  field: 'obs',     caption: 'Observação do Parecer' },
+					{ type: 'text',  field: 'tel',     caption: 'Contato' },
+				],
+				records: [
+							
+					<ui:repeat value="#{emprestimoChaveBean.listaEmprestimoOrdenadoPorPessoa}" var="emp">
+						{ 
+							recid:     #{emp.getEmpId()}, 
+							funcionario:    '#{emp.getFuncionario().pessoa.pesNome}',
+							nome:  '#{emp.pessoa.pesNome}',
+							dataEmprestimo:  '#{emp.getEmpDataEmprestimo()}',	
+							dataDevolucao:    '#{emp.getEmpDataDevolucao()}',
+							obs: 			  'Parecer: #{emp.getEmpObservacaoParecer()}',
+							end: 			  '#{emp.imovel.endereco.endNome}, #{emp.imovel.endereco.endNumero}, #{emp.imovel.endereco.bairro.baiNome}, #{emp.imovel.endereco.cidade.cidNome}-#{emp.imovel.endereco.cidade.cidUf}',
+							tel: 			'#{emprestimoChaveBean.buscarTelefonePorPessoa(emp.pessoa.pesId)}',
+						 },
+					</ui:repeat>
+						
+				],
+				 onExpand: function (event) {
+					var id = event.recid;
+
+					var informacoes = w2ui['grid'].get(id);
+					 
+			    	$('#'+event.box_id).html('<div style="padding: 10px">'+informacoes['obs']+'</div>').animate({ 'height': 100 }, 100);
+			    }
+		        ,			  
+				onDblClick: function(event) {
+					console.log(event.recid);
+				    window.open("#{request.contextPath}/restrito/locacao/cadastro-contrato.jsf?id=" + event.recid, "_self");
+				}
+			});	
+		});
+		</script>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

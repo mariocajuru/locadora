@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+		
+	<div class="row">
+		
+		<!-- ID -->
+		<label class="col-xs-1 control-label labelRenovar">FUNCIONÁRIO ID</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:inputText id="captadorId" class="form-control input-sm"
+					value="#{imovelBean.captador.pesId}" />
+					
+			</div>
+		</div>
+		
+		<!-- PROCURAR INQUILINO -->	
+		<div class="col-xs-2">
+			<div class="form-group" style="text-align: center; padding-left: 10px;">
+		
+				<input type="button" class="btn btn-default btn-sm btn-block" 
+					onclick="javascript:openGridCaptador();" value="Procurar" />
+					
+			</div>
+		</div>
+		
+	</div>
+	
+	<br/>
+	
+	<div class="row">
+	
+		<!-- NOME -->
+		<label class="col-xs-1 control-label labelRenovar">NOME</label>
+	
+		<div class="col-xs-5">
+			<div class="form-group">
+				<h:inputText id="captadorNome" class="form-control input-sm"
+					value="#{imovelBean.captador.pessoa.pesNome}" disabled="true" />
+			</div>
+		</div>
+			
+	
+		<!-- FILIAL -->
+		<label class="col-xs-1 control-label labelRenovar">FILIAL</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="captadorFilial" class="form-control input-sm"
+					value="#{imovelBean.captador.filial.filNome}" disabled="true"  />
+			</div>
+		</div>
+			
+	</div>
+	<script type="text/javascript">		
+		$(function () {		
+			// widget configuration
+			var configCaptador = {
+				layout: {
+					name: 'layoutIndicacao',
+					padding: 0,
+					panels: [
+						{ type: 'main', minSize: 350, overflow: 'hidden' }
+					]
+				},
+				grid: { 
+					name: 'gridCaptador',
+					style: 'border: 0px; border-left: 1px solid silver',
+					show: {
+						header 		: false,
+						toolbar 	: true,
+						footer		: false,
+						lineNumbers	: false,
+						selectColumn: false,
+						expandColumn: false
+					},
+					columns: [
+						{ field: 'recid', caption: 'Código', size: '60px', sortable: true, resizable: true },
+					    { field: 'nome', caption: 'Nome', size: '280px', sortable: true, resizable: true },
+					    { field: 'cpfcnpj', caption: 'CPF/CNPJ', size: '100px', sortable: true, resizable: true },
+					    { field: 'filial', caption: 'FILIAL', size: '100px', sortable: true, resizable: true }
+					],
+					searches: [
+						{ type: 'int',  field: 'recid', caption: 'Código' },
+						{ type: 'text',  field: 'nome', caption: 'Nome' },
+						{ type: 'text',  field: 'filial', caption: 'FILIAL' },
+					],
+					records: [
+								
+						<ui:repeat value="#{funcionarioBean.listaCaptadores}" var="cap">
+							{ 
+								recid: #{cap.pesId}, 
+								nome: '#{cap.pessoa.getPesNome()}', 
+								cpfcnpj: '#{cap.pessoa.getPesCpfCnpj()}',
+								filial: '#{cap.filial.getFilNome()}',
+							 },
+						</ui:repeat>
+							
+					],
+					onDblClick: function(event) {
+						var id = event.recid;
+	
+						var obj = w2ui['gridCaptador'].get(id);
+	
+						w2popup.close();
+						
+						if (obj != null) {
+							console.log(w2ui['gridCaptador'].get(id));
+							
+							document.getElementById('formulario:captadorId').value   = obj.recid    + "";
+							document.getElementById('formulario:captadorNome').value = obj.nome     + "";
+							document.getElementById('formulario:captadorFilial').value  = obj.filial  + "";
+						}
+					}					
+				}
+			}
+			
+			// initialization in memory
+			$().w2layout(configCaptador.layout);
+			$().w2grid(configCaptador.grid);
+		});
+
+		function openGridCaptador() {
+			w2popup.open({
+				title 	: 'Selecione o captador',
+				width	: 800,
+				height	: 600,
+				showMax : true,
+				body 	: '<div id="main" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px;"></div>',
+				onOpen  : function (event) {
+					event.onComplete = function () {
+						$('#w2ui-popup #main').w2render('layout');
+						w2ui.layout.content('main', w2ui['gridCaptador']);
+					}
+				},
+				onMax : function (event) { 
+					event.onComplete = function () {
+						w2ui.layout.resize();
+					}
+				},
+				onMin : function (event) {
+					event.onComplete = function () {
+						w2ui.layout.resize();
+					}
+				}		
+			});
+		}		
+	</script>
+		
+</ui:composition>

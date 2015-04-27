@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<div class="row">
+	
+		<!-- MULTA POR ATRASO -->
+		<label class="col-md-2 control-label labelRenovar">MULTA POR ATRASO</label>
+		
+		<div class="col-sm-2 form-group">	
+			<pe:inputNumber id="multaPorAtraso"
+					value="#{contratoLocacaoBean.locacao.locMultaAtraso}" size="15"
+					maxlength="15" required="false" symbol="%"  
+                    symbolPosition="s" emptyValue="empty" decimalPlaces="2" disabled="#{contratoLocacaoBean.alteracao}">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>
+		</div>
+		
+		<!-- JUROS POR ATRASO -->
+		<label class="col-md-2 control-label labelRenovar">JUROS POR ATRASO</label>
+		
+		<div class="col-sm-2 form-group">	
+			<pe:inputNumber id="jurosPorAtraso"
+					value="#{contratoLocacaoBean.locacao.locJurosAtraso}" size="15"
+					maxlength="15" required="false" symbol="%"  
+                    symbolPosition="s" emptyValue="empty" decimalPlaces="2" disabled="#{contratoLocacaoBean.alteracao}">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>
+		</div>
+		
+		<!-- MULTA POR RECISÃO -->
+		<label class="col-md-2 control-label labelRenovar">MULTA POR RECISÃO</label>
+		
+		<div class="col-sm-2 form-group">	
+			<pe:inputNumber id="multaPorRecisao"
+					value="#{contratoLocacaoBean.locacao.locMultaRecisao}" size="15"
+					maxlength="15" required="false" symbol="%"  
+                    symbolPosition="s" emptyValue="empty" decimalPlaces="2" disabled="#{contratoLocacaoBean.alteracao}">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>
+		</div>
+</div>
+
+</ui:composition>

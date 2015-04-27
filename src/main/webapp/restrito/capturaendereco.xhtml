@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<script type="text/javascript"
+			src="http://maps.google.com/maps/api/js?sensor=true"></script>
+		<div class="page-header">
+			<h1>
+				Lista de imóveis <small>escolha o imóvel para localizar
+					latitude e longitude</small>
+			</h1>
+		</div>
+		<h:form>
+			<p:growl id="growl" sticky="true" showDetail="false" autoUpdate="true" life="2000"/>
+
+			<p:dataTable id="imoveis" var="imo"
+				value="#{imovelBean.listaImoveis}" paginator="true" rows="5"
+				emptyMessage="Não há registro dessa Pessoa"
+				selection="#{imovelBean.imovel}" rowKey="#{imo.imoId}">
+
+				<f:facet name="header">  
+							            Selecione o imóvel para editar novas coordenadas  
+							        </f:facet>
+				<p:column selectionMode="single" style="width:2%" />
+				<p:column headerText="Tipo" style="width:23%">
+					<h:outputText value="#{imovelBean.carregarTipoImovel(imo.imoId)}" />
+				</p:column>
+				<p:column headerText="Rua" style="width:20%"
+					filterBy="#{imo.endereco.endNome}">
+					<h:outputText value="#{imo.endereco.endNome}" />
+				</p:column>
+				<p:column headerText="Nº" style="width:10%"
+					filterBy="#{imo.endereco.endNumero}">
+					<h:outputText value="#{imo.endereco.endNumero}" />
+				</p:column>
+				<p:column headerText="Bairro" style="width:10%"
+					filterBy="#{imo.endereco.bairro.baiNome}">
+					<h:outputText value="#{imo.endereco.bairro.baiNome}" />
+				</p:column>
+				<p:column headerText="Cidade" style="width:20%"
+					filterBy="#{imo.endereco.cidade.cidNome}">
+					<h:outputText
+						value="#{imo.endereco.cidade.cidNome}-#{imo.endereco.cidade.cidUf}" />
+				</p:column>
+				<p:column headerText="Lat/Log" style="width:15%">
+					<h:outputText
+						value="#{imo.endereco.endLatitude}/#{imo.endereco.endLongitude}" />
+				</p:column>
+				<f:facet name="footer">
+				</f:facet>
+			</p:dataTable>
+			<p:commandButton value="Buscar" process="@this,imoveis"
+				icon="ui-icon-search" update="dialogMap"
+				oncomplete="PF('map').show()" 
+				action="#{imovelBean.pesquisarMapa}"/>
+
+		
+
+			<p:dialog id="dialogMap" header="Localização atual:  lat #{imovelBean.imovel.endereco.endLatitude} / log #{imovelBean.imovel.endereco.endLongitude}" widgetVar="map"
+				resizable="false" showEffect="fade" hideEffect="explode"
+				width="750px" height="494px">
+				
+				<p:gmap id="mapa" model="#{imovelBean.advancedModel}"
+					center="#{imovelBean.latitude}, #{imovelBean.longitude}" zoom="15"
+					type="HYBRID" style="width:730px;height:440px">
+					
+					<p:ajax event="stateChange" listener="#{imovelBean.onStateChange}"
+						update="growl" />
+					<p:ajax event="pointSelect" listener="#{imovelBean.onPointSelect}"
+						update="growl,latLog" />
+					<p:ajax event="markerDrag" listener="#{imovelBean.onMarkerDrag}"
+						update="growl" />
+
+					<p:ajax event="overlaySelect"
+						listener="#{imovelBean.onMarkerSelect}" />
+
+					<p:gmapInfoWindow>
+						<p:outputPanel
+							style="text-align:center;display:block;margin:auto:">
+							<p:graphicImage library="resources/"
+								name="#{imovelBean.marker.data}" height="150" />
+							<br />
+							<h:outputText value="#{imovelBean.marker.title}" />
+						</p:outputPanel>
+
+					</p:gmapInfoWindow>
+
+				</p:gmap>
+				<center>
+										<p:commandButton global="false" process="@this"
+											readonly="true" transient="true" immediate="true"
+											value="Fechar mapa" onclick="map.hide();return false;"
+											class="btn btn-default btn-lg" />											
+											<br/>											
+											<p:outputLabel value="Nova: lat #{imovelBean.latitude} / log #{imovelBean.longitude}"
+											id="latLog"></p:outputLabel>
+											<br/>
+											<p:commandButton 
+											id="enviarLatLog"
+											action="#{imovelBean.salvarLatLog}"
+											value="Salvar Lat.e Log"
+											process="@this"
+											update="dialogMap,imoveis"
+											/>
+									</center>
+
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

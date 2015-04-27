@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<div class="row">
+	
+		<!-- CEP -->
+		<label class="col-xs-1 control-label labelRenovar">CEP</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<div class="input-group">
+				<p:focus for="cep"></p:focus>
+					<p:inputMask id="cep" class="form-control" mask="99.999-999"
+						value="#{filialBean.endereco.endCep}" size="10" required="true"
+						requiredMessage="O cep não foi preenchido.">
+						<f:validateLength minimum="0" maximum="10" />
+					</p:inputMask>
+		
+					<span class="input-group-btn">
+						<button class="btn btn-default btn-xssssss" type="button"
+							onclick="javascript:getEndereco();">Pesquisar</button>
+					</span>
+				</div>
+				
+			</div>
+		</div>
+	
+	
+		<!-- ENDEREÇO -->
+		<label class="col-xs-1 control-label labelRenovar">ENDEREÇO</label>
+	
+		<div class="col-xs-3">
+			<div class="form-group">
+			
+				<h:inputText id="end" class="form-control input-sm"
+					value="#{filialBean.endereco.endNome}" size="35" maxlength="35"
+					required="true" requiredMessage="O Endereço não foi preenchido." />
+				
+			</div>
+		</div>
+	
+	
+		<!-- NÚMERO -->
+		<label class="col-xs-1 control-label labelRenovar">Nº</label>
+	
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<pe:inputNumber id="numEnd"
+					required="true"  decimalPlaces="0"
+					requiredMessage="O Número do Endereço não foi preenchido." size="6"
+					maxlength="6" value="#{filialBean.endereco.endNumero}">
+					<f:converter converterId="javax.faces.Integer" />
+				</pe:inputNumber>
+			</div>
+		</div>
+	
+	
+		<!-- COMPLEMENTO -->
+		<label class="col-xs-1 control-label labelRenovar">COMPL.</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:inputText id="complemento" class="form-control input-sm"
+					value="#{filialBean.endereco.endComplemento}" size="30"
+					maxlength="30">
+					<f:validateLength minimum="0" maximum="60" />
+				</h:inputText>
+			
+			</div>
+		</div>
+	
+	</div>
+	
+	<div class="row">
+	
+		<!-- BAIRRO -->
+		<label class="col-xs-1 control-label labelRenovar">BAIRRO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:inputText id="bairro" class="form-control input-sm"
+					value="#{filialBean.bairro.baiNome}" size="35"
+					required="true" requiredMessage="O Bairro não foi preenchido." />
+				
+			</div>
+		</div>
+	
+	
+		<!-- CIDADE -->
+		<label class="col-xs-1 control-label labelRenovar">CIDADE</label>
+	
+		<div class="col-xs-3">
+			<div class="form-group">
+				
+				<h:inputText id="Cidade" class="form-control input-sm"
+					value="#{filialBean.cidade.cidNome}" size="35"
+					maxlength="35" />
+					
+			</div>
+		</div>
+	
+	
+		<!-- ESTADO -->
+		<label class="col-xs-1 control-label labelRenovar">ESTADO</label>
+	
+		<div class="col-xs-1">
+			<div class="form-group">
+				
+				<h:inputText id="estado" class="form-control input-sm"
+					value="#{filialBean.cidade.cidUf}"
+					size="5" />
+					
+			</div>
+		</div>
+	
+	
+		<!-- ZONA -->
+	
+		<label class="col-xs-1 control-label labelRenovar">ZONA</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:selectOneMenu id="zona" class="form-control input-sm"
+					value="#{filialBean.endereco.endZona}">
+					<f:converter converterId="javax.faces.Character" />
+					<f:selectItem itemValue="R" itemLabel="ZONA URBANA" />
+					<f:selectItem itemValue="U" itemLabel="ZONA RURAL" />
+				</h:selectOneMenu>
+				
+			</div>
+		</div>
+	
+	</div>
+	<div class="row">
+	<!-- PONTO DE REFERENCIA -->
+		<label class="col-xs-1 control-label labelRenovar">REFERÊNCIA</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+				<p:inputText id="referancia" class="form-control input-sm"
+					size="30" maxlength="29" value="#{filialBean.endereco.endPontoreferencial}">
+				</p:inputText>
+			</div>
+		</div>
+	
+
+	</div>
+		
+</ui:composition>

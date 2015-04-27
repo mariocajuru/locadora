@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="form">
+				<p:growl id="msg" showDetail="true" escape="false"   life="1900"/>
+				<p:messages id="mensagens" autoUpdate="true" showDetail="true" closable="true"/>
+			<div class="bs-callout bs-callout-info">
+				<h4>Emitir Relatório, pessoas cadastradas</h4>
+			</div>
+			<h:commandLink value="Gerar Boleto Download"
+				action="#{gerarBoleto.download}" />
+				
+				<p:spacer width="30px"></p:spacer> 
+
+			<h:commandLink value="Gerar Boleto Nova Aba"
+				action="#{gerarBoleto.abrirNovaAba}" target="_blank"/>
+				
+				<p:spacer width="30px"></p:spacer>
+
+			<h:commandLink id="pdf">
+				<f:setPropertyActionListener target="#{relatorioBean.tipoRelatorio}"
+					value="1" />
+				<p:fileDownload value="#{relatorioBean.arquivoRetorno}" />
+				<h:graphicImage library="imagens" name="pdf.png"
+					title="Imprimir PDF" />
+			</h:commandLink>
+			<h:commandLink id="excel">
+				<f:setPropertyActionListener target="#{relatorioBean.tipoRelatorio}"
+					value="2" />
+				<p:fileDownload value="#{relatorioBean.arquivoRetorno}" />
+				<h:graphicImage library="imagens" name="excel.png"
+					title="Imprimir Excel" />
+			</h:commandLink>
+			<h:commandLink id="html">
+				<f:setPropertyActionListener target="#{relatorioBean.tipoRelatorio}"
+					value="3" />
+				<p:fileDownload value="#{relatorioBean.arquivoRetorno}" />
+				<h:graphicImage library="imagens" name="html.png"
+					title="Imprimir HTML" />
+			</h:commandLink>
+			<h:commandLink id="open">
+				<f:setPropertyActionListener target="#{relatorioBean.tipoRelatorio}"
+					value="4" />
+				<p:fileDownload value="#{relatorioBean.arquivoRetorno}" />
+				<h:graphicImage library="imagens" name="ods.png"
+					title="Imprimir Planilha Open Office" />
+			</h:commandLink>
+				<p:ajaxStatus onstart="dialogAguarde.show()"
+						oncomplete="dialogAguarde.hide();" />
+					<p:dialog widgetVar="dialogAguarde" showHeader="false"
+						resizable="false" closable="false">
+                Aguarde...
+            </p:dialog>
+					<p:tooltip for="pdf" value="Emitir Relatório em PDF " />
+					<p:tooltip for="excel" value="Emitir Relatório em Excel " />
+					<p:tooltip for="html" value="Emitir Relatório em HTML " />
+					<p:tooltip for="open" value="Emitir Relatório em Planilha Open Office " />
+					
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

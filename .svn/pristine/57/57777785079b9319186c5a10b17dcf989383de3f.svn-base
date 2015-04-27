@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<div class="row" style="text-align: center">
+		<p:galleria id="galeria" value="#{imovelBean.listaFotos}" var="foto"  autoPlay="false"
+			panelWidth="1000" panelHeight="313" showCaption="true">
+			<p:graphicImage id="imagens" library="#{foto.fotArquivo}"
+				name="#{foto.fotNome}" alt="Web: #{foto.fotWeb ? 'Sim':'Não'}"
+				title="#{foto.fotNome}" >
+				<p:commandButton id="btnExcluir" 
+                                     process="@this" update="galeria"
+                                     actionListener="#{imovelBean.excluirFotoImovel}"
+                                     icon="ui-icon-trash"  
+                                     title="Excluir" style="position:absolute;right:0px;top:10px;">
+                                     <f:param name="paramId" value="#{foto.fotId}" />
+                                     </p:commandButton>
+                                     
+                                     <p:commandButton id="addWeb" 
+                                     process="@this" update="galeria"
+                                     actionListener="#{imovelBean.addFotoImovelWeb}"
+                                     icon="ui-icon-star"  
+                                     title="Add Web" style="position:absolute;right:0px;top:48px;">
+                                     <f:param name="paramIdWeb" value="#{foto.fotId}" />
+                                     </p:commandButton>
+
+<p:commandButton class="btn btn-default btn-lg" process="@this"
+	onclick="PF('dlg').show();" title="Adicionar Fotos" icon="ui-icon-plus"
+	style="position:absolute;right:0px;top:85px;" ajax="true">
+<f:setPropertyActionListener target="#{imovelBean.imovel}"
+		value="#{imovelBean.imovel}" />
+	<f:setPropertyActionListener target="#{imovelBean.listaFotos}"
+		value="#{null}" />
+</p:commandButton>
+			</p:graphicImage>
+		</p:galleria>
+		</div>
+<!--	<br/>
+ 	<div class="row" style="text-align: center">
+
+		<div class="btn-group">
+
+			<p:commandButton class="btn btn-default btn-lg" process="@this" icon="ui-icon-plus" 
+				onclick="PF('dlg').show();" value="Adicionar fotos">
+				<f:setPropertyActionListener target="#{uploadAquirvo.imovel}"
+					value="#{imovelBean.imovel}" />
+				<f:setPropertyActionListener target="#{imovelBean.listaFotos}"
+					value="#{null}" />
+			</p:commandButton>
+		</div>
+	</div> -->
+	
+	<p:dialog id="dialog" header="Adicionar Fotos" widgetVar="dlg"
+		position="center" closable="false" maximizable="false"
+		minimizable="false" showEffect="explode" hideEffect="bounce"
+		modal="true">
+
+		<p:fileUpload fileUploadListener="#{imovelBean.upload}"
+			allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|PNG|GIF|JPG|JPEG)$/"
+			sizeLimit="3145728" cancelLabel="Cancelar" 
+			dragDropSupport="true" process="@this" 
+			fileLimitMessage="Quantidade de imágens excedidas.Limite de 10 imágens, recarregue a página"
+			label="Selecionar" invalidFileMessage="Tipo de imagem inválido"
+			invalidSizeMessage="Imagem muito grande" uploadLabel="Enviar"
+			 multiple="true" fileLimit="10" update="@this" 
+			mode="advanced" />
+		<center>
+			<p:commandButton  styleClass="ui-confirmdialog-no" process="@this" 
+				icon="ui-icon-close" onclick="dlg.hide();" 
+				class="btn btn-success" value="Fechar" update="panelFotos">
+				<f:setPropertyActionListener target="#{imovelBean.listaFotos}"
+					value="#{null}" />
+			</p:commandButton>
+		</center>
+	</p:dialog>
+
+</ui:composition>

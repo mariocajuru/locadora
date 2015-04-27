@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="formulario" class="form-horizontal">
+			
+			<h3>Situação de Locação</h3>
+			
+			<div class="row">
+				<div class="bs-example bs-example-tabs">
+					<ul id="myTab" class="nav nav-tabs">
+						<li><a href="consulta.jsf">CONSULTA</a></li>
+						<li class="active"><a href="#">CADASTRO</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true" closable="true" errorClass="bs-callout bs-callout-info" />
+					
+			<br/>
+			
+			<div class="row">
+			
+				<label class="col-md-2 control-label labelRenovar">CÓDIGO</label>
+			
+				<div class="col-md-2 form-group">
+					<h:inputText id="id" class="form-control input-sm"
+						value="#{situacaoLocacaoBean.situacaoLocacao.sitLocId}" disabled="true" />
+				</div>
+				
+			</div>
+			
+			<div class="row">
+			
+				<label class="col-md-2 control-label labelRenovar">NOME</label>
+			
+				<div class="col-md-5 form-group">
+					<h:inputText id="nome" class="form-control input-sm"
+						value="#{situacaoLocacaoBean.situacaoLocacao.sitLocNome}" size="35" maxlength="60"
+						required="true" requiredMessage="A situação não foi preenchido." />
+				</div>
+				
+			</div>
+						
+			<hr />
+			<div class="row">
+		<div class="col-xs-6">
+			<div class="panel panel-default">
+		    	
+		        	<div class="panel-footer">Permissões</div>
+		      
+		     	<div class="panel-body">
+					<p:selectManyCheckbox id="checkboxPermissoes" immediate="true" converter="convertePermissoesLocacao"
+						value="#{situacaoLocacaoBean.listaPermissoesLocacaos}" layout="grid"
+						columns="1" >
+						
+						<f:selectItems class="col-xs-3"  
+							value="#{permissoesLocacaoBean.listaPermissoesLocacoes}" var="per2"
+							itemLabel="#{per2.perLocNome}" itemValue="#{per2}" />
+					</p:selectManyCheckbox>
+		     	</div>
+		    </div>
+	    </div>
+		<div class="col-xs-6">
+			<div class="panel panel-default">
+		        	<div class="panel-footer">Situação</div>
+		     	<div class="panel-body">
+					<p:selectOneRadio id="checkboxSituacao" required="true" 
+					requiredMessage="Selecione uma situação do imóvel."
+						value="#{situacaoLocacaoBean.situacaoimovel.sitId}" columns="1" 
+						layout="grid">
+						
+						<f:selectItems class="col-xs-3" 
+							value="#{situacaoimovelBean.listaSituacaoImovels}" var="sit"
+							itemLabel="#{sit.sitNome}" itemValue="#{sit.sitId}" />
+					</p:selectOneRadio>
+		     	</div>
+		    </div>
+	    </div>
+    </div>
+			
+			<div class="row" style="text-align: center">
+
+				<div class="btn-group">
+
+					<p:commandButton value="Salvar"
+						action="#{situacaoLocacaoBean.salvar}" 
+						class="btn btn-default btn-lg" />
+						
+					<p:commandButton class="btn btn-default btn-lg" value="Limpar" 
+						onclick="javascript: window.location.assign('cadastro.jsf');"/>
+						
+					<p:commandButton class="btn btn-default btn-lg" value="Excluir" 
+						onclick="javascript: window.location.assign('excluir.jsf?id=#{situacaoLocacaoBean.situacaoLocacao.sitLocId}');"/>
+						
+				</div>
+
+			</div>
+			
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+</html>

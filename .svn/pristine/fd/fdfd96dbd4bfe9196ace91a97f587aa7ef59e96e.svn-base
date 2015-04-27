@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<h:form id="formulario" class="form-horizontal">
+
+			<div class="page-header">
+				<h1>
+					<small>REAJUSTE</small>
+				</h1>
+			</div>
+
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true"
+				closable="true" errorClass="bs-callout bs-callout-info" />
+
+			<div class="row">
+				<!-- MES  -->
+				<label class="col-xs-2 control-label labelRenovar">MÊS
+					VENCIMENTO DOS CONTRATOS </label>
+
+				<div class="col-xs-2">
+					<div class="form-group">
+
+						<div class="input-group">
+							<pe:inputNumber id="mes" requiredMessage="MÊS obrigatório"
+								rendered="true" value="#{contaCorrenteBean.mes}" size="10"
+								maxlength="12" required="true" decimalPlaces="0" maxValue="12">
+								<f:validateLength minimum="1" maximum="12" />
+								<f:converter converterId="javax.faces.Integer" />
+							</pe:inputNumber>
+							<span class="input-group-btn"> <p:commandButton
+									process="@this, mes" update="mes,table,tableContratos"
+									value="PESQUISAR" icon="ui-icon-search"
+									action="#{contaCorrenteBean.pesquisarContratos}"
+									class="btn btn-default btn-xssssss" />
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p:outputPanel id="table">
+				<div class="row">
+					<p:dataTable id="tableContratos" var="cont"
+						rowsPerPageTemplate="10,15,50,100"
+						value="#{contaCorrenteBean.contratosPesquisados}" rows="10"
+						selection="#{contaCorrenteBean.contratosSelecionados}"
+						rendered="#{not empty contaCorrenteBean.contratosPesquisados}"
+						rowKey="#{cont.locId}" style="margin-bottom:0"
+						emptyMessage="Não há contratos encontrados">
+						<f:facet name="header">
+            Contratos
+        </f:facet>
+						<p:column selectionMode="multiple" rendered="false"
+							style="width:16px;text-align:center" />
+						<p:column headerText="Código">
+							<h:outputText value="#{cont.locId}" />
+						</p:column>
+						<p:column headerText="Código Imóvel">
+							<h:outputText value="#{cont.imovel.imoId}" />
+						</p:column>
+						<p:column headerText="Imóvel">
+							<h:outputText value="#{cont.imovel.tipoimovel.tipNome}" />
+						</p:column>
+						<p:column headerText="Locatário">
+							<h:outputText value="#{cont.pessoa.pesNome}" />
+						</p:column>
+						<p:column headerText="Proprietário(s)">
+							<h:outputText
+								value="#{contaCorrenteBean.carregarProprietarios(cont.imovel.imoId)}" />
+						</p:column>
+						<p:column headerText="Vencimento">
+							<p:outputLabel id="caledario" value="#{cont.locLancamentoMesAno}">
+								<f:convertDateTime pattern="dd-MM-yyyy" />
+							</p:outputLabel>
+						</p:column>
+						<p:column style="width:32px;text-align: center">
+							<p:commandButton process="@this"
+								oncomplete="window.open('#{request.contextPath}/restrito/locacao/cadastro-contrato.jsf?id=#{cont.locId}', '_black')"
+								icon="ui-icon-search" title="Destalhes">
+							</p:commandButton>
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton process="tableContratos" update="@form"
+								icon="ui-icon-check" value="Gerar Reajuste"
+								action="#{contaCorrenteBean.gerarReajuste}" />
+						</f:facet>
+					</p:dataTable>
+
+				</div>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

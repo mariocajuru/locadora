@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div class="page-header">
+			<h1>
+				Cadastro de Filial <small>visão geral</small>
+			</h1>
+		</div>
+		<style>
+.coluna1 {
+	text-align: right
+}
+
+.coluna2 {
+	text-align: left
+}
+</style>
+
+		<h:form id="cadsede">
+			<p:growl id="growl" sticky="true" showDetail="true" life="2000" />
+			<p:messages id="cadMenssagem" autoUpdate="true" />
+			<h:inputHidden value="#{filialBean.sede.filId}" />
+			<h:inputHidden value="#{filialBean.destinoSalvar}" />
+
+			<p:panel header="Incluir Filial">
+			 <p:focus for="panelGrid" context="panelGrid"/>
+				<h:panelGrid id="panelGrid" columns="3">
+					<h:outputLabel value="Cep:" for="cep"
+						style="font-weight:bold; padding-right: 5px; float: right;" />
+					<p:inputMask id="cep" label="cepPJ" mask="99.999-999"
+						value="#{filialBean.endereco.endCep}" size="10" required="true"
+						requiredMessage="Falta o CEP">
+						<f:validateLength minimum="0" maximum="10" />
+					</p:inputMask>
+
+
+					<p:commandButton value="Pesquisar" icon="ui-icon-search" process="@this">
+						<f:setPropertyActionListener
+							target="#{filialBean.endereco.endCep}"
+							value="#{filialBean.endereco.endCep}" />
+						<f:ajax event="click" execute="cep"
+							listener="#{filialBean.encontraCEP}" render=":cadsede" />
+					</p:commandButton>
+				</h:panelGrid>
+				<h:panelGrid columns="2" bgcolor="#FAFAD2"
+					columnClasses="coluna1, coluna2">
+
+					<h:outputLabel value="Endereço:" for="endereco" />
+					<h:inputText id="endereco" label="endereco" required="true" requiredMessage="Endereço obrigatorio"
+						value="#{filialBean.endereco.endNome}" size="30" maxlength="30">
+
+					</h:inputText>
+
+					<h:outputLabel value="Cidade:" for="Cidade" />
+					<h:inputText id="Cidade" label="cidade" required="true" requiredMessage="Cidade obrigatorio"
+						value="#{filialBean.cidade.cidNome}" size="30" maxlength="30">
+					</h:inputText>
+
+					<h:outputLabel value="Estado:" for="estado" />
+					<h:inputText id="estado" label="Estado" required="true" requiredMessage="Estado obrigatorio"
+						value="#{filialBean.cidade.cidUf}" size="3" maxlength="2">
+
+					</h:inputText>
+
+
+					<h:outputLabel value="Bairro:" />
+					<h:inputText size="25" value="#{filialBean.bairro.baiNome}" required="true" requiredMessage="Bairro obrigatorio"/>
+
+					<h:outputLabel value="Nº:" for="numEnd" />
+					<h:inputText id="numEnd" label="numEnd" required="true" requiredMessage="Numero obrigatorio"
+						value="#{filialBean.endereco.endNumero}" size="6" maxlength="6">
+					</h:inputText>
+
+					<h:outputLabel value="Filial:" for="sede" />
+					<h:inputText id="sede" label="Filial"
+						value="#{filialBean.sede.filNome}" size="30" maxlength="49"
+						required="true" requiredMessage="Falta o nome da Sede!">
+						<f:validateLength minimum="0" maximum="49" />
+					</h:inputText>
+
+					<h:outputLabel value="E-Mail:" for="mail" />
+					<h:inputText id="mail" label="E-Mail"
+						value="#{filialBean.email.emaEndereco}" size="50" maxlength="50"
+						validatorMessage="e-mail inválido">
+						<f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+					</h:inputText>
+					<h:message for="mail" />
+
+					<br />
+
+					<h:outputLabel value="CNPJ:" for="cnpj" />
+					<p:inputMask id="cnpj" label="CNPJ" value="#{filialBean.cnpj}"
+						size="20" requiredMessage="Falta o CNPJ da Empresa !"
+						mask="99.999.999/9999-99">
+						<p:ajax event="blur"
+							listener="#{filialBean.confirmaCNPJ(filialBean.cnpj)}"
+							process="@this" update="cadMenssagem" />
+					</p:inputMask>
+
+					<h:outputLabel value="Inscrição Estadual:" for="ie" />
+						<h:inputText id="ie" label="Inscrição Estadual"
+						value="#{filialBean.sede.filIe}" maxlength="18" size="18"
+						requiredMessage="Falta " />
+
+					<h:outputLabel value="Inscrição Municipal:" for="im" />
+					<h:inputText id="im" label="Inscrição Municipal"
+						value="#{filialBean.sede.filIm}" maxlength="15" size="15"
+						requiredMessage="Falta o IM da Pessoa !" />
+
+
+
+					<h:commandButton action="#{filialBean.salvar}" value="Salvar"
+						update="tabelaSede" class="btn btn-primary" />
+					<h:commandButton value="limpar" type="reset" class="btn btn-info"></h:commandButton>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+		<h:form id="tabSede">
+			<p:dataTable id="tabelaSede" value="#{filialBean.listaSedes}"
+				var="sede" paginator="true" rows="5"
+				emptyMessage="Não há registro dessa Sede">
+				<p:column headerText="Codigo" filterBy="#{sede.filId}">
+					<h:outputText value="#{sede.filId}" />
+				</p:column>
+				<p:column headerText="Nome da Sede" filterBy="#{sede.filNome}">
+					<h:outputText value="#{sede.filNome}" />
+				</p:column>
+				<p:column headerText="CNPJ" filterBy="#{sede.filCnpj}">
+					<h:outputText value="#{sede.filCnpj}" />
+				</p:column>
+
+
+				<p:column>
+					<h:commandButton value="Deletar Sede" update="tabelaSede"
+						icon="ui-icon-trash" action="#{filialBean.excluir}"
+						class="btn btn-danger">
+						<f:setPropertyActionListener target="#{filialBean.sede}"
+							value="#{sede}" />
+						<f:ajax execute="@this" render=":tabSede"></f:ajax>
+					</h:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

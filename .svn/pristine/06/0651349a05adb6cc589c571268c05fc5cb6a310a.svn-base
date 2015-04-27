@@ -1,0 +1,431 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+      xmlns:ui="http://java.sun.com/jsf/facelets"> 
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<div class="page-header">
+			<h1>
+				Alterar Cadastro de Imóveis <small>visão geral</small>
+			</h1>
+		</div>
+<style>  
+      .coluna1 {text-align: right}  
+      .coluna2 {text-align: left}
+       .coluna3 {text-align: right}  
+      .coluna4 {text-align: left}
+       .coluna5 {text-align: right}  
+      .coluna6 {text-align: left}  
+    </style>  
+		<h:form id="cad_imovel">
+
+			<p:messages errorClass="error" />
+
+
+
+			<p:growl id="growl" sticky="true" showDetail="true" />
+
+			<p:wizard flowListener="#{imovelAlterarBean.eventoProsseguir}"
+				nextLabel="Avançar" backLabel="Voltar">
+
+				<p:tab id="detalhes" title="Itens do imóvel">
+					<p:panel header="Adicionar detalhes do imóvel">
+<p:messages errorClass="error" />
+						<p:dataTable id="multiCars" var="lista"
+							value="#{detalhesImovelBean.listaDetalheImoveis}"
+							paginator="true" rows="10"
+							selection="#{imovelAlterarBean.listaDetalhes}" rowKey="#{lista.detId}">
+							<f:facet name="header">  
+            Selecione o detalhe  
+        </f:facet>
+
+							<p:column selectionMode="multiple" style="width:2%" />
+
+							<p:column headerText="Codigo" style="width:5%">  
+            #{lista.detId}   </p:column>
+							<p:column headerText="Nome" style="width:15%">  
+            #{lista.detNome}   </p:column>
+							<p:column headerText="Descrição" style="width:35%">  
+            #{lista.detDescricao}   </p:column>
+							<f:facet name="footer">
+								<p:commandButton id="multiViewButton" class="btnDetalhe"
+									value="add Qtd ao Detalhe" icon="ui-icon-extlink"
+									update=":cad_imovel:displayMulti"
+									oncomplete="PF('multiCarDialog').show()" action="#{imovelAlterarBean.novaLista()}"/>
+
+								<p:commandButton id="multiView" class="btnConferir"
+									value="Conferir Detalhes" icon="ui-icon-search"
+									update=":cad_imovel:displayVisualiza"
+									oncomplete="PF('visualiza').show()" />
+							
+							</f:facet>
+						</p:dataTable>
+
+						<p:dialog id="multiDialog" header="Detalhes do Imovel"
+							widgetVar="multiCarDialog" height="300" showEffect="fade"
+							hideEffect="explode">
+
+							<p:dataList id="displayMulti" value="#{imovelAlterarBean.listaDetalhes}"
+								var="selectedCar">
+								
+								   
+            Detalhe: #{selectedCar.detNome}  Qtd: <h:inputText id="qtd"
+									label="qtd" value="#{imovelAlterarBean.complementoId.comQtd}" size="2"
+									maxlength="2" required="true"
+									requiredMessage="Falta a quantidade !">
+
+									<p:ajax event="change"
+										listener="#{imovelAlterarBean.men2(imovelAlterarBean.complementoId.comQtd, selectedCar.detId)}"></p:ajax>
+
+								</h:inputText>
+
+
+							</p:dataList>
+							<h:commandButton global="false" process="@this" readonly="true"
+								transient="true" immediate="true" value="add e Fechar"
+								onclick="multiCarDialog.hide();return false;" />
+						</p:dialog>
+
+
+						<p:dialog id="visualiza" header="Detalhes do Imovel"
+							widgetVar="visualiza" height="150" showEffect="fade"
+							hideEffect="explode">
+
+							<p:dataList id="displayVisualiza"
+								value="#{imovelAlterarBean.listacomplemtos2}" var="vi">								
+								   
+            Codigo: #{vi.detId}  qtd: #{vi.comQtd}								
+							
+							</p:dataList>
+							<h:commandButton global="false" process="@this" readonly="true"
+								transient="true" immediate="true" value="Fechar"
+								onclick="visualiza.hide();return false;" />
+						</p:dialog>
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="pessoal" title="Proprietario">
+					<p:panel header="Detalhes do proprietario" id="panelPessoa">
+						
+						<p:messages errorClass="error" />
+							
+							<p:commandButton id="addPessoa" type="button" value="Adcionar/Remover Proprietario" onclick="PF('dialogPro').show()" 
+icon="ui-icon-extlink" update="tabelaPessoa" rendered="true">
+<f:ajax event="click" listener="#{imovelAlterarBean.carregarPessoa()}" />
+</p:commandButton>
+<p:dialog widgetVar="dialogPro" header="Encontre o Proprietario"
+				showEffect="clip" hideEffect="clip">
+<h:panelGrid>
+		 		<p:dataTable  value="#{imovelBean.listaPessoasProprietario}" var="pes"
+					id="tabelaPessoa" paginator="true" rows="5" 
+					emptyMessage="Não há registro dessa Pessoa" 
+					selection="#{imovelAlterarBean.listaPessoaPro}" rowKey="#{pes.pesId}" >
+
+
+					<p:column selectionMode="multiple" style="width:2%" />
+
+					<p:column headerText="Codigo" filterBy="#{pes.pesId}">
+						<h:outputText value="#{pes.pesId}" />
+					</p:column>
+
+					<p:column headerText="Nome"
+						filterBy="#{pes.pesNome}">
+						<h:outputText value="#{pes.pesNome}" />
+					</p:column>
+					
+					<p:column headerText="CPF/CNPJ"
+						filterBy="#{pes.pesCpfCnpj}">
+						<h:outputText value="#{pes.pesCpfCnpj}" />
+					</p:column>
+
+					<!-- <p:column headerText="Endereço" >
+						<h:outputText value="#{pes.endereco.endNome}" />
+					</p:column>
+
+					<p:column headerText="Numero">
+						<h:outputText value="#{pes.endereco.endNumero}" />
+					</p:column>  -->
+
+					<f:facet name="footer">
+
+						<h:commandButton global="false" process="@this" readonly="true"
+							transient="true" immediate="true" value="Fechar e Adcionar"
+							onclick="eventDialog.hide();return false;" icon="ui-icon-search">	
+							<f:ajax event="click" render="@this"  />						
+							</h:commandButton>
+					</f:facet>
+					
+				</p:dataTable> 
+				</h:panelGrid>
+			</p:dialog>	
+	<p:outputPanel id="displayPessoa" style="display:block;margin-top:10px;" rendered="#{not empty imovelAlterarBean.listaPessoaPro}"> 
+			<p:dataList value="#{imovelAlterarBean.listaPessoaPro}" var="tel" itemType="circle"
+ rendered="#{not empty imovelAlterarBean.listaPessoaPro}" id="tableTel">  
+    <f:facet name="header">  
+                Lista de Proprietario  
+            </f:facet>
+   Nome: #{tel.pesNome} 
+</p:dataList> 
+</p:outputPanel>
+<h:panelGrid columns="2" bgcolor="#FAFAD2"  columnClasses="coluna1, coluna2">
+							<h:outputLabel value="OBS do proprietario:" for="obsProprietario" />
+							<p:inputTextarea class="col-sm-10" id="obsProprietario" rows="5"
+								cols="200" maxlength="199" counter="counterP" autoResize="false"
+								counterTemplate="{0} caracteres restantes"
+								value="#{imovelAlterarBean.proprietario.proObservacao}" />
+								<br/>
+							<h:outputText id="counterP" />
+						</h:panelGrid>
+
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="enderecoImo" title="Endereço">
+					<p:panel header="Detalhes de Endereço">
+					<p:messages errorClass="error" />
+						<h:panelGrid columns="3">
+			<h:outputLabel value="Cep:" for="cep" style="font-weight:bold; padding-right: 5px; float: right;" />
+					<p:inputMask id="cep" label="cepPJ" mask="99.999-999"
+						value="#{imovelAlterarBean.endereco.endCep}" size="10" required="true"
+						requiredMessage="Falta o CEP">
+						<f:validateLength minimum="0" maximum="10" />
+					</p:inputMask>
+
+
+					<p:commandButton value="Pesquisar" icon="ui-icon-search">
+						 <f:setPropertyActionListener target="#{imovelAlterarBean.endereco.endCep}" value="#{imovelAlterarBean.endereco.endCep}"/>
+						<f:ajax event="click" execute="cep" listener="#{imovelAlterarBean.encontraCEP}"  render="@form"/>
+						</p:commandButton>
+		</h:panelGrid>				
+<h:panelGrid columns="2" bgcolor="#FAFAD2"  columnClasses="coluna1, coluna2">
+						
+						<h:outputLabel value="Endereço:" for="end" />
+						<h:inputText id="end" label="endereco" requiredMessage="Falta o Endereço" required="true"
+							value="#{imovelAlterarBean.endereco.endNome}" size="35" maxlength="35">
+
+						</h:inputText>
+
+						<h:outputLabel value="Cidade:" for="Cidade" />
+						<h:inputText id="Cidade" label="cidade" disabled="true"
+							value="#{imovelAlterarBean.cidade.cidNome}" size="35" maxlength="35">
+						</h:inputText>
+						
+						<h:outputLabel value="Estado:" for="estado" />
+						<h:inputText id="estado" label="Estado" disabled="true"
+							value="#{imovelAlterarBean.cidade.cidUf}" size="5">
+
+						</h:inputText>
+
+
+						<h:outputLabel value="Bairro:" />
+						<h:inputText size="35" value="#{imovelAlterarBean.bairro.baiNome}" 
+						requiredMessage="Falta o Bairro" required="true"/>
+
+						<h:outputLabel value="Nº:" for="numEnd" />
+						<h:inputText id="numEnd" label="numEnd" requiredMessage="Falta o nº" required="true"
+							value="#{imovelAlterarBean.endereco.endNumero}" size="6" maxlength="6">
+						</h:inputText>
+
+							<h:outputLabel value="Complemento:" for="complemento" />
+							<h:inputText id="complemento" label="Complemento"
+								value="#{imovelAlterarBean.endereco.endComplemento}" size="30"
+								maxlength="30"
+								requiredMessage="Falta o nome complemento do Endereço da Pessoa !">
+								<f:validateLength minimum="0" maximum="60" />
+							</h:inputText>
+
+							<h:outputLabel value="Zona:" for="zona" />
+							<h:selectOneMenu id="zona" value="#{imovelAlterarBean.endereco.endZona}">
+								<f:converter converterId="javax.faces.Character" />
+								<f:selectItem itemValue="R" itemLabel="Zona Urbana" />
+								<f:selectItem itemValue="U" itemLabel="Zona Rural" />
+							</h:selectOneMenu>
+
+							<h:outputLabel value="Região:" for="regiao" />
+							<h:selectOneMenu id="regiao"
+								value="#{imovelAlterarBean.endereco.endRegiao}">
+								<f:selectItem itemValue="Central" itemLabel="Central" />
+								<f:selectItem itemValue="Bom Pastor" itemLabel="Bom Pastor" />
+							</h:selectOneMenu>
+
+					
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="informacaoImovel" title="Informações do Imóvel">
+					<p:panel header="Detalhes do Imovel">
+					<p:messages errorClass="error" />
+						<h:panelGrid columns="2" bgcolor="#FAFAD2"  columnClasses="coluna1, coluna2">
+
+							<h:outputLabel value="Situação do Imóvel:" for="situacao" />
+							<h:selectOneMenu id="situacao"
+								value="#{imovelAlterarBean.situacaoImovel.sitId}" required="true" requiredMessage="Selecione a situação do imovél">
+								<f:selectItem itemLabel="Selecione a Situacão do Imovel"
+									itemValue="0" />
+								<f:selectItems id="SelectSituacao"
+									value="#{situacaoimovelBean.listaSituacaoImovels}" var="sit"
+									itemValue="#{sit.sitId}" itemLabel="#{sit.sitNome}" />
+							</h:selectOneMenu>
+
+							<h:outputLabel value="Tipo do Imóvel:" for="tipo" />
+							<h:selectOneMenu id="tipo" value="#{imovelAlterarBean.tipoImovel.tipId}"
+							required="true" requiredMessage="Selecione o tipo do imovél">
+								<f:selectItem itemLabel="Selecione o tipo do Imovel"
+									itemValue="0" />
+								<f:selectItems id="Selecttipo"
+									value="#{tipoImovelBean.listaTipoImovels}" var="tip"
+									itemValue="#{tip.tipId}" itemLabel="#{tip.tipNome}" />
+							</h:selectOneMenu>
+
+
+					
+
+							<h:outputLabel value="Área do imóvel m²:" for="area" />
+							<h:inputText id="area" label="area"
+								value="#{imovelAlterarBean.imovel.imoAreaImovel}" size="6"
+								maxlength="6" required="false"
+								requiredMessage="Falta a área do imóvel">
+								<f:validateLength minimum="0" maximum="6" />
+							</h:inputText>
+
+							<h:outputLabel value="Área do terreno m²:" for="areaTerreno" />
+							<h:inputText id="areaTerreno" label="areaTerreno"
+								value="#{imovelAlterarBean.imovel.imoAreTerreno}" size="6"
+								maxlength="6" required="false"
+								requiredMessage="Falta a área do terreno">
+								<f:validateLength minimum="0" maximum="6" />
+							</h:inputText>
+ <h:outputText value="Placa no imóvel: " />  
+        <p:selectBooleanCheckbox value="#{imovelAlterarBean.imovel.imoPlaca}" /> 
+        
+							<h:outputLabel value="Categoria do Imóvel:" for="cat_imovel" />
+							<h:selectOneMenu id="cat_imovel"
+								value="#{imovelAlterarBean.imovel.imoCategoria}">
+								<f:selectItem itemValue="UR"
+									itemLabel="UR-urbanco residencial" />
+								<f:selectItem itemValue="UC"
+									itemLabel="UC- urbano comercial" />
+								<f:selectItem itemValue="URC"
+									itemLabel="URC- urbano residencial comercial" />
+								<f:selectItem itemValue="R" itemLabel="R- rural" />
+							</h:selectOneMenu>
+
+							<h:outputLabel value="Valor de Mercado:" for="valorMercado" />
+							<h:inputText id="valorMercado" label="valorMercado"
+								value="#{imovelAlterarBean.imovel.imoValorMercado}" size="9"
+								maxlength="6" required="false"
+								requiredMessage="Falta o valor de mercado">
+								<f:validateLength minimum="0" maximum="9" />
+							</h:inputText>
+
+							<h:outputLabel value="Data da construção do imóvel:"
+								for="dataConstrucao" />
+							<p:calendar id="dataConstrucao" locale="pt_BR" showButtonPanel="true"
+								value="#{imovelAlterarBean.imovel.imoDataConstrucao}"
+								navigator="true" showOn="button" pattern="dd/MM/yyyy" size="10" maxlength="10">
+											<h:outputScript name="js/calendario_pt_BR.js" library="resources"></h:outputScript>
+							</p:calendar>
+
+							<h:outputLabel value="Posição de chegada do imóvel:" for="posicao" />
+							<h:selectOneMenu id="posicao"
+								value="#{imovelAlterarBean.imovel.imoPosicao}">
+								<f:selectItem itemValue="1" itemLabel="1ª" />
+								<f:selectItem itemValue="2" itemLabel="2ª" />
+								<f:selectItem itemValue="3" itemLabel="3ª" />
+								<f:selectItem itemValue="4" itemLabel="4ª" />
+								<f:selectItem itemValue="5" itemLabel="5ª" />
+								<f:selectItem itemValue="6" itemLabel="6ª" />
+								<f:selectItem itemValue="7" itemLabel="7ª" />
+								<f:selectItem itemValue="8" itemLabel="8ª" />
+								<f:selectItem itemValue="9" itemLabel="9ª" />
+								<f:selectItem itemValue="10" itemLabel="10ª" />
+								<f:selectItem itemValue="11" itemLabel="11ª" />
+							</h:selectOneMenu>
+
+						</h:panelGrid>
+<h:panelGrid columns="2" bgcolor="#FAFAD2"  columnClasses="coluna1, coluna2">
+							<h:outputLabel value="Obs:" for="obs" />
+							<p:inputTextarea class="col-sm-10" id="obs" rows="5" cols="100"
+								maxlength="249" counter="counter" autoResize="false"
+								counterTemplate="{0} caracteres restantes"
+								value="#{imovelAlterarBean.imovel.imoObservacao}" />
+								<h:outputText id="vazio" />
+							<h:outputText id="counter" />
+</h:panelGrid>
+					</p:panel>
+				</p:tab>
+
+
+				<p:tab id="confirmacao" title="Confirmação">
+					<p:panel header="Confirmação das informações do imóvel">
+						<h:panelGrid columns="4" bgcolor="#FAFAD2"  columnClasses="coluna1, coluna2, coluna3, coluna4">
+
+						
+							<h:outputText value="OBS do proprietario :" />
+							<h:outputText styleClass="outputLabel"
+								value="#{imovelAlterarBean.proprietario.proObservacao}" />
+							<h:outputText value="Bairro :" />
+							<h:outputText styleClass="outputLabel"
+								value="#{imovelAlterarBean.bairro.baiNome}" />
+							<h:outputText value="Endereço :" />
+							<h:outputText styleClass="outputLabel"
+								value="#{imovelAlterarBean.endereco.endNome}" />
+							<h:outputText value="Nº :" />
+							<h:outputText styleClass="outputLabel"
+								value="#{imovelAlterarBean.endereco.endNumero}" />
+							<h:outputText value="Cep :" />
+							<h:outputText styleClass="outputLabel"
+								value="#{imovelAlterarBean.endereco.endCep}" />
+							<h:outputText value="Cidade :" />
+							<h:outputText value="#{imovelAlterarBean.cidade.cidNome}"
+								styleClass="outputLabel" />
+							<h:outputText value="Situação do imóvel :" />
+							<h:outputText value="#{imovelAlterarBean.situacaoImovel.sitNome}"
+								styleClass="outputLabel" />
+							<h:outputText value="Tipo do imóvel :" />
+							<h:outputText value="#{imovelAlterarBean.tipoImovel.tipNome}"
+								styleClass="outputLabel" />							
+							<h:outputText value="Área do imóvel :" />
+							<h:outputText value="#{imovelAlterarBean.imovel.imoAreaImovel}"
+								styleClass="outputLabel" />
+							<h:outputText value="Área do terreno :" />
+							<h:outputText value="#{imovelAlterarBean.imovel.imoAreTerreno}"
+								styleClass="outputLabel" />
+							<h:outputText value="Categoria do imóvel :" />
+							<h:outputText value="#{imovelAlterarBean.imovel.imoCategoria}"
+								styleClass="outputLabel" />
+							<h:outputText value="Valor de Mercado :" />
+							<h:outputText value="#{imovelAlterarBean.imovel.imoValorMercado}"
+								styleClass="outputLabel" ><f:convertNumber currencySymbol="R$" type="currency" /></h:outputText>
+							<h:outputText value="Data da construção do imóvel :" />
+							<h:outputText value="#{imovelAlterarBean.imovel.imoDataConstrucao}"
+								styleClass="outputLabel" converter="javax.faces.DateTime">
+								</h:outputText>
+							<h:outputText value="Posição de chegada do imóvel :" />
+							<h:outputText value="#{imovelAlterarBean.imovel.imoPosicao}"
+								styleClass="outputLabel" />
+							<h:outputText value="OBS do imóvel :" />
+							<h:outputText value="#{imovelAlterarBean.imovel.imoObservacao}"
+								styleClass="outputLabel" />
+
+
+							<br />
+
+						</h:panelGrid>
+						<p:commandButton value="Gravar" update="growl @form"
+							actionListener="#{imovelAlterarBean.salvar}" class="btn btn-primary" 
+							icon="ui-icon-disk"/>
+					</p:panel>
+				</p:tab>
+
+			</p:wizard>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

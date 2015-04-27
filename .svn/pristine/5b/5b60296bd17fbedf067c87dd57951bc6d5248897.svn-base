@@ -1,0 +1,494 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+
+		<label class="col-md-1 control-label labelRenovar">ID</label>
+
+		<div class="col-md-2">
+			<div class="form-group">
+
+				<h:inputText id="id" class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesId}" disabled="true" />
+
+			</div>
+		</div>
+
+	</div>
+	
+	<div class="row">
+
+		<!-- TIPO -->
+		<label class="col-md-1 control-label labelRenovar">TIPO</label>
+		<p:focus for="selectorTipoPessoa"></p:focus>
+		<div class="col-md-2 form-group">
+			<h:selectOneMenu id="selectorTipoPessoa"
+				class="form-control input-sm" value="#{pessoaBean.pessoa.pesTipo}" >				
+				<f:selectItem itemValue="F" itemLabel="Pessoa Física" />
+				<f:selectItem itemValue="J" itemLabel="Pessoa Jurídica" />				
+				<f:converter converterId="javax.faces.Character" />
+				<p:ajax event="change" partialSubmit="true"
+					listener="#{pessoaBean.alterarTipoPessoa()}"
+					update="@this formulario" process="@this,selectorTipoPessoa" />
+				<!--  <f:ajax render=":cad_pessoaFisica" />  -->
+			</h:selectOneMenu>
+		</div>
+
+
+		<!-- NOME -->
+		<label class="col-md-1 control-label labelRenovar">NOME</label>
+
+		<div class="col-md-5 form-group">		
+			<h:inputText id="nomepessoa" class="form-control input-sm"
+				requiredMessage="Falta o nome da Pessoa !" required="true"
+				value="#{pessoaBean.pessoa.pesNome}" size="30" maxlength="145" />
+		</div>
+
+
+		<!-- PROPRIETÁRIO -->
+		<label class="col-xs-2 col-md-1 control-label labelRenovar">PROPRIETÁRIO</label>
+
+		<div class="col-xs-2 col-md-1 form-group">
+			<p:selectBooleanButton class="form-control input-sm"
+				value="#{pessoaBean.pessoa.pesProprietario}" onLabel="Sim"
+				offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close" >
+				<p:ajax  update="panelDadosBancariosProprietario"/>
+				</p:selectBooleanButton>
+		</div>
+
+
+		<!-- INQUILINO -->
+		<label class="col-xs-2 col-md-1 control-label labelRenovar">LOCATÁRIO</label>
+
+		<div class="col-xs-2 col-md-1 form-group">
+			<p:selectBooleanButton class="form-control input-sm"
+				value="#{pessoaBean.pessoa.pesInquilino}" onLabel="Sim"
+				offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close" >				
+				<p:ajax event="change" process="@this"  update="panelPessoaFisica outputPanelTipoLocatario"/>
+				<p:ajax event="change" process="@this"  update="panelPessoaJuridica outputPanelTipoLocatarioJuridica"/>
+				</p:selectBooleanButton>
+		</div>
+
+		<!-- FIADOR -->
+		<p:outputPanel id="panelFuncionario"
+			rendered="#{pessoaBean.pessoa.pesTipo == null || pessoaBean.pessoa.pesTipo == 'F'}">
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">FUNCIONÁRIO</label>
+
+			<div class="col-xs-2 col-md-1 form-group">
+				<p:selectBooleanButton class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesFuncionario}" onLabel="Sim"
+					offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+			</div>
+		</p:outputPanel>
+		
+		<!-- Data de abertura de firma -->
+		<p:outputPanel id="panelDateFirma"
+			rendered="#{pessoaBean.pessoa.pesTipo == 'J'}">
+		<label class="col-xs-2 col-md-2 control-label labelRenovar">DATA ABERTURA CNPJ</label>
+
+		<div class="col-xs-2 col-md-2 form-group data">
+			<p:calendar id="dataAberturaFirma" navigator="true"
+				value="#{pessoaBean.pessoa.pesDataNasc}" locale="pt_BR"
+				pattern="dd/MM/yyyy" minlength="10" maxlength="10">
+				<h:outputScript name="calendario_pt_BR.js" library="js" />
+			</p:calendar>
+		</div>
+
+		</p:outputPanel>
+
+		<!-- Data de Nascimento -->
+		<p:outputPanel id="panelDateNasc"
+			rendered="#{pessoaBean.pessoa.pesTipo == null || pessoaBean.pessoa.pesTipo == 'F'}">
+			
+		<br/>
+			
+		<label class="col-xs-2 col-md-1 control-label labelRenovar">DATA NASC</label>
+
+		<div class="col-xs-2 col-md-2 form-group data">
+			<p:calendar id="dataNascimento" navigator="true"
+				value="#{pessoaBean.pessoa.pesDataNasc}" locale="pt_BR"
+				pattern="dd/MM/yyyy" minlength="10" maxlength="10">
+				<h:outputScript name="calendario_pt_BR.js" library="js" />
+			</p:calendar>
+		</div>
+		</p:outputPanel>			
+			
+		<label class="col-xs-2 col-md-1 control-label labelRenovar">FIADOR</label>
+		<div class="col-xs-2 col-md-1 form-group">
+			<p:selectBooleanButton class="form-control input-sm"
+				id="booleanFiador" value="#{pessoaBean.pessoa.pesFiador}"
+				onLabel="Sim" offLabel="Não" onIcon="ui-icon-check"
+				offIcon="ui-icon-close">
+				<f:ajax event="change" execute="@this" render="panelFiador"></f:ajax>
+			</p:selectBooleanButton>
+		</div>
+		
+		<label class="col-xs-2 col-md-2 control-label labelRenovar">LOCATÁRIO SOLIDÁRIO</label>
+		<div class="col-xs-2 col-md-1 form-group">
+			<p:selectBooleanButton class="form-control input-sm"
+				id="booleanLocatarioSolidario" value="#{pessoaBean.pessoa.pesLocatarioSolidario}"
+				onLabel="Sim" offLabel="Não" onIcon="ui-icon-check"
+				offIcon="ui-icon-close">
+			</p:selectBooleanButton>
+		</div>
+	</div>
+	
+	<!-- 
+	*********************************************************************
+	* FIADOR
+	********************************************************************* 
+	-->
+	
+	<!-- Panel fiador para adicionar as propriedade de fiador, quando acionar a fiador vai atualizar e visualizar propriedadeFiado -->
+	<p:outputPanel id="panelFiador"
+		rendered="#{pessoaBean.pessoa.pesTipo == null || pessoaBean.pessoa.pesTipo == 'F'}">
+		
+		<p:outputPanel id="renderedFiador"
+			rendered="#{pessoaBean.pessoa.pesFiador}">
+			
+
+				<div class="bs-callout bs-callout-info"> <p>Fiador</p> </div>
+				
+			<div class="row">
+	
+				<!-- Fiador cartorio -->
+				<label class="col-xs-2 col-md-1 control-label labelRenovar">CARTORIO</label>
+				
+				<div class="col-xs-2 col-sm-2 form-group">
+					<p:inputText id="fiadorCartorio" class="form-control input-sm"
+						value="#{pessoaBean.fiador.fiaCartorio}" size="20"
+						rendered="#{pessoaBean.pessoa.pesFiador}" />
+				</div>
+
+				<!-- Fiador registro -->
+				<label class="col-xs-2 col-md-2 control-label labelRenovar">NUMÉRO DO
+					REGISTRO</label>
+				<div class="col-xs-2 col-sm-2 form-group">
+					<p:inputText id="fiadorRegistro" class="form-control input-sm"
+						value="#{pessoaBean.fiador.fiaNumeroRegistro}" size="20"
+						rendered="#{pessoaBean.pessoa.pesFiador}" />
+				</div>
+
+				<!-- Fiador Local Trabalho -->
+				<label class="col-xs-2 col-md-2 control-label labelRenovar">LOCAL DE
+					TRABALHO</label>
+				<div class="col-xs-2 col-sm-3 form-group">
+
+					<p:inputText id="fiadorLocalTrablho" class="form-control input-sm"
+						value="#{pessoaBean.fiador.fiaLocalTrabalho}" size="30"
+						rendered="#{pessoaBean.pessoa.pesFiador}" />
+				</div>
+				
+			</div>
+			
+			<div class="row">
+
+				<!-- Fiador Renda -->
+				<label class="col-xs-2 col-md-1 control-label labelRenovar">RENDA</label>
+				
+				<div class="col-xs-2 col-sm-2 form-group">
+					<pe:inputNumber id="fiadorRenda"
+						rendered="#{pessoaBean.pessoa.pesFiador}"
+						value="#{pessoaBean.fiador.fiaRenda}" size="15" maxlength="15"
+						required="false" symbol="R$ ">
+						<f:validateLength minimum="0" maximum="15" />
+						<f:converter converterId="javax.faces.Double" />
+					</pe:inputNumber>
+				</div>
+
+				<!-- Data Registro -->
+				<label class="col-xs-2 col-md-2 control-label labelRenovar">DATA REGISTRO</label>
+				
+				<div class="col-xs-2 col-sm-2 form-group">
+					<p:calendar id="fiadorDataRegistro" navigator="true"
+						rendered="#{pessoaBean.pessoa.pesFiador}"
+						value="#{pessoaBean.fiador.fiaDataRegistro}" locale="pt_BR"
+						pattern="dd/MM/yyyy" minlength="10" maxlength="10">
+						<h:outputScript name="js/calendario_pt_BR.js" library="resources" />
+					</p:calendar>
+
+				</div>
+				
+				<!-- Fiador Tipo do Imóvel -->
+				<label class="col-xs-2 col-md-2 control-label labelRenovar">TIPO ÍMOVEL</label>
+				
+				<div class="col-xs-2 col-sm-3 form-group">
+					<p:inputText id="fiadorTipoImovel" class="form-control input-sm"
+						value="#{pessoaBean.fiador.fiaTipoImovel}" size="20" maxlength="50"
+						rendered="#{pessoaBean.pessoa.pesFiador}" />
+				</div>
+			
+			</div>
+			
+			<div class="row">
+						
+				<label class="col-xs-2 col-md-1 control-label labelRenovar">OBSERVAÇÕES</label>
+						
+				<div class="col-xs-2 col-md-7 form-group">
+					<p:inputTextarea id="obsFiador" class="form-control input-sm" 
+						rows="5" cols="100" autoResize="false" maxlength="249"
+						value="#{pessoaBean.fiador.fiaObservacao}" 
+						counterTemplate="{0} caracteres restantes"	counter="counterFiadorObservacoes" />
+						<h:outputText id="counterFiadorObservacoes"/>
+				</div>
+				
+			</div>
+			
+		</p:outputPanel>
+	</p:outputPanel>
+
+
+	<!-- 
+	*********************************************************************
+	* DADOS DE PESSOA FÍSICA
+	********************************************************************* 
+	-->
+
+
+	<p:outputPanel id="panelPessoaFisica"
+		rendered="#{pessoaBean.pessoa.pesTipo != 'J'}">
+
+		<div class="bs-callout bs-callout-info">
+			<p>Pessoa Física</p>
+		</div>
+
+		<div class="row">
+			<!-- CPF -->
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">CPF</label>
+
+			<div class="col-xs-2 col-md-2 form-group">
+				<p:inputMask id="cpf" class="form-control input-sm" required="true"
+					value="#{pessoaBean.pessoa.pesCpfCnpj}" size="14"
+					requiredMessage="Cpf não preenchido" mask="999.999.999-99">
+					<p:ajax event="blur"
+						listener="#{pessoaBean.confirmaCPF(pessoaBean.pessoa.pesCpfCnpj)}"
+						process="@this" update="cadMenssagem cpf confirmDialog"/>
+				</p:inputMask>
+			</div>
+
+
+			<!-- RG -->
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">RG</label>
+
+			<div class="col-xs-2 col-md-2 form-group">
+				<h:inputText id="rg" class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesRgIe}" size="20"
+					requiredMessage="Falta o RG da Pessoa !" maxlength="19"/>
+			</div>
+
+
+			<!-- ESTADO CIVIL -->
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">ESTADO
+				CIVIL</label>
+
+			<div class="col-xs-2 col-md-2 form-group">
+				<h:selectOneMenu id="estadocivil" class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesEstadoCivil}">
+					<f:selectItem itemValue="S" itemLabel="Solteiro" />
+					<f:selectItem itemValue="C" itemLabel="Casado" />
+					<f:selectItem itemValue="O" itemLabel="Outro" />
+				</h:selectOneMenu>
+			</div>
+
+
+			<!-- SEXO -->
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">SEXO</label>
+
+			<div class="col-xs-2 col-md-2 form-group">
+				<h:selectOneMenu id="sexo" class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesSexo}">
+					<f:selectItem itemValue="M" itemLabel="Masculino" />
+					<f:selectItem itemValue="F" itemLabel="Feminino" />
+				</h:selectOneMenu>
+			</div>
+
+		</div>
+
+		<div class="row">
+
+
+			<!-- FILHOS -->
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">FILHOS</label>
+
+			<div class="col-xs-2 col-md-2 form-group">
+				<h:inputText id="qtdfilho" class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesQtdFilho}" size="3" maxlength="3">
+					<f:validateLength minimum="0" maximum="3" />
+					<f:validateDoubleRange minimum="0" maximum="15" />
+				</h:inputText>
+			</div>
+
+
+			<!-- PROFISSÃO -->
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">PROFISSÃO</label>
+
+			<div class="col-xs-2 col-md-2 form-group">
+				<h:inputText id="profissão" class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesProfissao}" size="20" maxlength="20" />
+			</div>
+			
+			<p:outputPanel id="outputPanelTipoLocatario" rendered="#{pessoaBean.pessoa.pesInquilino}">
+			
+			<!-- TIPO DO LOCATARIO -->
+			<label class="col-xs-2 col-md-2 control-label labelRenovar">TIPO DO
+				LOCATÁRIO</label>
+			<div class="col-xs-2 col-md-1 form-group">
+				<h:selectOneMenu id="selectorTipoLocatario"
+					class="form-control input-sm" 
+					value="#{pessoaBean.pessoa.pesTipoLocatario}">
+					<f:selectItem itemValue="F1" itemLabel="F1" />
+					<f:selectItem itemValue="F2" itemLabel="F2" />
+					<f:selectItem itemValue="F3" itemLabel="F3" />
+				</h:selectOneMenu>
+			</div>
+			</p:outputPanel>
+
+		</div>
+
+	</p:outputPanel>
+
+	<!-- 
+	*********************************************************************
+	* DADOS DE PESSOA JURIDICA
+	********************************************************************* -->
+
+	<p:outputPanel id="panelPessoaJuridica"
+		rendered="#{pessoaBean.pessoa.pesTipo == 'J'}">
+
+		<div class="bs-callout bs-callout-info">
+			<p>Pessoa Jurídica</p>
+		</div>
+
+		<div class="row">
+
+			<!-- CNPJ -->
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">CNPJ</label>
+			
+			<div class="col-xs-2 col-md-2 form-group">
+				<p:inputMask id="cnpj" class="form-control input-sm"
+					value="#{pessoaBean.cpf}" size="14"
+					requiredMessage="Cnpj inválido." mask="99.999.999/9999-99">
+					<p:ajax event="blur"
+						listener="#{pessoaBean.confirmaCNPJ(pessoaBean.cpf)}"
+						process="@this" update="cadMenssagem confirmDialog" />
+				</p:inputMask>
+
+			</div>
+
+
+			<!-- Inscrição Estadual -->
+
+			<label class="col-xs-2 col-md-2 control-label labelRenovar">INSCRIÇÃO ESTADUAL</label>
+
+			<div class="col-xs-2 col-md-2 form-group">
+				<h:inputText id="inscrEstadual" class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesRgIe}" size="18"
+					requiredMessage="Verifique a Incrição estadual" maxlength="18">
+				</h:inputText>
+
+			</div>
+
+
+			<!-- Inscrição Municipal -->
+			<label class="col-xs-2 col-md-1 control-label labelRenovar">INSCRIÇÃO MUNICIPAL</label>
+			
+			<div class="col-xs-2 col-md-2 form-group">
+				<h:inputText id="inscrMuni" class="form-control input-sm"
+					value="#{pessoaBean.pessoa.pesIm}" size="15"
+					requiredMessage="Verifique a Incrição estadual" maxlength="15" />
+
+			</div>
+
+			<p:outputPanel id="outputPanelTipoLocatarioJuridica"
+				rendered="#{pessoaBean.pessoa.pesInquilino}">
+				<!-- TIPO DO LOCATARIO -->
+				<label class="col-xs-2 col-md-2 control-label labelRenovar">TIPO DO
+					LOCATÁRIO</label>
+				<div class="col-xs-2 col-md-1 form-group">
+					<h:selectOneMenu id="selectorTipoLocatarioJuridica"
+						class="form-control input-sm"
+						value="#{pessoaBean.pessoa.pesTipoLocatario}">
+						<f:selectItem itemValue="J1" itemLabel="J1" />
+						<f:selectItem itemValue="J2" itemLabel="J2" />
+						<f:selectItem itemValue="J3" itemLabel="J3" />
+					</h:selectOneMenu>
+				</div>
+			</p:outputPanel>
+
+		</div>
+		
+		<div class="row">
+		
+			<label class="col-xs-2 col-md-2 control-label labelRenovar">RAMO DE ATIVIDADE</label>
+			
+			<div class="col-xs-2 col-md-2 form-group">
+				<h:selectOneMenu id="SelectRamo" value="#{pessoaBean.ramo.ramId}"
+					class="form-control input-sm">
+					<f:selectItems value="#{ramoBean.listaRamos}" var="ram"
+						itemLabel="#{ram.ramNome}" itemValue="#{ram.ramId}" />
+				</h:selectOneMenu>
+			</div>
+			
+			<div class="col-xs-2 col-md-3 form-group">
+				<p:commandButton value="Adicionar Ramo de Atividade"
+					class="form-control btn btn-mini" onclick="PF('dialogRamo').show()"
+					icon="ui-icon-extlink" />
+			</div>
+
+		</div>
+		
+		<p:dialog header="Adicionar Ramo de Atividade" widgetVar="dialogRamo" resizable="false" >
+					
+			<div class="row">
+			
+				<label class="col-xs-2 col-md-2 control-label labelRenovar">RAMO</label>
+				
+				<div class="col-xs-2 col-md-2 form-group">
+					<h:inputText id="addRamo" class="form-control input-sm"
+						value="#{ramoBean.ramo.ramNome}" size="30" maxlength="30"
+						requiredMessage="Verifique a Nome do Ramo" />
+	
+				</div>	
+				
+			</div>
+			
+			<div class="row">
+						
+				<label class="col-xs-2 col-md-2 control-label labelRenovar">OBSERVAÇÕES</label>
+						
+				<div class="col-xs-7 col-md-7 form-group">
+					<p:inputTextarea id="obsRamo" class="form-control input-sm" 
+						rows="5" cols="100" autoResize="false" maxlength="249"
+						value="#{ramoBean.ramo.ramObservacao}" 
+						counterTemplate="{0} caracteres restantes"	counter="counterFiadorObservacoes" />
+						<h:outputText id="counterRamo"/>
+				</div>
+				
+			</div>
+				
+			<div class="row" style="text-align: center">
+
+				<div class="btn-group">
+					<p:commandButton action="#{ramoBean.salvarDialogPessoaBean}" value="Salvar" 
+						update="SelectRamo,addRamo,obsRamo" class="btn btn-default btn-lg" process="@this,addRamo,obsRamo"/>
+						
+					<p:commandButton value="Limpar" type="reset" class="btn btn-default btn-lg">
+					</p:commandButton>
+					
+					<p:commandButton global="false" process="@this" readonly="true"
+						transient="true" immediate="true" value="Fechar"
+						onclick="dialogRamo.hide();return false;" class="btn btn-default btn-lg" />
+
+				</div>
+				
+			</div>
+
+		</p:dialog>
+
+	</p:outputPanel>
+
+</ui:composition>

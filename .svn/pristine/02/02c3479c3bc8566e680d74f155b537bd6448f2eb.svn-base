@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="formulario" class="form-horizontal">
+			
+			<h3>Envio de SMS</h3>
+			
+			
+
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true" closable="true" errorClass="bs-callout bs-callout-info" />
+					
+			<br/>
+
+			
+			<div class="row">
+			
+				<label class="col-md-2 control-label labelRenovar">NÚMERO DESTINO</label>
+			
+				<div class="col-md-2 form-group">
+					<p:inputMask id="numero" class="form-control input-sm" required="true"
+						value="#{smsBean.numero}" size="14"
+						requiredMessage="Cpf não preenchido" mask="(99)9999.9999">
+					</p:inputMask>
+				</div>
+				
+			</div>
+			<div class="row">
+			
+				<label class="col-md-2 control-label labelRenovar">MENSAGEM</label>
+			
+				<div class="col-md-7 form-group">
+					<p:inputTextarea id="desc" class="form-control input-sm" 
+						rows="5" cols="100" autoResize="false" maxlength="150"
+						value="#{smsBean.menssagem}" 
+					counterTemplate="{0} caracteres restantes"	counter="counter"/>
+					<h:outputText id="counter" />
+				</div>
+				
+			</div>
+						
+			<hr />
+			
+			<div class="row" style="text-align: center">
+
+				<div class="btn-group">
+
+					<p:commandButton value="Enviar"
+						action="#{smsBean.enviar}" 
+						class="btn btn-default btn-lg" update="@form"/>
+						
+					<p:commandButton class="btn btn-default btn-lg" value="Limpar" 
+						onclick="javascript: window.location.assign('enviosms.jsf');"/>
+							
+				</div>
+
+			</div>
+			
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+</html>

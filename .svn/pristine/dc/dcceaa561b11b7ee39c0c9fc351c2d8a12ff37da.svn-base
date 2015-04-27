@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+	
+		<div class="col-xs-12">
+
+			<p:dataGrid value="#{imovelBean.listaDetalhesImovel}" var="detalhe" 
+				paginator="false" columns="6">
+				
+					<div class="row">
+						<label class="col-xs-12 control-label labelRenovar" style="text-align: center;">#{detalhe.nome}</label>
+					</div>
+					
+					<div class="row" style="padding-top: 5px;">
+						
+						<div class="col-xs-8 col-md-offset-2" style="text-align: center;">
+								<h:selectBooleanCheckbox
+									value="#{detalhe.selecionado}"
+									rendered="#{detalhe.unitario == true}" />
+				
+								<h:selectOneMenu class="form-control input-sm"
+									value="#{detalhe.quantidade}"
+									rendered="#{detalhe.unitario == false}">
+									
+									<f:selectItem itemValue="0" itemLabel="0" />
+									<f:selectItem itemValue="1" itemLabel="1" />
+									<f:selectItem itemValue="2" itemLabel="2" />
+									<f:selectItem itemValue="3" itemLabel="3" />
+									<f:selectItem itemValue="4" itemLabel="4" />
+									<f:selectItem itemValue="5" itemLabel="5" />
+									<f:selectItem itemValue="6" itemLabel="6" />
+									<f:selectItem itemValue="7" itemLabel="7" />
+									<f:selectItem itemValue="8" itemLabel="8" />
+									<f:selectItem itemValue="9" itemLabel="9" />
+									<f:selectItem itemValue="10" itemLabel="10" />
+									<f:selectItem itemValue="11" itemLabel="11" />
+									<f:selectItem itemValue="12" itemLabel="12" />
+									<f:selectItem itemValue="13" itemLabel="13" />
+									<f:selectItem itemValue="14" itemLabel="14" />
+									<f:selectItem itemValue="15" itemLabel="15" />
+									<f:selectItem itemValue="16" itemLabel="16" />
+									<f:selectItem itemValue="17" itemLabel="17" />
+									<f:selectItem itemValue="18" itemLabel="18" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+			</p:dataGrid>
+			
+		</div>
+		
+	</div>
+	
+	<br/>
+
+</ui:composition>

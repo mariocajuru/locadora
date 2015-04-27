@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<div class="page-header">
+			<h1>
+				Teste com Wizard <small>visão geral</small>
+			</h1>
+		</div>
+		<h:form>
+
+			<p:growl id="growl" sticky="true" showDetail="true" />
+
+			<p:wizard flowListener="#{userWizard.onFlowProcess}"
+				backLabel="Anterior" nextLabel="Próximo" widgetVar="wiz">
+
+				<p:tab id="personal" title="Personal">
+
+					<p:panel header="Personal Details">
+ <p:messages/>
+						<h:outputText value="Nome: *" />
+						<p:inputText required="true" label="Firstname"
+							value="#{userWizard.user.pesNome}" />
+
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="address" title="Address">
+					<p:panel header="Adress Details">
+ <p:messages/>
+						<h:outputText value="Rua: " />
+						<p:inputText value="#{userWizard.end.endNome}" />
+
+
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="contact" title="Contact">
+					<p:panel header="Contact Information">
+
+ <p:messages/>
+						<h:outputText value="Email: *" />
+						<p:inputText required="true" label="Email"
+							value="#{userWizard.end.endPontoreferencial}" />
+
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="confirm" title="Confirmation">
+					<p:panel header="Confirmation">
+
+
+						<h:outputText value="Firstname: " />
+						<h:outputText styleClass="outputLabel"
+							value="#{userWizard.user.pesNome}" />
+
+						<br />
+						<h:outputText value="Street: " />
+						<h:outputText styleClass="outputLabel"
+							value="#{userWizard.end.endNome}" />
+						<br />
+
+
+						<h:outputText value="Email: " />
+						<h:outputText styleClass="outputLabel"
+							value="#{userWizard.end.endPontoreferencial}" />
+						<br />
+
+
+						<p:commandButton value="Submit" update="growl"
+							actionListener="#{userWizard.save}" />
+
+					</p:panel>
+				</p:tab>
+
+			</p:wizard>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

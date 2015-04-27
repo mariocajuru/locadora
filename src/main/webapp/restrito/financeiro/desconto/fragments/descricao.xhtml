@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="col-xs-12">
+		<div class="col-xs-7">
+
+			<label class="control-label">HISTÓRICO</label>
+
+			<p:inputTextarea id="historico" class="autosize form-control" rows="5"
+				cols="100" maxlength="250" counter="counter" required="true" requiredMessage="HISTÓRICO obrigatório"
+				counterTemplate="{0} caracteres restantes"
+				value="#{financeiroBean.contaCorrente.conCorHistorico}"
+				style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;" />
+
+			<h:outputText id="vazio" />
+
+			<div style="text-align: right; padding-top: 20px;">
+				<h:outputText id="counter" />
+			</div>
+
+		</div>
+
+		<div class="col-xs-5">
+
+			<label class="control-label">OBS.</label>
+
+			<p:inputTextarea id="obs"
+				class="autosize form-control" rows="5" cols="100" maxlength="200"
+				counter="counterAcerto" 
+				counterTemplate="{0} caracteres restantes"
+				value="#{financeiroBean.contaCorrente.conCorObservacao}"
+				style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;" />
+
+			<h:outputText id="vazioAcerto" />
+
+			<div style="text-align: right; padding-top: 20px;">
+				<h:outputText id="counterAcerto" />
+			</div>
+
+		</div>
+	</div>
+</ui:composition>

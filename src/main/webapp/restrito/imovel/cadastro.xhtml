@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="formulario" class="form-horizontal" enctype="multipart/form-data">
+
+			<legend>Cadastro de Imóvel</legend>
+
+			<div class="row">
+				<div class="bs-example bs-example-tabs">
+					<ul id="myTab" class="nav nav-tabs">
+						<li><a href="consulta.jsf">CONSULTA</a></li>
+						<li class="active"><a>CADASTRO</a></li>
+						<li>
+							<h:panelGroup rendered="#{imovelBean.alteracao}">
+								<a href="proposta.jsf?id=#{imovelBean.imovel.imoId}">PROPOSTAS</a>
+							</h:panelGroup>
+						</li>
+					</ul>
+				</div>
+			</div>
+					
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true" closable="true" errorClass="bs-callout bs-callout-info" />
+					
+			<br/>
+			
+			<div class="row">
+			
+				<label class="col-md-1 control-label labelRenovar">ID</label>
+			
+				<div class="col-md-2">
+					<div class="form-group">
+					
+						<h:inputText id="id" class="form-control input-sm"
+							value="#{imovelBean.imovel.imoId}" disabled="true" />
+							
+					</div>
+				</div>
+				
+			</div>
+
+
+			<ui:include src="/restrito/imovel/fragments/endereco.xhtml" />
+
+			<ui:include src="/restrito/imovel/fragments/mapa.xhtml" />
+
+			<br />
+			<p:outputPanel id="panelFotos" rendered="#{imovelBean.alteracao}">
+				<div class="bs-callout bs-callout-info">
+					<p>Fotos</p>
+				</div>
+
+				<ui:include src="/restrito/imovel/fragments/fotos.xhtml" />
+				<br />
+			</p:outputPanel>
+
+			<div class="bs-callout bs-callout-info">
+				<p>Detalhes</p>
+			</div>
+
+			<ui:include src="/restrito/imovel/fragments/detalhes.xhtml" />
+
+			<div class="bs-callout bs-callout-info"> <p>Características</p> </div>
+			
+			<ui:include src="/restrito/imovel/fragments/caracteristicas.xhtml" />
+
+			<div class="bs-callout bs-callout-info"> <p>O que tem perto?</p> </div>
+			
+			<ui:include src="/restrito/imovel/fragments/temperto.xhtml" />
+
+			<div class="bs-callout bs-callout-info"> <p>Proprietários</p> </div>
+			
+			<ui:include src="/restrito/imovel/fragments/proprietarios.xhtml" />
+			
+			<div class="bs-callout bs-callout-info"> <p>Captador</p> </div>
+			
+			<ui:include src="/restrito/imovel/fragments/captador.xhtml" />
+
+			<div class="bs-callout bs-callout-info"> <p>Indicação</p> </div>
+			
+			<ui:include src="/restrito/imovel/fragments/indicacao.xhtml" />
+			
+			<div class="bs-callout bs-callout-info"> <p>Chaves nas Filiais</p> </div>
+			
+			<ui:include src="/restrito/imovel/fragments/filiais.xhtml" />
+			
+			<div class="bs-callout bs-callout-info"> <p>Outros</p> </div>
+			
+			<ui:include src="/restrito/imovel/fragments/outros.xhtml" />
+			
+			<hr />
+			
+			<div class="row" style="text-align: center">
+
+				<div class="btn-group">
+
+					<h:commandButton value="Salvar"
+						action="#{imovelBean.gravar}" 
+						class="btn btn-default btn-lg" />
+						
+					<a class="btn btn-default btn-lg" href="javascript:void(0);" 
+						onclick="javascript: window.location.assign('cadastro.jsf');">Limpar</a>
+
+					<h:commandButton value="Excluir" class="btn btn-default btn-lg" disabled="true"/>
+
+				</div>
+
+			</div>
+			
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+</html>

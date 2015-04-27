@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+			<div class="page-header">
+			<h1>
+				Cadastro de Situação do Imovel <small>visão geral</small>
+			</h1>
+		</div>
+		<style>  
+      .coluna1 {text-align: right}  
+      .coluna2 {text-align: left}  
+    </style> 
+			<h:form id="incluir">
+				<h:messages autoUpdate="true" />
+				<h:inputHidden value="#{situacaoimovelBean.situacaoImovel.sitId}" />
+
+
+				<p:panel header="Incluir Situações do Imovel">
+
+					<h:panelGrid columns="2" bgcolor="#FAFAD2"  columnClasses="coluna1, coluna2">
+
+						<h:outputLabel value="Nome da Situação" for="nome" />
+						<h:inputText id="nome" label="nome"
+							value="#{situacaoimovelBean.situacaoImovel.sitNome}" size="30"
+							maxlength="30" required="true"
+							requiredMessage="Falta o nome da Situação!">
+							<f:validateLength minimum="5" maximum="30" />
+						</h:inputText>
+
+						<h:outputLabel value="Descricao da Situação" for="descricao" />
+						<p:inputTextarea id="descricao" rows="5" cols="100" autoResize="false" maxlength="49"
+							counter="counter" counterTemplate="{0} caracteres restantes"
+							value="#{situacaoimovelBean.situacaoImovel.sitDescricao}" />
+							<br/>
+						<h:outputText id="counter" />
+
+						<h:commandButton action="#{situacaoimovelBean.salvar}"
+							value="Salvar" update="tabelaSituacao" class="btn btn-primary"/>
+						<h:commandButton value="Limpar" type="reset" class="btn btn-info"></h:commandButton>
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+			<h:form id="TelaSituacao">
+				<p:dataTable id="tabelaSituacao"
+					value="#{situacaoimovelBean.listaSituacaoImovels}" var="situacao"
+					paginator="true" rows="5" emptyMessage="Não há registro">
+					<p:column headerText="Codigo" filterBy="#{situacao.sitId}">
+						<h:outputText value="#{situacao.sitId}" />
+					</p:column>
+					<p:column headerText="Nome da Situacão do Imovel"
+						filterBy="#{situacao.sitNome}">
+						<h:outputText value="#{situacao.sitNome}" />
+					</p:column>
+					<p:column headerText="Descrições">
+						<h:outputText value="#{situacao.sitDescricao}" />
+					</p:column>
+					<p:column>
+						<h:commandButton value="Deletar Situação"
+							action="#{situacaoimovelBean.excluirSituacaoImovel}"
+							update="tabelaSituacao" class="btn btn-danger">
+							<f:setPropertyActionListener
+								target="#{situacaoimovelBean.situacaoImovel}" value="#{situacao}" />
+							<f:ajax execute="@this" render=":TelaSituacao"></f:ajax>
+						</h:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+	</ui:define>
+</ui:composition>
+</html>

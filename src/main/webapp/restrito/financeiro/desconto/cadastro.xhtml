@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<h:form id="formulario" class="form-horizontal">
+
+			<h3>DESCONTOS ALUGUEL</h3>
+
+			<div class="row">
+				<div class="bs-example bs-example-tabs">
+					<ul id="myTab" class="nav nav-tabs">
+						<li><a href="consulta.jsf">CONSULTA</a></li>
+						<li class="active"><a href="#">CADASTRO</a></li>
+					</ul>
+				</div>
+			</div>
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true"
+				closable="true" errorClass="bs-callout bs-callout-info" />
+
+			<br />
+			<br />
+			<ui:include
+				src="/restrito/financeiro/desconto/fragments/contrato.xhtml" />
+
+			<div class="bs-callout bs-callout-info">
+				<p>DESCRIÇÃO</p>
+			</div>
+
+
+			<div class="row">
+
+				<!--Grupo de Contas -->
+				<label class="col-xs-2 control-label labelRenovar">GRUPO DE
+					CONTAS</label>
+
+				<div class="col-xs-2">
+					<div class="form-group">
+
+						<h:selectOneMenu id="grupoContas" class="form-control input-sm"
+							value="#{descontoLocacaoBean.grupoDeContas.gruConId}" disabled="#{descontoLocacaoBean.alteracao}"
+							required="true" requiredMessage="Selecione o grupo de contas">
+							<f:selectItems value="#{grupoDeContasBean.listaGrupoDeContas}"
+								var="sta" itemValue="#{sta.gruConId}"
+								itemLabel="#{sta.gruConNome}" />
+						</h:selectOneMenu>
+
+					</div>
+				</div>
+
+				<!-- Data INICIO  -->
+				<label class="col-xs-2 control-label labelRenovar">DATA
+					INICIO</label>
+
+				<div class="col-xs-1">
+					<div class="form-group data">
+
+						<p:calendar id="dataInicio"
+							disabled="#{descontoLocacaoBean.alteracao}"
+							value="#{descontoLocacaoBean.descontoLocacao.descLocInicio}"
+							locale="pt_BR" pattern="MM/yyyy" minlength="10" maxlength="10"
+							navigator="true" required="true"
+							requiredMessage="DATA
+					INICIO obrigatorio">
+							<h:outputScript name="js/calendario_pt_BR.js" library="resources" />
+						</p:calendar>
+
+					</div>
+				</div>
+
+				<!-- Data final  -->
+				<label class="col-xs-2 control-label labelRenovar">DATA
+					FINAL</label>
+
+				<div class="col-xs-1">
+					<div class="form-group data">
+
+						<p:calendar id="dataFinal"
+							disabled="#{descontoLocacaoBean.alteracao}"
+							value="#{descontoLocacaoBean.descontoLocacao.descLocFim}"
+							locale="pt_BR" pattern="MM/yyyy" minlength="10" maxlength="10"
+							navigator="true" required="true"
+							requiredMessage="DATA
+					FINAL obrigatorio">
+							<h:outputScript name="js/calendario_pt_BR.js" library="resources" />
+						</p:calendar>
+
+					</div>
+				</div>
+
+				<!-- Valor  -->
+				<label class="col-xs-1 control-label labelRenovar">VALOR</label>
+
+				<div class="col-xs-1">
+					<div class="form-group">
+
+						<pe:inputNumber id="valor" requiredMessage="VALOR obrigatório"
+							rendered="true" disabled="#{descontoLocacaoBean.alteracao}"
+							value="#{descontoLocacaoBean.descontoLocacao.descLocValor}"
+							size="15" maxlength="15" required="true" symbol="R$ "
+							decimalPlaces="2">
+							<f:validateLength minimum="0" maximum="15" />
+							<f:converter converterId="javax.faces.Double" />
+						</pe:inputNumber>
+					</div>
+				</div>
+
+
+
+			</div>
+			<p:outputPanel rendered="#{!descontoLocacaoBean.alteracao}">
+
+				<div class="row" style="text-align: center">
+
+					<div class="btn-group">
+
+						<h:commandButton value="Salvar"
+							action="#{descontoLocacaoBean.gravar}"
+							class="btn btn-default btn-lg" />
+
+						<a class="btn btn-default btn-lg" href="javascript:void(0);"
+							onclick="javascript: window.location.assign('cadastrar.jsf');">Limpar</a>
+
+					</div>
+
+				</div>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

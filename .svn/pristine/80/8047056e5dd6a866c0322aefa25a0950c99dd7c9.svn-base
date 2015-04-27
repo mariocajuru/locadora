@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:outputPanel id="panelCoord" rendered="#{regiaoBean.regiao.regId > 0}">
+	<p:growl id="growl" life="3000" showDetail="true" />
+
+		<div class="row">
+			<div class="col-xs-8">
+				<div class="panel panel-default">
+					<div class="panel-footer">Coordenadas</div>
+
+					<div class="row">
+
+						<!-- LIMITE SUPERIOR -->
+						<label class="col-xs-2 control-label labelRenovar">Latitude</label>
+
+						<div class="col-xs-2">
+							<div class="form-group">
+
+								<h:inputText id="latitude" class="form-control input-sm"
+									value="#{regiaoBean.regiaoCoordenada.regCooLatitude}" size="39"
+									maxlength="39" required="true"
+									requiredMessage="A Latitude da região não foi preenchido." />
+
+							</div>
+
+						</div>
+
+						<!-- ALÍQUOTA -->
+						<label class="col-xs-2 control-label labelRenovar">Longitude</label>
+
+						<div class="col-xs-2">
+							<div class="form-group">
+								<h:inputText id="longitude" class="form-control input-sm"
+									value="#{regiaoBean.regiaoCoordenada.regCooLongitude}"
+									size="39" maxlength="39" required="true"
+									requiredMessage="A Longitude da região não foi preenchido." />
+							</div>
+
+						</div>
+
+						<label class="col-xs-1 control-label labelRenovar"></label>
+						<div class="col-xs-1">
+							<div class="form-group">
+								<p:commandButton id="adicionar" class="btn btn-default btn-sm"
+									actionListener="#{regiaoBean.adicionarCoordenada}"
+									update="@this,latitude,longitude,tabelaImpostoDeRenda,gmap"
+									process="@this,latitude,longitude" value="Adicionar" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<script type="text/javascript"
+						src="http://maps.google.com/maps/api/js?sensor=true"></script>
+
+					<div class="col-xs-8">
+						<div class="form-group" style="text-align: center">
+
+							<p:gmap id="gmap" center="-20.1378218,-44.8851127" zoom="13"
+								type="HYBRID" style="width:780px;height:400px"
+								model="#{regiaoBean.mapa}" streetView="true">
+								<p:ajax event="pointSelect" listener="#{regiaoBean.onCoordSelect}"
+					update="latitude,longitude" />
+								<p:ajax event="overlaySelect"
+									listener="#{regiaoBean.onPolygonSelect}" update="growl" />
+							</p:gmap>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-xs-4">
+			<div class="panel panel-default">
+				<div class="panel-footer">Coordenadas</div>
+
+				<p:dataTable id="tabelaImpostoDeRenda"
+					value="#{regiaoBean.listaRegiaoCoordenada}" var="val"
+					type="definition"
+					emptyMessage="Não há Coordenadas para essa região">
+
+					<p:column style="text-align: center" headerText="Latitude">
+						<p:outputLabel value="#{val.regCooLatitude}"
+							class="form-control input-sm">
+						</p:outputLabel>
+					</p:column>
+					<p:column style="text-align: center" headerText="Longitude">
+						<p:outputLabel value="#{val.regCooLongitude}"
+							class="form-control input-sm">
+						</p:outputLabel>
+					</p:column>
+					<p:column style="text-align: center" headerText="Excluir">	
+							<p:commandButton id="btnExcluir" 
+                                     process="@this" update="tabelaImpostoDeRenda,:formulario:gmap"
+                                     actionListener="#{regiaoBean.excluirCoordenada}"
+                                     icon="ui-icon-trash"  
+                                     title="Excluir" >
+                                     <f:param name="idRegiaoCoordenada" value="#{val.regCooId}" />
+                                     </p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+
+		</div>
+</div>
+	</p:outputPanel>
+</ui:composition>

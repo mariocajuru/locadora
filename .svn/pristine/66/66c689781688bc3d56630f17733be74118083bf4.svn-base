@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+		
+	<div class="row">
+		
+		<!-- ID -->
+		<label class="col-xs-1 control-label labelRenovar">FUNCIONÁRIO ID</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:inputText id="indid" class="form-control input-sm"
+					value="#{contratoLocacaoBean.indicacao.pesId}" disabled="true"/>
+					
+			</div>
+		</div>
+		
+			<h:panelGroup rendered="#{!contratoLocacaoBean.alteracao}">
+		
+			<!-- PROCURAR INQUILINO -->	
+			<div class="col-xs-2">
+				<div class="form-group" style="text-align: center; padding-left: 10px;">
+			
+					<input type="button" class="btn btn-default btn-sm btn-block" 
+						onclick="javascript:openGridIndicacao();" value="Procurar" />
+						
+				</div>
+			</div>
+		
+		</h:panelGroup>
+		
+	</div>
+	
+	<br/>
+	
+	<div class="row">
+	
+		<!-- NOME -->
+		<label class="col-xs-1 control-label labelRenovar">NOME</label>
+	
+		<div class="col-xs-5">
+			<div class="form-group">
+				<h:inputText id="indnome" class="form-control input-sm"
+					value="#{contratoLocacaoBean.indicacao.pessoa.pesNome}" disabled="true" />
+			</div>
+		</div>
+			
+	
+		<!-- CPF -->
+		<label class="col-xs-1 control-label labelRenovar">FILIAL</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="indfilial" class="form-control input-sm"
+					value="#{contratoLocacaoBean.indicacao.filial.filNome}" disabled="true"  />
+			</div>
+		</div>
+			
+	</div>
+	<script type="text/javascript">		
+		$(function () {		
+			// widget configuration
+			var configIndicacao = {
+				layout: {
+					name: 'layoutIndicacao',
+					padding: 0,
+					panels: [
+						{ type: 'main', minSize: 350, overflow: 'hidden' }
+					]
+				},
+				grid: { 
+					name: 'gridIndicacao',
+					style: 'border: 0px; border-left: 1px solid silver',
+					show: {
+						header 		: false,
+						toolbar 	: true,
+						footer		: false,
+						lineNumbers	: false,
+						selectColumn: false,
+						expandColumn: false
+					},
+					columns: [
+						{ field: 'recid', caption: 'Código', size: '60px', sortable: true, resizable: true },
+					    { field: 'nome', caption: 'Nome', size: '280px', sortable: true, resizable: true },
+					    { field: 'cpfcnpj', caption: 'CPF/CNPJ', size: '100px', sortable: true, resizable: true },
+					    { field: 'filial', caption: 'FILIAL', size: '100px', sortable: true, resizable: true }
+					],
+					searches: [
+						{ type: 'int',  field: 'recid', caption: 'Código' },
+						{ type: 'text',  field: 'nome', caption: 'Nome' },
+						{ type: 'text',  field: 'filial', caption: 'FILIAL' },
+					],
+					records: [
+								
+						<ui:repeat value="#{funcionarioBean.listaFuncionarios}" var="pes">
+							{ 
+								recid: #{pes.pesId}, 
+								nome: '#{pes.pessoa.getPesNome()}', 
+								cpfcnpj: '#{pes.pessoa.getPesCpfCnpj()}',
+								filial: '#{pes.filial.getFilNome()}',
+							 },
+						</ui:repeat>
+							
+					],
+					onDblClick: function(event) {
+						var id = event.recid;
+	
+						var obj = w2ui['gridIndicacao'].get(id);
+	
+						w2popup.close();
+						
+						if (obj != null) {
+							console.log(w2ui['gridIndicacao'].get(id));
+							
+							document.getElementById('formulario:indid').value   = obj.recid    + "";
+							document.getElementById('formulario:indnome').value = obj.nome     + "";
+							document.getElementById('formulario:indfilial').value  = obj.filial  + "";
+						}
+					}					
+				}
+			}
+			
+			// initialization in memory
+			$().w2layout(configIndicacao.layout);
+			$().w2grid(configIndicacao.grid);
+		});
+
+		function openGridIndicacao() {
+			w2popup.open({
+				title 	: 'Selecione um funcionário',
+				width	: 800,
+				height	: 600,
+				showMax : true,
+				body 	: '<div id="main" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px;"></div>',
+				onOpen  : function (event) {
+					event.onComplete = function () {
+						$('#w2ui-popup #main').w2render('layout');
+						w2ui.layout.content('main', w2ui['gridIndicacao']);
+					}
+				},
+				onMax : function (event) { 
+					event.onComplete = function () {
+						w2ui.layout.resize();
+					}
+				},
+				onMin : function (event) {
+					event.onComplete = function () {
+						w2ui.layout.resize();
+					}
+				}		
+			});
+		}		
+	</script>
+		
+</ui:composition>

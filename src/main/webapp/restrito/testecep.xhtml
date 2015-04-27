@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div class="page-header">
+			<h1>
+				Teste Com Cep <small>visão geral</small>
+			</h1>
+		</div>
+
+		<p:dialog appendToBody="true" closable="false" draggable="false"
+			footer="http://renovarsistemas.com.br/ - Visite :)"
+			header="Web Service CEP" maximizable="true" minimizable="true"
+			position="center" resizable="false" showEffect="slide" visible="true"
+			widgetVar="visualizar">
+
+			<h:form id="frmBusca">
+				<h:panelGrid id="pnCEP" columns="3">
+					<h:outputText value="CEP: " />
+					<p:inputMask id="cep" mask="99999-999" value="#{mbService.cep}" />
+
+					<p:commandButton value="Pesquisar" icon="ui-icon-search" class="btn btn-primary"
+						action="#{mbService.encontraCEP}" update=":frmResultado" />
+				</h:panelGrid>
+			</h:form>
+
+			<h:form id="frmResultado">
+				<h:panelGrid id="pnResultado" columns="2">
+					<h:outputLabel value="UF: "
+						style="font-weight:bold; padding-right: 5px; float: right;" />
+					<p:inputText size="5" value="#{mbService.estado}" />
+
+					<h:outputLabel value="Logradouro: "
+						style="font-weight:bold; padding-right: 5px; float: right;" />
+					<p:inputText size="50"
+						value="#{mbService.tipoLogradouro} #{mbService.logradouro}" />
+
+					<h:outputLabel value="Cidade: "
+						style="font-weight:bold; padding-right: 5px; float: right;" />
+					<p:inputText size="50" value="#{mbService.cidade}" />
+
+					<h:outputLabel value="Bairro: "
+						style="font-weight:bold; padding-right: 5px; float: right;" />
+					<p:inputText size="25" value="#{mbService.bairro}" />
+				</h:panelGrid>
+
+				<h:commandButton global="false" process="@this" readonly="true"
+					transient="true" immediate="true" value="Fechar"
+					onclick="visualizar.hide();return false;" class="btn btn-success" />
+			</h:form>
+		</p:dialog>
+
+
+
+	</ui:define>
+</ui:composition>
+</html>
+<!-- 						
+					<h:outputLabel value="Cep" for="cep" />
+					<p:inputMask id="cep" label="cepPJ" mask="99.999-999"
+						value="#{filialBean.endereco.endCep}" size="10" required="true"
+						requiredMessage="Falta o CEP">
+						<f:validateLength minimum="0" maximum="10" />
+					</p:inputMask>
+
+
+					<p:commandButton value="Pesquisar" icon="ui-icon-search"
+						action="#{filialBean.encontraCEP}" update=":cadsede" />
+
+
+					<h:panelGrid columns="2">
+
+						<h:outputLabel value="endereco" for="endereco" />
+						<h:inputText id="endereco" label="endereco"
+							value="#{filialBean.endereco.endNome}" size="30" maxlength="30">
+
+						</h:inputText>
+
+						<h:outputLabel value="Cidade" for="Cidade" />
+						<h:inputText id="Cidade" label="cidade"
+							value="#{filialBean.cidade.cidNome}" size="30" maxlength="30">
+
+						</h:inputText>
+
+
+						<h:outputLabel value="Bairro: "
+							style="font-weight:bold; padding-right: 5px; float: right;" />
+						<p:inputText size="25" value="#{filialBean.bairro.baiNome}" />
+
+						<h:outputLabel value="Nº" for="numEnd" />
+						<h:inputText id="numEnd" label="numEnd"
+							value="#{filialBean.endereco.endNumero}" size="6" maxlength="6">
+						</h:inputText> -->

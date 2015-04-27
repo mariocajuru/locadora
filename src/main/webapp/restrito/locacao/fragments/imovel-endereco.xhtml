@@ -1,0 +1,309 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+		
+	<div class="row">
+		
+		<!-- ID -->
+		<label class="col-xs-1 control-label labelRenovar">IMÓVEL ID</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:inputText id="imo_id" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.imoId}" />
+					
+			</div>
+		</div>
+		
+		
+		<h:panelGroup rendered="#{!contratoLocacaoBean.alteracao}">
+		
+			<!-- PROCURAR IMOVEL -->	
+			<div class="col-xs-2">
+				<div class="form-group" style="text-align: center; padding-left: 10px;">
+			
+					<input type="button" class="btn btn-default btn-sm btn-block" 
+						onclick="javascript:openGridImoveis();" value="Procurar" />
+						
+				</div>
+			</div>
+	
+		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{contratoLocacaoBean.alteracao}">
+		
+			<!-- VISUALIZAR IMOVEL -->	
+			<div class="col-xs-2">
+				<div class="form-group" style="text-align: center; padding-left: 10px;">
+			
+					<input type="button" class="btn btn-default btn-sm btn-block" value="Detalhes"  
+						onclick="javascript: window.open('#{request.contextPath}/restrito/imovel/cadastro.jsf?id=#{contratoLocacaoBean.imovel.imoId}','_blank');" />
+						
+				</div>
+			</div>
+	
+		</h:panelGroup>
+		
+		<!-- MAPA IMOVEL 
+		<div class="col-xs-2">
+			<div class="form-group" style="text-align: center; padding-left: 10px;">
+		
+				<input type="button" class="btn btn-default btn-sm btn-block" 
+					onclick="javascript:void(0);" value="Mapa" />
+					
+			</div>
+		</div>-->	
+		
+	</div>
+	
+	<br/>
+	
+	<div class="row">
+	
+		<!-- CEP -->
+		<label class="col-xs-1 control-label labelRenovar">CEP</label>
+			
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:inputText id="imo_cep" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.endereco.endCep}" disabled="true"/>
+				
+			</div>
+		</div>
+	
+	
+		<!-- ENDEREÇO -->
+		<label class="col-xs-1 control-label labelRenovar">ENDEREÇO</label>
+	
+		<div class="col-xs-3">
+			<div class="form-group">
+			
+				<h:inputText id="imo_end" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.endereco.endNome}" disabled="true"/>
+				
+			</div>
+		</div>
+	
+	
+		<!-- NÚMERO -->
+		<label class="col-xs-1 control-label labelRenovar">Nº</label>
+	
+		<div class="col-xs-1">
+			<div class="form-group">
+			
+				<h:inputText id="imo_numEnd" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.endereco.endNumero}" disabled="true" />
+			</div>
+		</div>
+	
+	
+		<!-- COMPLEMENTO -->
+		<label class="col-xs-1 control-label labelRenovar">COMPL.</label>
+	
+		<div class="col-xs-2">
+			<div class="form-group">
+			
+				<h:inputText id="imo_complemento" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.endereco.endComplemento}"  disabled="true"/>
+			
+			</div>
+		</div>
+	
+	</div>
+
+	<div class="row">
+
+		<!-- BAIRRO -->
+		<label class="col-xs-1 control-label labelRenovar">BAIRRO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+
+				<h:inputText id="imo_bairro" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.endereco.bairro.baiNome}"
+					disabled="true" />
+
+			</div>
+		</div>
+
+
+		<!-- CIDADE -->
+		<label class="col-xs-1 control-label labelRenovar">CIDADE</label>
+
+		<div class="col-xs-3">
+			<div class="form-group">
+
+				<h:inputText id="imo_cidade" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.endereco.cidade.cidNome}"
+					disabled="true" />
+
+			</div>
+		</div>
+
+
+		<!-- ESTADO -->
+		<label class="col-xs-1 control-label labelRenovar">ESTADO</label>
+
+		<div class="col-xs-1">
+			<div class="form-group">
+
+				<h:inputText id="imo_estado" class="form-control input-sm"
+					value="#{contratoLocacaoBean.imovel.endereco.cidade.cidUf}"
+					disabled="true" />
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<!-- PROPRIETÁRIOS -->
+		<label class="col-xs-1 control-label labelRenovar">PROPRIETÁRIO(S)</label>
+		<div class="col-xs-9">
+			<div class="form-group">
+				<p:inputTextarea id="proprietarios" class="autosize form-control"
+					rows="5" cols="15" maxlength="200" disabled="true"
+					style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;" />
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">		
+		$(function () {		
+			// widget configuration
+			var configImoveis = {
+				layout: {
+					name: 'layoutImoveis',
+					padding: 0,
+					panels: [
+						{ type: 'main', minSize: 350, overflow: 'hidden' }
+					]
+				},
+				grid: { 
+					name: 'gridImoveis',
+					style: 'border: 0px; border-left: 1px solid silver',
+					show: {
+						header 		: false,
+						toolbar 	: true,
+						footer		: false,
+						lineNumbers	: false,
+						selectColumn: false,
+						expandColumn: false
+					},
+					columns: [
+						{ field: 'recid',    caption: 'Código',   size: '60px',  sortable: true, resizable: true },
+					    { field: 'situacao', caption: 'Situação', size: '280px', sortable: true, resizable: true },
+					    { field: 'tipo',     caption: 'Tipo',     size: '350px', sortable: true, resizable: true },
+					    { field: 'cep',      caption: 'CEP',      size: '100px', sortable: true, resizable: true },
+					    { field: 'endereco', caption: 'Endereço', size: '350px', sortable: true, resizable: true },
+					    { field: 'bairro',   caption: 'Bairro',   size: '100px', sortable: true, resizable: true },
+					    { field: 'cidade',   caption: 'Cidade',   size: '150px', sortable: true, resizable: true },
+					    { field: 'estado',   caption: 'Estado',   size: '50px',  sortable: true, resizable: true },
+					],
+					searches: [
+						{ type: 'int',   field: 'recid',    caption: 'ID' },
+						{ type: 'text',  field: 'situacao', caption: 'Situação' },
+						{ type: 'text',  field: 'tipo',     caption: 'Tipo' },
+						{ type: 'text',  field: 'cep',      caption: 'CEP' },
+						{ type: 'text',  field: 'endereco', caption: 'Endereço' },
+						{ type: 'text',  field: 'bairro',   caption: 'Bairro' },
+						{ type: 'text',  field: 'cidade',   caption: 'Cidade' },
+						{ type: 'text',  field: 'estado',   caption: 'Estado' },
+					],
+					records: [
+								
+						<ui:repeat value="#{contratoLocacaoBean.listaImoveis}" var="imovel">
+							{ 
+								recid:     #{imovel.getImoId()}, 
+								situacao: '#{imovel.getSituacaoimovel().getSitNome()}', 
+								tipo:     '#{imovel.getTipoimovel().getTipNome()}', 
+								cep:      '#{imovel.getEndereco().getEndCep()}', 
+								endereco: '#{imovel.getEndereco().getEndNome()}',
+								numero:   '#{imovel.getEndereco().getEndNumero()}',
+								bairro:   '#{imovel.getEndereco().getBairro().getBaiNome()}',
+								cidade:   '#{imovel.getEndereco().getCidade().getCidNome()}',
+								estado:   '#{imovel.getEndereco().getCidade().getCidUf()}',
+								aluguel:   '#{imovel.getImoValorAluguel()}',
+								taxaAdm:   '#{imovel.getImoTaxa()}',
+								valorVenal:   '#{imovel.getImoValorAluguel()*120}',
+								complemento: '#{imovel.getEndereco().getEndComplemento()}',
+								prazo:   '#{imovel.getImoGarantia()}',
+								diaRecebimentoLocatario: '#{contratoLocacaoBean.calculandoDiaRecebimentoLocatario(imovel.getImoId())}',
+								diaRecebimentoLocador: '#{contratoLocacaoBean.calculandoDiaRecebimentoLocador(imovel.getImoId())}',
+								proprietarios:    '#{contratoLocacaoBean.carregarProprietarios(imovel.imoId)}',
+							 },
+						</ui:repeat>
+							
+					],
+					onDblClick: function(event) {
+						var id = event.recid;
+	
+						var obj = w2ui['gridImoveis'].get(id);
+	
+						w2popup.close();
+						
+						if (obj != null) {
+							console.log(w2ui['gridImoveis'].get(id));
+							
+							document.getElementById('formulario:imo_id').value           = obj.recid       + "";
+							document.getElementById('formulario:imo_cep').value          = obj.cep         + "";
+							document.getElementById('formulario:imo_end').value          = obj.endereco    + "";
+							document.getElementById('formulario:imo_numEnd').value       = obj.numero      + "";
+							document.getElementById('formulario:imo_complemento').value  = obj.complemento+"";
+							document.getElementById('formulario:imo_bairro').value       = obj.bairro      + "";
+							document.getElementById('formulario:imo_cidade').value       = obj.cidade      + "";
+							document.getElementById('formulario:imo_estado').value       = obj.estado      + "";
+							document.getElementById('formulario:valorAluguel').value       = obj.aluguel      + "";
+							document.getElementById('formulario:taxaAdmImovel').value       = obj.taxaAdm      + "";
+							document.getElementById('formulario:valorVenalTotalSeguroIncendio').value       = obj.valorVenal      + "";
+							document.getElementById('formulario:prazoGarantia').value       = obj.prazo      + "";
+							document.getElementById('formulario:valorTotalSeguroIncendio').value     = "";
+							document.getElementById('formulario:valorParcelaSeguroIncendio').value   = 0;
+							document.getElementById('formulario:diasPagamentoLocatario').value       = obj.diaRecebimentoLocatario + "";
+							document.getElementById('formulario:diasPagamentoLocador').value       = obj.diaRecebimentoLocador + "";
+							document.getElementById('formulario:proprietarios').value          = obj.proprietarios    + "";
+						}
+					}					
+				}
+			}
+			
+			// initialization in memory
+			$().w2layout(configImoveis.layout);
+			$().w2grid(configImoveis.grid);
+		});
+
+		function openGridImoveis() {
+			w2popup.open({
+				title 	: 'Selecione um imóvel',
+				width	: 800,
+				height	: 600,
+				showMax : true,
+				body 	: '<div id="main" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px;"></div>',
+				onOpen  : function (event) {
+					event.onComplete = function () {
+						$('#w2ui-popup #main').w2render('layout');
+						w2ui.layout.content('main', w2ui['gridImoveis']);
+					}
+				},
+				onMax : function (event) { 
+					event.onComplete = function () {
+						w2ui.layout.resize();
+					}
+				},
+				onMin : function (event) {
+					event.onComplete = function () {
+						w2ui.layout.resize();
+					}
+				}		
+			});
+		}	
+
+	
+	</script>
+		
+</ui:composition>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<div class="page-header">
+			<h1>
+				PERMISSÕES <small>visão geral</small>
+			</h1>
+		</div>
+		<h:form id="formulario" class="form-horizontal">
+
+			<p:growl id="msgs" showDetail="true" escape="false" />
+
+			<div class="row">
+				<!-- FUNCIONÁRIO -->
+				<label class="col-xs-2 control-label labelRenovar">FUNCIONÁRIO</label>
+				<div class="col-xs-2">
+					<div class="form-group">
+						<h:selectOneMenu id="funcionario" class="form-control input-sm"
+							value="#{funcionarioBean.funcionario.funId}" required="true"
+							requiredMessage="Selecione o funcionario">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{funcionarioBean.listaFuncionarios}"
+								var="fun" itemValue="#{fun.funId}"
+								itemLabel="#{fun.pessoa.pesNome}" />
+								<p:ajax listener="#{funcionarioBean.funcionarioEscolhido}" 
+								process="funcionario"
+								update="@form"/>
+						</h:selectOneMenu>
+
+					</div>
+				</div>
+			</div>
+<p:outputPanel rendered="#{funcionarioBean.funcionario.funId!=0}" id="teste">
+			<h3>PERMISSÕES</h3>
+				<p:tree value="#{funcionarioBean.arvore.arvore}" var="doc" id="tree"
+					selectionMode="checkbox"
+					selection="#{funcionarioBean.arvoreSelecionada}">
+					<p:treeNode icon="ui-icon-document">
+						<h:outputText value="#{doc}" />
+					</p:treeNode>
+					<p:treeNode type="Documents" expandedIcon="ui-icon-folder-open"
+						collapsedIcon="ui-icon-folder-collapsed">
+						<h:outputText value="#{doc}" />
+					</p:treeNode>
+					<p:treeNode type="Pictures" icon="ui-icon-newwin">
+						<h:outputText value="#{doc}" />
+					</p:treeNode>
+
+					<p:treeNode type="alterar" icon="ui-icon-pencil">
+						<h:outputText value="#{doc}" />
+					</p:treeNode>
+					<p:treeNode type="excluir" icon="ui-icon-trash">
+						<h:outputText value="#{doc}" />
+					</p:treeNode>
+					<p:treeNode type="incluir" icon="ui-icon-plus">
+						<h:outputText value="#{doc}" />
+					</p:treeNode>
+					<p:treeNode type="consultar" icon="ui-icon-zoomin">
+						<h:outputText value="#{doc}" />
+					</p:treeNode>
+				</p:tree>
+
+				<p:commandButton value="SALVAR" update="@form" icon="ui-icon-disk"
+					process="@this,tree,funcionario"
+					actionListener="#{funcionarioBean.salvarPermissoes(funcionarioBean.arvoreSelecionada)}" />
+
+				<p:ajaxStatus onstart="statusDialog.show();"
+					onsuccess="statusDialog.hide();" />
+				<p:dialog modal="true" widgetVar="statusDialog" header="Aguarde..."
+					draggable="false" closable="false">
+					<p:graphicImage library="imagens" name="ajaxloadingbar.gif" />
+				</p:dialog>
+
+			</p:outputPanel>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

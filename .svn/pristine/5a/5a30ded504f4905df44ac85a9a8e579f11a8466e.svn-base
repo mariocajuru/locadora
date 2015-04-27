@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"> 
+<div class="row">
+
+<!-- SEGURADORA -->
+		<label class="col-xs-2 control-label labelRenovar">SEGURADORA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="seguradoraFianca" class="form-control input-sm"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaSeguradora}" disabled="#{contratoLocacaoBean.alteracao}" maxlength="50">
+				</h:inputText>
+			</div>
+		</div>
+		
+		<!-- CORRETORA -->
+		<label class="col-xs-2 control-label labelRenovar">CORRETORA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="corretoraFianca" class="form-control input-sm"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaCorretar}" disabled="#{contratoLocacaoBean.alteracao}" maxlength="50">
+				</h:inputText>
+			</div>
+		</div>
+		
+<!-- Data da incio seguro incendio -->
+		<label class="col-xs-2 control-label labelRenovar">INÍCIO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+				<p:calendar id="dataInicioSeguroFianca" disabled="#{contratoLocacaoBean.alteracao}"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaDataInicio}" locale="pt_BR"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true" required="false" >
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+					</p:calendar>
+			</div>
+		</div>
+		
+		
+<!-- Data fim seguro incendio -->
+		<label class="col-xs-2 control-label labelRenovar">TÉRMINO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+				<p:calendar id="dataFimSeguroFianca" disabled="#{contratoLocacaoBean.alteracao}"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaDataFinal}" locale="pt_BR"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true" required="false" >
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+					</p:calendar>
+			</div>
+		</div>
+
+		<!-- Valor total -->
+		<label class="col-xs-2 control-label labelRenovar">VAL.TOTAL</label>
+		<div class="col-xs-2">
+			<div class="form-group">
+				<pe:inputNumber id="valorTotalSeguroFianca"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaValorTotal}"
+					size="15" maxlength="15" required="false" symbol="R$ "
+					decimalPlaces="2" disabled="#{contratoLocacaoBean.alteracao}">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>
+			</div>
+		</div>
+
+	<!-- PLANO -->
+		<label class="col-xs-2 control-label labelRenovar">PLANO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				
+				<pe:inputNumber id="formaPagamentoFianca"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaPlano}"
+					 required="false" maxValue="12" 
+					decimalPlaces="0" disabled="#{contratoLocacaoBean.alteracao}">          
+					<f:converter converterId="javax.faces.Integer" />
+				</pe:inputNumber>	
+			</div>
+		</div>
+					
+		<!-- VAL.PARCELA -->
+		<label class="col-xs-2 control-label labelRenovar">VAL.PARCELA</label>		
+		<div class="col-xs-2">
+			<div class="form-group">	
+			<pe:inputNumber id="parcelasSeguroFianca"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaValorParcela}"
+					size="15" maxlength="15" required="false" symbol="R$ "
+					decimalPlaces="2" disabled="#{contratoLocacaoBean.alteracao}">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>				
+			</div>
+		</div>
+		
+				<!-- PAC -->
+		<label class="col-xs-2 control-label labelRenovar">PAC</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="pacFianca" class="form-control input-sm"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaPac}" disabled="#{contratoLocacaoBean.alteracao}" maxlength="50">
+				</h:inputText>
+			</div>
+		</div>
+		
+								<!-- APOLICE -->
+		<label class="col-xs-2 control-label labelRenovar">APOLICE</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="apoliceFianca" class="form-control input-sm"
+					value="#{contratoLocacaoBean.seguroFianca.segFiaApolice}" disabled="#{contratoLocacaoBean.alteracao}" maxlength="50">
+				</h:inputText>
+			</div>
+		</div>
+		
+		</div>
+</ui:composition>

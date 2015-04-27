@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="formulario" class="form-horizontal">
+
+			<legend>Informação Adicional - Locação</legend>
+
+			<div class="row">
+				<div class="bs-example bs-example-tabs">
+					<ul id="myTab" class="nav nav-tabs">
+						<li><a href="consulta-contrato.jsf">CONSULTA</a></li>
+						<li><a
+							href="cadastro-contrato.jsf?id=#{contratoLocacaoImpressaoBean.locacao.locId}">CADASTRO</a></li>
+						<li class="active"><a>INFORMAÇÃO ADICIONAL</a></li>
+						<li><a
+							href="imprimir-contrato.jsf?id=#{contratoLocacaoImpressaoBean.locacao.locId}">IMPRIMIR</a></li>
+					</ul>
+				</div>
+			</div>
+			<p:growl id="cadMenssagem" display="text" autoUpdate="true"
+				closable="true" errorClass="bs-callout bs-callout-info" life="2500"></p:growl>
+
+			<br />
+			<div class="row">
+
+				<!-- ID -->
+				<label class="col-xs-1 control-label labelRenovar">CÓDIGO</label>
+
+				<div class="col-xs-2">
+					<div class="form-group">
+
+						<h:inputText id="id" class="form-control input-sm"
+							value="#{contratoLocacaoImpressaoBean.locacao.locId}"
+							disabled="true" />
+
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row"></div>
+			<div class="row">
+
+				<div class="col-xs-12">
+
+					<label class="control-label">INFORMAÇÕES ADICIONAIS</label>
+
+					<p:inputTextarea id="inforAdicionais" class="autosize form-control"
+						rows="5" cols="100" maxlength="250" counter="counterInfor"
+						counterTemplate="{0} caracteres restantes"
+						disabled="false"
+						value="#{contratoLocacaoBean.informacaoAdicional.infAdiObservacao}"
+						style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;" />
+
+					<h:outputText id="vazio" />
+
+					<div style="text-align: right; padding-top: 20px;">
+						<h:outputText id="counterInfor" />
+					</div>
+
+				</div>
+			</div>
+
+			<hr />
+
+			<div class="row" style="text-align: center">
+
+				<div class="btn-group">
+
+					<h:commandButton value="Salvar"
+						action="#{contratoLocacaoBean.gravarInformacaoAdiconal}"
+						class="btn btn-default btn-lg" >
+						<p:ajax process="@this,inforAdicionais" update="inforAdicionais, outPanel"></p:ajax>
+						</h:commandButton>
+						
+						<h:commandButton  class="btn btn-default btn-lg" value="Limpar" ajax="true" immediate="true" type="reset">
+						</h:commandButton>
+
+				</div>
+
+			</div>
+			<br/>
+			<br/>
+			<p:outputPanel id="outPanel">
+			 <p:dataList value="#{contratoLocacaoBean.listaInformacaoAdicinal}"
+				var="inf" type="definition" emptyMessage="Não há informações adicionais cadastradas para essa locação">
+				<ul class="list-group">
+					<li class="list-group-item active">
+						<h4 class="list-group-item-heading">#{inf.infAdiObservacao}</h4>
+						<p class="list-group-item-text">
+							Codigo:
+							<kbd>#{inf.infAdiId}</kbd>
+							Data:
+							<kbd><p:outputLabel value="#{inf.infAdiData}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</p:outputLabel></kbd>
+							Funcionário:
+							<kbd>#{contratoLocacaoBean.funcionario(inf.infAdiFuncionario)}</kbd>
+							Setor:
+							<kbd>#{inf.infAdiSetor}</kbd>
+						</p>
+
+					</li>
+				</ul>
+			</p:dataList>
+</p:outputPanel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<title><ui:insert name="titulo">Pesquisa de Imóveis</ui:insert></title>
+	
+    <link href="#{request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"></link>
+    <link href="#{request.contextPath}/v2/pesquisa/css/font-awesome/css/font-awesome.css" rel="stylesheet"></link>
+    <link href="#{request.contextPath}/v2/pesquisa/css/pesquisa.css" rel="stylesheet"></link>
+</h:head>
+<h:body>
+
+	<div class="topo"></div>
+	
+	<div class="topo-pesquisas">
+		<div class="container">
+			<img src="img/pesquisa-logo.png" class="img-responsive" />
+		</div>
+	</div>
+	
+	<div class="container container-resultados">
+		
+		<h:panelGroup rendered="#{ResultadoPesquisa.erro != null}">
+			<div class="alert alert-danger" role="alert">
+			  	<p>#{ResultadoPesquisa.erro}</p>
+			</div>
+		</h:panelGroup>
+		
+		<div class="row">
+	
+		    <ui:repeat value="#{ResultadoPesquisa.getResultados()}" var="imovel">
+				
+				<!-- Item Resultado INICIO -->
+		    	<div class="col-xs-6" style="margin-right: 0px !important;">
+					<div class="resultados-item shadow-box">
+					
+						<div class="col-xs-12 centralizar">
+							<h4>
+								#{imovel.tipoimovel.tipNome} / 
+								#{imovel.imoVenda ? 'VENDA' : ''}
+								#{imovel.imoVenda and imovel.imoLocacao ? ' / ' : ''}
+								#{imovel.imoLocacao ? 'LOCAÇÃO' : ''}
+							</h4>
+							<hr/>
+						</div>
+						
+						<div class="col-xs-4 centralizar">
+							<a href="javascript:void(#{imovel.imoId});">
+								<img src="img/sem-imagem.png" class="img-responsive"></img>
+							</a>
+						</div>
+						
+						<div class="col-xs-8">
+							<p>
+								<a target="_blank" href="http://maps.google.com/?q=#{imovel.endereco.endNome} #{imovel.endereco.endNumero}, #{imovel.endereco.cidade.cidNome}, #{imovel.endereco.cidade.cidUf}, Brasil">
+									<i class="fa fa-map-marker"></i> #{imovel.endereco.endNome}
+								</a>
+							</p>
+							<p><i class="fa fa-building"></i> #{imovel.endereco.cidade.cidNome} - #{imovel.endereco.cidade.cidUf}</p>
+							<p><i class="fa fa-usd"></i> Aluguel: R$ #{imovel.imoValorAluguel}</p>
+							<p><i class="fa fa-usd"></i> Preço: R$ #{imovel.imoValorMercado}</p>
+							<!-- <p><i class="fa fa-info"></i> Comercial</p> -->
+						</div>
+						
+						<div class="col-xs-12 centralizar">
+							<hr/>
+						
+							<a class="btn btn-default btn-sm btn-g" href="javascript:void(0);" id="btnAjuda">Emprestar Chaves</a>	
+							<a class="btn btn-default btn-sm btn-g" href="javascript:void(0);" id="btnAjuda">Ver Detalhes</a>	
+						</div>
+						
+					</div>
+				</div>
+				<!-- Item Resultado FIM -->
+				
+		    </ui:repeat>
+				
+		</div>
+	</div>
+	
+</h:body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<h:form id="formulario" class="form-horizontal">
+
+			<div class="page-header">
+				<h1>
+					<small>GERAR FINANCEIRO</small>
+				</h1>
+			</div>
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true"
+				closable="true" errorClass="bs-callout bs-callout-info" />
+
+
+			<div class="bs-callout bs-callout-info">
+				<p>CONTRATO</p>
+			</div>
+
+			<ui:include
+				src="/restrito/financeiro/manualmente/fragments/contrato.xhtml" />
+
+			<div class="bs-callout bs-callout-info">
+				<p>DESCRIÇÃO</p>
+			</div>
+
+
+			<div class="row">
+
+				<!--Grupo de Contas -->
+				<label class="col-xs-2 control-label labelRenovar">GRUPO DE
+					CONTAS</label>
+
+				<div class="col-xs-2">
+					<div class="form-group">
+
+						<h:selectOneMenu id="grupoContas" class="form-control input-sm"
+							value="#{financeiroBean.grupoDeContas.gruConId}" required="true"
+							requiredMessage="Selecione o grupo de contas">
+							<f:selectItems value="#{grupoDeContasBean.listaGrupoDeContas}"
+								var="sta" itemValue="#{sta.gruConId}"
+								itemLabel="#{sta.gruConNome}" />
+						</h:selectOneMenu>
+
+					</div>
+				</div>
+
+				<!-- Data final contrato -->
+				<label class="col-xs-2 control-label labelRenovar">DATA
+					VENCIMENTO</label>
+
+				<div class="col-xs-1">
+					<div class="form-group data">
+
+						<p:calendar id="dataVencimento"
+							value="#{financeiroBean.contaCorrente.conCorDataVencimento}"
+							locale="pt_BR" pattern="dd/MM/yyyy" minlength="10" maxlength="10"
+							navigator="true" required="true"
+							requiredMessage="DATA
+					VENCIMENTO obrigatorio">
+							<h:outputScript name="calendario_pt_BR.js" library="js" />
+						</p:calendar>
+
+					</div>
+				</div>
+				<!-- Valor  -->
+				<label class="col-xs-1 control-label labelRenovar">VALOR</label>
+
+				<div class="col-xs-1">
+					<div class="form-group">
+
+						<pe:inputNumber id="valor" requiredMessage="VALOR obrigatório"
+							rendered="true"
+							value="#{financeiroBean.contaCorrente.conCorValor}" size="15"
+							maxlength="15" required="true" symbol="R$ " decimalPlaces="2">
+							<f:validateLength minimum="0" maximum="15" />
+							<f:converter converterId="javax.faces.Double" />							
+							<p:ajax update="valorParcelado"/>
+						</pe:inputNumber>
+					</div>
+				</div>
+				
+				<!-- Parcelas  -->
+				<label class="col-xs-1 control-label labelRenovar">Nº PARCELAS</label>
+
+				<div class="col-xs-1">
+					<div class="form-group">
+
+						<pe:inputNumber id="parcelas" requiredMessage="Nº PARCELAS obrigatório"
+							rendered="true"
+							value="#{financeiroBean.parcelas}" size="15"
+							maxlength="15" required="true" decimalPlaces="0">
+							<f:validateLength minimum="0" maximum="15" />
+							<f:converter converterId="javax.faces.Integer" />
+							<p:ajax update="valorParcelado"/>
+						</pe:inputNumber>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<!-- MOVIMENTAÇÃO -->
+				<label class="col-xs-2 control-label labelRenovar">MOVIMENTAÇÃO</label>
+
+				<div class="col-xs-4">
+					<div class="form-group">
+						<h:selectOneMenu id="basic" value="#{financeiroBean.operacao}"
+							rendered="true" class="form-control input-sm"
+							requiredMessage="Selecione o tipo da MOVIMENTAÇÃO">
+							<f:selectItem
+								itemLabel="PAGAMENTO LOCADOR - RECEBIMENTO LOCATÁRIO"
+								itemValue="1" />
+							<f:selectItem
+								itemLabel="PAGAMENTO LOCATÁRIO - RECECIMENTO LOCADOR"
+								itemValue="2" />
+							<f:selectItem itemLabel="PAGAMENTO LOCADOR" itemValue="3" />
+							<f:selectItem itemLabel="PAGAMENTO LOCATÁRIO" itemValue="4" />
+							<f:selectItem itemLabel="RECEBIMENTO LOCADOR" itemValue="5" />
+							<f:selectItem itemLabel="RECEBIMENTO LOCATÁRIO" itemValue="6" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+				
+				<!-- ValorParcelado  -->
+				<label class="col-xs-2 control-label labelRenovar">VALOR PARCELADO</label>
+
+				<div class="col-xs-1">
+					<div class="form-group">
+
+						<pe:inputNumber id="valorParcelado" disabled="true"
+							value="#{financeiroBean.contaCorrente.conCorValor/financeiroBean.parcelas}" size="15"
+							maxlength="15" required="true" symbol="R$ " decimalPlaces="2">
+							<f:validateLength minimum="0" maximum="15" />
+							<f:converter converterId="javax.faces.Double" />
+						</pe:inputNumber>
+					</div>
+				</div>
+				
+			</div>
+
+						<ui:include
+						src="/restrito/financeiro/manualmente/fragments/descricao.xhtml" />
+						
+						
+					<div class="row" style="text-align: center">
+
+						<div class="btn-group">
+
+							<h:commandButton value="Salvar" action="#{financeiroBean.gravar}"
+								class="btn btn-default btn-lg" />
+
+							<a class="btn btn-default btn-lg" href="javascript:void(0);"
+								onclick="javascript: window.location.assign('gerar.jsf');">Limpar</a>
+
+						</div>
+
+					</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

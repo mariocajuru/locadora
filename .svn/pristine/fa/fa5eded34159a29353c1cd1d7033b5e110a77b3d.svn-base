@@ -1,0 +1,8 @@
+# ----------------------------- Threads --------------------------- #
+# Quantos postos de jobs pode ser executado ao mesmo tempo?
+org.quartz.threadPool.threadCount=5
+
+# ----------------------------- Plugins --------------------------- #
+# Classe para carregar os dados de configuração para cada job e trigger.
+# Neste exemplo, os dados estão num ficheiro XML.
+org.quartz.plugin.jobInitializer.class=org.quartz.plugins.xml.XMLSchedulingDataProcessorPlugin

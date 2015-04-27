@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<h:form id="formulario" class="form-horizontal">
+
+			<div class="page-header">
+				<h1>
+					<small>GERAR CONTAS A PAGAR</small>
+				</h1>
+			</div>
+			<p:messages id="cadMenssagem" display="text" autoUpdate="true"
+				closable="true" errorClass="bs-callout bs-callout-info" />
+
+
+			<div class="bs-callout bs-callout-info">
+				<p>CONTRATO</p>
+			</div>
+
+			<ui:include
+				src="/restrito/financeiro/manualmente/fragments/contrato.xhtml" />
+
+			<div class="bs-callout bs-callout-info">
+				<p>DESCRIÇÃO</p>
+			</div>
+
+
+			<div class="row">
+
+				<!--Grupo de Contas -->
+				<label class="col-xs-2 control-label labelRenovar">GRUPO DE
+					CONTAS</label>
+
+				<div class="col-xs-2">
+					<div class="form-group">
+
+						<h:selectOneMenu id="grupoContas" class="form-control input-sm"
+							value="#{financeiroBean.grupoDeContas.gruConId}" required="true"
+							requiredMessage="Selecione o grupo de contas">
+							<f:selectItems value="#{grupoDeContasBean.listaGrupoDeContas}"
+								var="sta" itemValue="#{sta.gruConId}"
+								itemLabel="#{sta.gruConNome}" />
+						</h:selectOneMenu>
+
+					</div>
+				</div>
+
+				<!-- Data final contrato -->
+				<label class="col-xs-2 control-label labelRenovar">DATA
+					VENCIMENTO</label>
+
+				<div class="col-xs-1">
+					<div class="form-group data">
+
+						<p:calendar id="dataVencimento"
+							value="#{financeiroBean.contaCorrente.conCorDataVencimento}"
+							locale="pt_BR" pattern="dd/MM/yyyy" minlength="10" maxlength="10"
+							navigator="true" required="true"
+							requiredMessage="DATA
+					VENCIMENTO obrigatorio">
+							<h:outputScript name="calendario_pt_BR.js" library="js" />
+						</p:calendar>
+
+					</div>
+				</div>
+				<!-- Valor  -->
+				<label class="col-xs-1 control-label labelRenovar">VALOR</label>
+
+				<div class="col-xs-1">
+					<div class="form-group">
+
+						<pe:inputNumber id="valor" requiredMessage="VALOR obrigatório"
+							rendered="true"
+							value="#{financeiroBean.contaCorrente.conCorValor}" size="15"
+							maxlength="15" required="true" symbol="R$ " decimalPlaces="2">
+							<f:validateLength minimum="0" maximum="15" />
+							<f:converter converterId="javax.faces.Double" />							
+							<p:ajax update="valorParcelado"/>
+						</pe:inputNumber>
+					</div>
+				</div>
+				
+				<!-- Parcelas  -->
+				<label class="col-xs-1 control-label labelRenovar">Nº PARCELAS</label>
+
+				<div class="col-xs-1">
+					<div class="form-group">
+
+						<pe:inputNumber id="parcelas" requiredMessage="Nº PARCELAS obrigatório"
+							rendered="true"
+							value="#{financeiroBean.parcelas}" size="15"
+							maxlength="15" required="true" decimalPlaces="0">
+							<f:validateLength minimum="0" maximum="15" />
+							<f:converter converterId="javax.faces.Integer" />
+							<p:ajax update="valorParcelado"/>
+						</pe:inputNumber>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<!-- MOVIMENTAÇÃO -->
+				<!-- <label class="col-xs-2 control-label labelRenovar">MOVIMENTAÇÃO</label>
+
+				<div class="col-xs-4">
+					<div class="form-group">
+						<h:selectOneMenu id="movimentacao" value="#{financeiroBean.operacao}"
+							rendered="true" class="form-control input-sm"
+							requiredMessage="Selecione o tipo da MOVIMENTAÇÃO">
+							<f:selectItem itemLabel="PAGAMENTO LOCADOR" itemValue="1" />
+							<f:selectItem itemLabel="PAGAMENTO LOCATÁRIO" itemValue="2" />
+							<f:selectItem itemLabel="RECEBIMENTO LOCADOR" itemValue="3" />
+							<f:selectItem itemLabel="RECEBIMENTO LOCATÁRIO" itemValue="4" />
+						</h:selectOneMenu>
+					</div>
+				</div> -->
+				
+				<!-- ValorParcelado  -->
+				<label class="col-xs-2 control-label labelRenovar">VALOR PARCELADO</label>
+
+				<div class="col-xs-1">
+					<div class="form-group">
+
+						<pe:inputNumber id="valorParcelado" disabled="true"
+							value="#{financeiroBean.contaCorrente.conCorValor/financeiroBean.parcelas}" size="15"
+							maxlength="15" required="true" symbol="R$ " decimalPlaces="2">
+							<f:validateLength minimum="0" maximum="15" />
+							<f:converter converterId="javax.faces.Double" />
+						</pe:inputNumber>
+					</div>
+				</div>
+				
+			</div>
+
+						<ui:include
+						src="/restrito/financeiro/manualmente/fragments/descricao.xhtml" />
+						
+						
+					<div class="row" style="text-align: center">
+
+						<div class="btn-group">
+
+							<p:commandButton value="Gerar" action="#{financeiroBean.abrirDialog}"
+								class="btn btn-default btn-lg" process="@this,contrato_id, grupoContas, dataVencimento, valor, parcelas,valorParcelado, historico, obs"
+								 update="dialogValores" icon="ui-icon-extlink"/>
+
+							<a class="btn btn-default btn-lg" href="javascript:void(0);"
+								onclick="javascript: window.location.assign('gerar.jsf');">Limpar</a>
+
+						</div>
+
+					</div>
+			<p:dialog id="dialogValores" width="825px" height="468px" 
+				modal="true" showEffect="fade" hideEffect="fade"
+				widgetVar="dialogVal" closable="true" closeOnEscape="true"
+				maximizable="true" minimizable="false">
+				<p:messages autoUpdate="true" closable="true" showDetail="true" />
+				<div class="page-header">
+					<h1>
+						<p:outputPanel id="valorCabecalho">
+							<small>Valor:</small> R$#{financeiroBean.valorParcela}
+							</p:outputPanel>
+					</h1>
+				</div>
+				<div class="row">
+					<!-- LOCATÁRIO -->
+					<label class="col-xs-1 control-label labelRenovar">LOCATÁRIO</label>
+					<div class="col-xs-3">
+						<div class="form-group">
+							<p:inputText disabled="true"
+								value="#{financeiroBean.locacao.pessoa.pesNome}"
+								class="form-control input-sm" />
+
+							<pe:inputNumber id="valorLocatario" size="15" maxlength="15"
+								required="true" symbol="R$ " decimalPlaces="2"
+								value="#{financeiroBean.subtrairValorLocatario}">
+								<f:validateLength minimum="0" maximum="15" />
+								<f:converter converterId="javax.faces.Double" />
+								<p:ajax event="keyup" process="@this,listaPro, valorLocatario"
+								 update="@this,listaPro, valorCabecalho" listener="#{financeiroBean.subtrairValorLocatario}"/>
+							</pe:inputNumber>
+
+						</div>
+					</div>
+				</div>
+				<p:dataList id="listaPro" value="#{financeiroBean.listaProprietarios}"
+				type="definition" var="pro">
+					<div class="row">
+						<label class="col-xs-1 control-label labelRenovar">LOCADOR</label>
+						<div class="col-xs-3">
+							<div class="form-group">
+								<p:inputText disabled="true" value="#{pro.pessoa.pesNome}"
+									class="form-control input-sm" />
+
+								<pe:inputNumber size="15" maxlength="15" required="true"
+									symbol="R$ " decimalPlaces="2" value="#{pro.valor}">
+									<f:validateLength minimum="0" maximum="15" />
+									<f:converter converterId="javax.faces.Double" />
+									<p:ajax process="@this,listaPro" event="keyup"
+								 update="listaPro, @form:valorCabecalho" listener="#{financeiroBean.subtrairValorLocador}"/>
+								</pe:inputNumber>
+
+							</div>
+						</div>
+					</div>
+					</p:dataList>
+						<div class="row" style="text-align: center">
+
+						<div class="btn-group">
+
+							<p:commandButton value="Salvar" action="#{financeiroBean.gravarContasAPagar}" icon="ui-icon-check"
+								class="btn btn-default btn-lg" process="@this,valorLocatario, listaPro" update="dialogValores, listaPro"/>
+								
+								<p:commandButton class="btn btn-default btn-lg" value="Fechar"  process="@this"
+								 icon="ui-icon-close" onclick="dialogVal.hide()"/>
+
+						</div>
+
+					</div>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

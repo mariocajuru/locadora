@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+		<p:dataTable var="imo" value="#{pessoaBean.listaImoveisProprietario}"
+			rows="5" paginator="false"  >
+			<p:column headerText="Código" style="width:2px">
+				<center>
+					<h:outputText value="#{imo.imoId}" />
+				</center>
+			</p:column>
+
+			<p:column headerText="Tipo" style="width:2px">
+				<h:outputText value="#{imo.tipoimovel.tipNome}" />
+			</p:column>
+
+			<p:column headerText="Endereço" style="width:2px">
+				<h:outputText
+					value="#{imo.endereco.endNome},nº#{imo.endereco.endNumero},#{imo.endereco.bairro.baiNome},#{imo.endereco.cidade.cidNome}" />
+			</p:column>
+			<f:facet name="footer">
+        Imóveis 
+    </f:facet>
+		</p:dataTable>
+	</div>
+</ui:composition>

@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+
+		<div class="col-xs-12">
+
+			<label class="control-label">Observações</label>
+
+			<p:inputTextarea id="obs" class="autosize form-control"
+				rows="5" cols="100" maxlength="200" counter="counter"
+				counterTemplate="{0} caracteres restantes"
+				value="#{pessoaBean.pessoa.pesObservacao}"
+				style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 125px;" />
+
+			<h:outputText id="vazio" />
+
+			<div style="text-align: right; padding-top: 20px;">
+				<h:outputText id="counter" />
+			</div>
+
+		</div>
+	</div>
+
+
+</ui:composition>

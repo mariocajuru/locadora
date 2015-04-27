@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+		<!-- BANCO -->
+		<label class="col-md-1 control-label labelRenovar">BANCO</label>
+
+		<div class="col-md-2 form-group">
+			<h:selectOneMenu id="SelectBanco" converter="converteBanco"
+				value="#{pessoaBean.dadosBancariosProprietario.banco}"
+				class="form-control input-sm">
+				<f:selectItem itemLabel="Selecione ..." />
+				<f:selectItems value="#{pessoaBean.listaBancos}" var="banco"
+					itemLabel="#{banco.banNome}" itemValue="#{banco}" />
+			</h:selectOneMenu>
+		</div>
+
+		<div class="col-md-2 form-group">
+			<h:selectOneMenu  id="tipoConta" class="form-control input-sm"
+			value="#{pessoaBean.dadosBancariosProprietario.dadBanProContaCorrente}">
+				<f:selectItem itemValue="#{true}" itemLabel="Conta Corrente" />
+				<f:selectItem itemValue="#{false}" itemLabel="Poupança" />
+			</h:selectOneMenu>
+		</div>
+
+		<!-- AGENCIA -->
+		<label class="col-md-1 control-label labelRenovar">AGENCIA</label>
+
+		<div class="col-md-2 form-group">
+			<h:inputText id="agencia" class="form-control input-sm"
+				requiredMessage="Falta o nome da Pessoa !" required="false"
+				value="#{pessoaBean.dadosBancariosProprietario.dadBanProAgencia}"
+				size="30" maxlength="30" />
+		</div>
+
+		<!-- CONTA -->
+		<label class="col-md-1 control-label labelRenovar">CONTA</label>
+
+		<div class="col-md-2 form-group">
+			<h:inputText id="conta" class="form-control input-sm"
+				requiredMessage="Falta o nome da Pessoa !" required="false"
+				value="#{pessoaBean.dadosBancariosProprietario.dadBanProConta}"
+				size="30" maxlength="30" />
+		</div>
+		
+		</div>
+		
+		<div class="row">
+		
+		<div class="col-md-4 form-group">
+			<p:selectOneRadio id="localPagamente" 
+				value="#{pessoaBean.localPagamentoProprietario}" 
+				requiredMessage="Selecione o local de pagamento de pagemento do proprietairo. 'EM CARTEIRA' ou 'DEPÓSITO BANCÁRIO'"
+				style="margin-right: 30px;">
+				<f:selectItem itemLabel="EM CARTEIRA" itemValue="1" />
+				<f:selectItem itemLabel="DEPÓSITO BANCÁRIO" itemValue="2" />
+			</p:selectOneRadio>
+		</div>
+		
+			<!-- nomial -->
+		<label class="col-md-1 control-label labelRenovar">NOMINAL</label>
+
+		<div class="col-md-4 form-group">
+			<h:inputText id="nominal" class="form-control input-sm"
+				requiredMessage="Falta o nome da Pessoa !" required="false"
+				value="#{pessoaBean.dadosBancariosProprietario.dadBanProPessoaDepositoNome}"
+				size="30" maxlength="30" />
+		</div>
+		
+	</div>
+</ui:composition>

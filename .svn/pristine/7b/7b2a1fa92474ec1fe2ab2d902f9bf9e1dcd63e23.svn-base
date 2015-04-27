@@ -1,0 +1,711 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<div class="bs-callout bs-callout-info">
+				<h4>Alterar dados de pessoa</h4>
+			</div>
+				
+
+		<style>
+.coluna1 {
+	text-align: right
+}
+
+.coluna2 {
+	text-align: left
+}
+
+.coluna3 {
+	text-align: right
+}
+
+.coluna4 {
+	text-align: left
+}
+
+.coluna5 {
+	text-align: right
+}
+
+.coluna6 {
+	text-align: left
+}
+</style>
+
+		<script type="text/javascript">
+    function erro() {
+         alert('error');
+    }
+    </script>
+		<h:form id="cad_pessoaFisica">
+			<p:growl id="growl" sticky="true" showDetail="true" />
+
+			<p:wizard flowListener="#{pessoaAlterarBean.eventoProsseguir}"
+				nextLabel="Avançar" backLabel="Voltar">
+				<h:messages id="cadMenssagem"></h:messages>
+
+				<p:tab id="pessoal" title="Pessoal">
+					<p:panel header="Detalhes Pessoal">
+						<p:messages autoUpdate="true" closable="true" />
+						<h:panelGrid columns="2" bgcolor="#FAFAD2"
+							columnClasses="coluna1, coluna2">
+
+							<h:outputLabel value="Tipo de Pessoa:" for="fj" />
+							<h:selectOneMenu id="fj"
+								requiredMessage="Falta selecionar o tipo da Pessoa !"
+								value="#{pessoaAlterarBean.pessoa.pesTipo}" required="true">
+								<f:converter converterId="javax.faces.Character" />
+								<f:selectItem itemLabel="Selecione o tipo da Pessoa" />
+								<f:selectItem itemValue="F" itemLabel="Pessoa Fisica" />
+								<f:selectItem itemValue="J" itemLabel="Pessoa Juridica" />
+								<f:ajax render=":cad_pessoaFisica" />
+							</h:selectOneMenu>
+							<h:outputLabel value="" 
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<p:selectManyCheckbox id="quetipopessoaJuridica"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}">
+								<p:selectBooleanCheckbox
+									value="#{pessoaAlterarBean.pessoa.pesProprietario}"
+									label="proprietarioBoolean" itemLabel="Proprietário"
+									rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+								<p:selectBooleanCheckbox
+									value="#{pessoaAlterarBean.pessoa.pesFuncionario}"
+									label="funcionarioBoolean" itemLabel="Funcionário"
+									rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+								<p:selectBooleanCheckbox
+									value="#{pessoaAlterarBean.pessoa.pesFiador}"
+									label="fiadorBoolean" itemLabel="Fiador"
+									rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+								<p:selectBooleanCheckbox
+									value="#{pessoaAlterarBean.pessoa.pesInquilino}"
+									label="inquilinoBoolean" itemLabel="Inquilino"
+									rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							</p:selectManyCheckbox>
+
+							<h:outputLabel value="O que é essa pessoa ?"
+								for="quepessoaJuridica"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+							<p:selectManyCheckbox id="quepessoaJuridica"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}">
+								<p:selectBooleanCheckbox
+									value="#{pessoaAlterarBean.pessoa.pesProprietario}"
+									label="proprietarioBooleanJ" itemLabel="Proprietário"
+									rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+								<p:selectBooleanCheckbox
+									value="#{pessoaAlterarBean.pessoa.pesFiador}"
+									label="fiadorBooleanJ" itemLabel="Fiador"
+									rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+								<p:selectBooleanCheckbox
+									value="#{pessoaAlterarBean.pessoa.pesInquilino}"
+									label="inquilinoBooleanJ" itemLabel="Inquilino"
+									rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+							</p:selectManyCheckbox>
+
+							<h:outputLabel value="Nome:" for="nomepessoa" styleClass="coluna1"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:inputText id="nomepessoa" label="Nome da Pessoa"
+								requiredMessage="Falta o nome da Pessoa !" required="true"
+								value="#{pessoaAlterarBean.pessoa.pesNome}" size="30"
+								maxlength="30"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+
+							<h:outputLabel value="Razão social:" for="nomeEmpresa"
+								styleClass="coluna1"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+							<h:inputText id="nomeEmpresa" label="Nome da Pessoa"
+								requiredMessage="Falta Razão social !" required="true"
+								value="#{pessoaAlterarBean.pessoa.pesNome}" size="30"
+								maxlength="30"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+
+
+
+							<h:outputLabel value="Data Nascimento:" for="nas"
+								style="text-align:right" />
+							<p:calendar locale="pt_BR" id="nas" showButtonPanel="true"
+								value="#{pessoaAlterarBean.pessoa.pesDataNasc}" navigator="true"
+								showOn="button" pattern="dd/MM/yyyy" size="10" maxlength="10">
+								<h:outputScript name="js/calendario_pt_BR.js"
+									library="resources"></h:outputScript>
+							</p:calendar>
+
+
+
+							<h:outputLabel value="CPF:" for="cpf"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<p:inputMask id="cpf" label="CPF"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}"
+								value="#{pessoaAlterarBean.cpf}" size="14"
+								requiredMessage="Falta o CPF da Pessoa !" mask="999.999.999-99">
+								<p:ajax event="blur"
+									listener="#{pessoaAlterarBean.confirmaCPF(pessoaAlterarBean.cpf)}"
+									process="@this" update="cadMenssagem cpf" />
+							</p:inputMask>
+
+							<h:outputLabel value="RG:" for="rg"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<p:inputMask id="rg" label="RG" mask="99-999.999.999-99"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}"
+								value="#{pessoaAlterarBean.pessoa.pesRgIe}" size="20"
+								requiredMessage="Falta o RG da Pessoa !" />
+
+							<h:outputLabel value="CNPJ:" for="cnpj"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+							<p:inputMask id="cnpj" label="CNPJ"
+								value="#{pessoaAlterarBean.cpf}" size="20"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}"
+								requiredMessage="Falta o CNPJ da Empresa !"
+								mask="99.999.999/9999-99">
+								<p:ajax event="blur"
+									listener="#{pessoaAlterarBean.confirmaCNPJ(pessoaAlterarBean.cpf)}"
+									process="@this" update="cadMenssagem" />
+							</p:inputMask>
+
+							<h:outputLabel value="Inscrição Estadual:" for="ie"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+							<p:inputMask id="ie" label="Inscrição Estadual"
+								mask="99-999.999.999-99"
+								value="#{pessoaAlterarBean.pessoa.pesRgIe}" size="20"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}"
+								requiredMessage="Falta o RG da Pessoa !" />
+
+							<h:outputLabel value="Inscrição Municipal:" for="im"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}" />
+							<h:inputText id="im" label="Inscrição Municipal"
+								value="#{pessoaAlterarBean.pessoa.pesIm}" maxlength="15"
+								size="15" rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'J'}"
+								requiredMessage="Falta o IM da Pessoa !" />
+
+							<h:outputLabel value="Estado civil:" for="estadocivil"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:selectOneMenu id="estadocivil"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}"
+								value="#{pessoaAlterarBean.pessoa.pesEstadoCivil}">
+								<f:converter converterId="javax.faces.Character" />
+								<f:selectItem itemValue="C" itemLabel="Casado" />
+								<f:selectItem itemValue="S" itemLabel="Solteiro" />
+								<f:selectItem itemValue="O" itemLabel="Outros" />
+							</h:selectOneMenu>
+
+
+							<h:outputLabel value="Sexo:" for="sexo"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:selectOneMenu id="sexo"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}"
+								value="#{pessoaAlterarBean.pessoa.pesSexo}">
+								<f:converter converterId="javax.faces.Character" />
+								<f:selectItem itemValue="M" itemLabel="Masculino" />
+								<f:selectItem itemValue="F" itemLabel="Feminino" />
+							</h:selectOneMenu>
+
+
+
+							<h:outputLabel value="Qtd. de Filhos:" for="qtdfilho"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:inputText id="qtdfilho" label="Qtd. de Filhos"
+								value="#{pessoaAlterarBean.pessoa.pesQtdFilho}" size="3"
+								maxlength="3"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}">
+								<f:validateLength minimum="0" maximum="3" />
+							</h:inputText>
+
+							<h:outputLabel value="Profissão:" for="profissão"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:inputText id="profissão" label="Profissão"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}"
+								value="#{pessoaAlterarBean.pessoa.pesProfissao}" size="20"
+								maxlength="20">
+								<f:validateLength minimum="0" maximum="20" />
+							</h:inputText>
+
+
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="Financeiro" title="Financeiro">
+					<p:panel header="Detalhes do Financeiro">
+						<p:messages errorClass="error" />
+						<h:panelGrid columns="2" bgcolor="#FAFAD2"
+							columnClasses="coluna1, coluna2">
+
+							<h:outputLabel value="Qtd. de Veiculo:" for="qtdveiculo" />
+							<h:inputText id="qtdveiculo" label="Qtd. de Veiculo"
+								value="#{pessoaAlterarBean.pessoa.pesQtdVeiculo}" size="3"
+								maxlength="3">
+								<f:validateLength minimum="0" maximum="3" />
+							</h:inputText>
+
+							<h:outputLabel value="Faturamento:" for="faturamento" />
+							<h:inputText id="faturamento" label="Faturamento"
+								value="#{pessoaAlterarBean.pessoa.pesFaturamento}" size="8"
+								maxlength="8">
+								<f:validateLength minimum="0" maximum="8" />
+							</h:inputText>
+
+							<h:outputLabel value="Ramo de atividade:" for="SelectRamo" />
+							<h:selectOneMenu id="SelectRamo"
+								value="#{pessoaAlterarBean.ramo.ramId}">
+								<f:selectItems value="#{ramoBean.listaRamos}" var="ram"
+									itemLabel="#{ram.ramNome}" itemValue="#{ram.ramId}" />
+							</h:selectOneMenu>
+
+
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="Contato" title="Contatos">
+					<p:panel header="Detalhes de Contato" id="dd">
+						<p:messages errorClass="error" />
+						<h:panelGrid id="panelCont">
+
+						</h:panelGrid>
+						<p:commandButton id="addEmail" type="button"
+							value="Adcionar Email" onclick="PF('dialogEmail').show()"
+							icon="ui-icon-extlink" update="displayEmail formMail" />
+
+						<p:dialog header="Adcionar Email" widgetVar="dialogEmail"
+							resizable="false">
+
+							<!--   <p:growl id="tt" showDetail="true" sticky="true" /> -->
+							<p:panelGrid id="panelCadastrarEmail" columns="2"
+								style="margin-bottom:10px">
+
+
+								<h:outputLabel value="E-Mail" for="mailC" />
+								<h:inputText id="mailC" label="E-Mail:"
+									requiredMessage="Falta o E-Mail da Pessoa !"
+									value="#{pessoaAlterarBean.email.emaEndereco}" size="50"
+									maxlength="50" validatorMessage="e-mail inválido">
+									<f:validateRegex
+										pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+								</h:inputText>
+
+								<h:outputLabel value="Spam:" for="spamC" />
+								<h:selectOneMenu id="spamC"
+									value="#{pessoaAlterarBean.email.emaSpam}">
+									<f:converter converterId="javax.faces.Character" />
+									<f:selectItem itemValue="S" itemLabel="Sim" />
+									<f:selectItem itemValue="N" itemLabel="Não" />
+								</h:selectOneMenu>
+								<p:commandButton id="submitEmail" value="Adcionar"
+									oncomplete="PF('dialogEmail').hide();" icon="ui-icon-check">
+									<f:setPropertyActionListener
+										target="#{pessoaAlterarBean.email}"
+										value="#{pessoaAlterarBean.email}" />
+									<f:ajax event="click" listener="#{pessoaAlterarBean.addEmail}"
+										execute="submitEmail mailC spamC"
+										render="@form panelCadastrarEmail displayEmail" />
+								</p:commandButton>
+
+							</p:panelGrid>
+
+
+
+						</p:dialog>
+						<p:outputPanel id="displayEmail"
+							style="display:block;margin-top:10px;">
+							<p:dataList value="#{pessoaAlterarBean.listaEmail}" var="mail"
+								itemType="circle"
+								rendered="#{not empty pessoaAlterarBean.listaEmail}"
+								id="tableEmail">
+								<f:facet name="header">  
+                Lista de E-mail  
+            </f:facet> 
+   E-Mail: #{mail.emaEndereco}, Spam (S-sim:N-não): #{mail.emaSpam} 
+    <p:commandButton id="removerMail" value="Remover"
+									icon="ui-icon-check">
+									<f:setPropertyActionListener
+										target="#{pessoaAlterarBean.email}" value="#{mail}" />
+									<f:ajax event="click"
+										listener="#{pessoaAlterarBean.removerEmail(mail)}"
+										execute="removerMail" render="@form" />
+								</p:commandButton>
+							</p:dataList>
+						</p:outputPanel>
+
+						<br />
+						<p:commandButton id="showDialogButton" type="button"
+							value="Adcionar Telefone" onclick="PF('dialogTelefone').show()"
+							icon="ui-icon-extlink" />
+
+						<p:dialog header="Adcionar Telefone" widgetVar="dialogTelefone"
+							resizable="false">
+
+							<!--   <p:growl id="tt" showDetail="true" sticky="true" /> -->
+							<p:panelGrid id="panelCadastrar" columns="2"
+								style="margin-bottom:10px">
+								<h:outputLabel value="Numero de telefone" for="telefone" />
+								<p:inputMask id="telefone" label="Numero de telefone:"
+									value="#{pessoaAlterarBean.telefone.telNumero}" size="15"
+									maxlength="15" requiredMessage="Falta o Telefone da Pessoa !"
+									mask="(999) 9999-9999">
+									<f:validateLength minimum="0" maximum="15" />
+								</p:inputMask>
+
+								<h:outputLabel value="SMS:" for="sms" />
+								<h:selectOneMenu id="sms"
+									value="#{pessoaAlterarBean.telefone.telSms}">
+									<f:converter converterId="javax.faces.Character" />
+									<f:selectItem itemValue="S" itemLabel="Sim" />
+									<f:selectItem itemValue="N" itemLabel="Não" />
+								</h:selectOneMenu>
+
+								<h:outputLabel value="Tipo do telefone:" for="tipotelefone" />
+								<h:selectOneMenu id="tipotelefone"
+									value="#{pessoaAlterarBean.telefone.telTipo}">
+									<f:selectItem itemValue="CELULAR" itemLabel="Comercial" />
+									<f:selectItem itemValue="RESIDENCIAL" itemLabel="Residencial" />
+									<f:selectItem itemValue="COMERCIAL" itemLabel="Comercial" />
+									<f:selectItem itemValue="RECADO" itemLabel="Recado" />
+								</h:selectOneMenu>
+
+								<p:commandButton id="submitButton" value="Adcionar"
+									oncomplete="PF('dialogTelefone').hide();" icon="ui-icon-check">
+									<f:ajax event="click" listener="#{pessoaAlterarBean.addTel}"
+										execute="submitButton telefone sms tipotelefone"
+										render="@form panelCadastrar displayTelefone" />
+								</p:commandButton>
+							</p:panelGrid>
+
+
+						</p:dialog>
+						<p:outputPanel id="displayTelefone"
+							style="display:block;margin-top:10px;">
+							<p:dataList value="#{pessoaAlterarBean.listaTel}" var="tel"
+								itemType="circle"
+								rendered="#{not empty pessoaAlterarBean.listaTel}" id="tableTel">
+								<f:facet name="header">  
+                Lista de Telefones  
+            </f:facet>
+   Numero: #{tel.telNumero}, Tipo: #{tel.telTipo}, Sms(S-sim:N-não): #{tel.telSms} 
+    <p:commandButton id="removerTel" value="Remover"
+									icon="ui-icon-check">
+									<f:setPropertyActionListener
+										target="#{pessoaAlterarBean.telefone}" value="#{tel}" />
+									<f:ajax event="click"
+										listener="#{pessoaAlterarBean.removerTel(tel)}"
+										execute="removerTel" render="@form" />
+								</p:commandButton>
+							</p:dataList>
+						</p:outputPanel>
+					</p:panel>
+				</p:tab>
+
+
+				<p:tab id="endereco" title="Endereço">
+					<p:panel header="Detalhes do Endereço">
+						<p:messages errorClass="error" />
+
+						<h:panelGrid columns="3">
+							<h:outputLabel value="Cep" for="cep"
+								style="font-weight:bold; padding-right: 5px; float: right;" />
+							<p:inputMask id="cep" label="cepPJ" mask="99.999-999"
+								value="#{pessoaAlterarBean.endereco.endCep}" size="10"
+								required="true" requiredMessage="Falta o CEP">
+								<f:validateLength minimum="0" maximum="10" />
+							</p:inputMask>
+
+
+							<p:commandButton value="Pesquisar" icon="ui-icon-search">
+								<f:setPropertyActionListener
+									target="#{pessoaAlterarBean.endereco.endCep}"
+									value="#{pessoaAlterarBean.endereco.endCep}" />
+								<f:ajax event="click" execute="cep"
+									listener="#{pessoaAlterarBean.encontraCEP}" render="@form" />
+							</p:commandButton>
+						</h:panelGrid>
+						<h:panelGrid columns="2" bgcolor="#FAFAD2"
+							columnClasses="coluna1, coluna2">
+
+							<h:outputLabel value="Endereço:" for="end" />
+							<h:inputText id="end" label="endereco"
+								requiredMessage="Falta o Endereço" required="true"
+								value="#{pessoaAlterarBean.endereco.endNome}" size="35"
+								maxlength="35">
+
+							</h:inputText>
+
+							<h:outputLabel value="Cidade:" for="Cidade" />
+							<h:inputText id="Cidade" label="cidade" disabled="true"
+								value="#{pessoaAlterarBean.cidade.cidNome}" size="35"
+								maxlength="35">
+							</h:inputText>
+
+							<h:outputLabel value="Estado:" for="estado" />
+							<h:inputText id="estado" label="Estado" disabled="true"
+								value="#{pessoaAlterarBean.cidade.cidUf}" size="5">
+
+							</h:inputText>
+
+
+							<h:outputLabel value="Bairro:" />
+							<h:inputText size="35"
+								value="#{pessoaAlterarBean.bairro.baiNome}"
+								requiredMessage="Falta o Bairro" required="true" />
+
+							<h:outputLabel value="Nº" for="numEnd" />
+							<h:inputText id="numEnd" label="numEnd"
+								requiredMessage="Falta o nº" required="true"
+								value="#{pessoaAlterarBean.endereco.endNumero}" size="6"
+								maxlength="6">
+							</h:inputText>
+
+							<h:outputLabel value="Complemento:" for="complemento" />
+							<h:inputText id="complemento" label="Complemento"
+								value="#{pessoaAlterarBean.endereco.endComplemento}" size="30"
+								maxlength="30"
+								requiredMessage="Falta o nome complemento do Endereço da Pessoa !">
+								<f:validateLength minimum="0" maximum="60" />
+							</h:inputText>
+
+							<h:outputLabel value="Zona:" for="zona" />
+							<h:selectOneMenu id="zona"
+								value="#{pessoaAlterarBean.endereco.endZona}">
+								<f:converter converterId="javax.faces.Character" />
+								<f:selectItem itemValue="R" itemLabel="Zona Urbana" />
+								<f:selectItem itemValue="U" itemLabel="Zona Rural" />
+							</h:selectOneMenu>
+
+
+							<h:outputLabel value="OBS:" for="obs" />
+							<p:inputTextarea class="col-sm-10" id="obs" rows="5" cols="60"
+								maxlength="199" counter="counter" autoResize="false"
+								counterTemplate="{0} caracteres restantes"
+								value="#{pessoaAlterarBean.pessoa.pesObservacao}" />
+							<br />
+							<h:outputText id="counter" />
+
+
+
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>
+
+
+				<p:tab id="refe" title="Referencia">
+					<p:panel header="Referencia Pessoal">
+						<p:messages errorClass="error" />
+						<h:panelGrid id="panelRef">
+
+						</h:panelGrid>
+
+						<p:commandButton id="addRef" type="button"
+							value="Adcionar Referência"
+							onclick="PF('dialogReferencia').show()" icon="ui-icon-extlink"
+							update="addDialog panelCadastrarReferencia nomeRef telefoneRef telefoneRef2 telefoneRef3 contato tipo mailRef2 mailRef" />
+
+						<p:dialog id="addDialog" header="Adcionar Referência"
+							widgetVar="dialogReferencia" resizable="false">
+							<p:panelGrid id="panelCadastrarReferencia" columns="2"
+								style="margin-bottom:10px">
+								<h:outputLabel value="Nome da referencia" for="nomeRef" />
+								<h:inputText id="nomeRef" label="Nome da referencia:"
+									value="#{pessoaAlterarBean.referencia.refNome}" size="60"
+									maxlength="60" required="false"
+									requiredMessage="Falta o nome da refencia da Pessoa !">
+									<f:validateLength minimum="0" maximum="60" />
+								</h:inputText>
+
+								<h:outputLabel value="Número de Celular:" for="telefoneRef" />
+								<p:inputMask id="telefoneRef" label="Numero de Celular"
+									value="#{pessoaAlterarBean.referencia.refTelefone1}" size="15"
+									required="false" maxlength="15"
+									requiredMessage="Falta o Telefone da referencia daPessoa !"
+									mask="(999) 9999-9999">
+									<f:validateLength minimum="0" maximum="15" />
+								</p:inputMask>
+
+								<h:outputLabel value="Número de Celular:" for="telefoneRef2" />
+								<p:inputMask id="telefoneRef2" label="Numero de Celular"
+									value="#{pessoaAlterarBean.referencia.refTefefone2}" size="15"
+									maxlength="15" mask="(999) 9999-9999">
+									<f:validateLength minimum="0" maximum="15" />
+								</p:inputMask>
+
+								<h:outputLabel value="Número Residencial:" for="telefoneRef3" />
+								<p:inputMask id="telefoneRef3" label="Numero de Celular"
+									value="#{pessoaAlterarBean.referencia.refTefefone3}" size="16"
+									maxlength="16" mask="(999) 9 999-9999">
+									<f:validateLength minimum="0" maximum="16" />
+								</p:inputMask>
+
+
+								<h:outputLabel value="E-Mail da referência" for="mailRef" />
+								<h:inputText id="mailRef" label="E-Mail da referencia"
+									requiredMessage="Falta o E-Mail da referencia !"
+									required="false"
+									value="#{pessoaAlterarBean.referencia.refEmail1}" size="30"
+									maxlength="30" validatorMessage="E-mail inválido">
+									<f:validateRegex
+										pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+								</h:inputText>
+
+								<h:outputLabel value="E-Mail da referência" for="mailRef2" />
+								<h:inputText id="mailRef2" label="E-Mail da referencia"
+									value="#{pessoaAlterarBean.referencia.refEmail2}" size="30"
+									maxlength="30" validatorMessage="E-mail inválido">
+									<f:validateRegex
+										pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+								</h:inputText>
+
+								<h:outputLabel value="Tipo da referência " for="tipo" />
+								<h:inputText id="tipo" label="Tipo da referencia"
+									value="#{pessoaAlterarBean.referencia.refTipo}" size="30"
+									maxlength="30" required="false"
+									requiredMessage="Falta o tipo da refencia!">
+									<f:validateLength minimum="0" maximum="30" />
+								</h:inputText>
+
+								<h:outputLabel value="Contato" for="contato" />
+								<h:inputText id="contato" label="Contato"
+									value="#{pessoaAlterarBean.referencia.refContato}" size="60"
+									maxlength="60" required="false"
+									requiredMessage="Falta o contato da refencia!">
+									<f:validateLength minimum="0" maximum="60" />
+								</h:inputText>
+								<h:commandButton id="submitReferencia" value="Adcionar"
+									oncomplete="PF('displayReferencia').hide();"
+									icon="ui-icon-check">
+									<f:setPropertyActionListener
+										target="#{pessoaAlterarBean.referencia}"
+										value="#{pessoaAlterarBean.referencia}" />
+									<f:ajax event="click"
+										listener="#{pessoaAlterarBean.addReferencia}"
+										execute="submitReferencia nomeRef telefoneRef telefoneRef2 telefoneRef3 contato tipo mailRef2 mailRef"
+										render="@form panelCadastrarReferencia displayReferencia" />
+								</h:commandButton>
+
+							</p:panelGrid>
+						</p:dialog>
+
+						<p:outputPanel id="displayReferencia"
+							style="display:block;margin-top:10px;">
+							<p:dataList value="#{pessoaAlterarBean.listaReferencias}"
+								var="ref" itemType="circle"
+								rendered="#{not empty pessoaAlterarBean.listaReferencias}"
+								id="tableReferencia">
+								<f:facet name="header">  
+                Lista de Referência  
+            </f:facet> 
+   Nome: #{ref.refNome}, Tel: #{ref.refTelefone1}, E-Mail: #{ref.refEmail1} 
+    <p:commandButton id="removerReferencia" value="Remover"
+									icon="ui-icon-check">
+									<f:setPropertyActionListener
+										target="#{pessoaAlterarBean.referencia}" value="#{ref}" />
+									<f:ajax event="click"
+										listener="#{pessoaAlterarBean.removerReferencia(ref)}"
+										execute="removerReferencia" render="@form" />
+								</p:commandButton>
+							</p:dataList>
+						</p:outputPanel>
+
+
+
+
+					</p:panel>
+				</p:tab>
+
+
+				<p:tab id="confirm" title="Confirmação">
+					<p:panel header="Confirmação do Cadastro">
+
+						<h:panelGrid columns="4" bgcolor="#FAFAD2"
+							columnClasses="coluna1, coluna2, coluna3, coluna4">
+
+							<h:outputText value="Nome :" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesNome}"
+								style="font-weight:bold" />
+							<h:outputText value="Data de Nascimento :" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesDataNasc}"
+								style="font-weight:bold" converter="javax.faces.DateTime" />
+							<h:outputText value="CPF/CNPJ :" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesCpfCnpj}"
+								style="font-weight:bold" />
+							<h:outputText value="RG/IE :" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesRgIe}"
+								style="font-weight:bold" />
+							<h:outputText value="Estado civil :"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesEstadoCivil}"
+								style="font-weight:bold"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:outputText value="Sexo :"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesSexo}"
+								style="font-weight:bold"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:outputText value="Qtd. de Veiculo :" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesQtdVeiculo}"
+								style="font-weight:bold" />
+							<h:outputText value="Qtd. de Filhos :" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesQtdFilho}"
+								style="font-weight:bold" />
+							<h:outputText value="Faturamento :" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesFaturamento}"
+								style="font-weight:bold">
+								<f:convertNumber currencySymbol="R$" type="currency" />
+							</h:outputText>
+							<h:outputText value="Profissão :"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesProfissao}"
+								style="font-weight:bold"
+								rendered="#{pessoaAlterarBean.pessoa.pesTipo == 'F'}" />
+							<h:outputText value="Ramo:" />
+							<h:outputText value="#{pessoaAlterarBean.ramo.ramNome}"
+								style="font-weight:bold" />
+
+
+							<h:outputText value="Endereço :" />
+							<h:outputText value="#{pessoaAlterarBean.endereco.endNome}"
+								style="font-weight:bold" />
+							<h:outputText value="CEP :" />
+							<h:outputText value="#{pessoaAlterarBean.endereco.endCep}"
+								style="font-weight:bold" />
+							<h:outputText value="Numero :" />
+							<h:outputText value="#{pessoaAlterarBean.endereco.endNumero}"
+								style="font-weight:bold" />
+							<h:outputText value="Complemento :" />
+							<h:outputText
+								value="#{pessoaAlterarBean.endereco.endComplemento}"
+								style="font-weight:bold" />
+							<h:outputText value="Zona :" />
+							<h:outputText value="#{pessoaAlterarBean.endereco.endZona}"
+								style="font-weight:bold" />
+
+							<h:outputText value="Bairro:" />
+							<h:outputText value="#{pessoaAlterarBean.bairro.baiNome}"
+								style="font-weight:bold" />
+							<h:outputText value="Cidade:" />
+							<h:outputText value="#{pessoaAlterarBean.cidade.cidNome}"
+								style="font-weight:bold" />
+							<h:outputText value="OBS:" />
+							<h:outputText value="#{pessoaAlterarBean.pessoa.pesObservacao}"
+								style="font-weight:bold" />
+							<br />
+
+						</h:panelGrid>
+						<p:commandButton value="Gravar" update="cad_pessoaFisica growl"
+							actionListener="#{pessoaAlterarBean.salvarPessoa}"
+							class="btn btn-primary" icon="ui-icon-disk" />
+
+					</p:panel>
+				</p:tab>
+
+			</p:wizard>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+
+
+
+</html>

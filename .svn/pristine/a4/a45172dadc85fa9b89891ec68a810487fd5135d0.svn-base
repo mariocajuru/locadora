@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div class="page-header">
+			<h1>
+				Incluir chave no quadro <small>visão geral</small>
+			</h1>
+		</div>
+		<style>
+.coluna1 {
+	text-align: right
+}
+
+.coluna2 {
+	text-align: left
+}
+</style>
+		<script type="text/javascript">  
+        function handleDrop(event, ui) {  
+            var draggable = ui.draggable,   
+            helper = ui.helper,   
+            position = ui.position,   
+            offset = ui.offset;  
+        }  
+</script>
+
+
+		<h:form id="form">
+			<p:messages autoUpdate="true" id="menssagem" closable="true"
+				globalOnly="true" showDetail="true" />
+			<p:growl id="growl" sticky="true" showDetail="true" life="2000"
+				autoUpdate="true" />
+
+			<h:panelGrid columns="3">
+				<h:outputLabel for="filial" value="Selecione a filial:" />
+				<p:selectOneMenu value="#{quadroChavesBean.filial.filId}"
+					effect="fold" id="filial" required="true" label="Escolher a filial"
+					requiredMessage="Falta escolher a filial">
+					<f:selectItem itemLabel="Selecione a filial" itemValue="" />
+					<f:selectItems value="#{filialBean.listaSedes}" var="fil"
+						itemLabel="#{fil.filNome}" itemValue="#{fil.filId}" />
+				</p:selectOneMenu>
+				<p:commandButton id="enviarFilial"
+					action="#{quadroChavesBean.escolhaFilial}" value="Pesquisar"
+					update="@form" icon="ui-icon-search" />
+			</h:panelGrid>
+
+			<p:fieldset legend="Transferência de chaves para o quadro"
+				style="margin-top:20px">
+				<p:dataTable id="availableCars"
+					value="#{quadroChavesBean.listaImoveis}" var="imo"
+					emptyMessage="Não registros de imóveis com essa características"
+					rendered="#{quadroChavesBean.filialSelecionada}">
+					<p:column style="width:20px" headerText="Arraste">
+						<h:outputText id="dragIcon" styleClass="ui-icon ui-icon-arrow-4" />
+						<p:draggable for="dragIcon" revert="true" stack=".ui-panel" />
+					</p:column>
+					<p:column headerText="Código">
+						<p:outputLabel id="locacao1" value="#{imo.imoId}" />
+					</p:column>
+
+					<p:column headerText="Tipo do imóvel"
+						filterBy="#{imo.tipoimovel.tipNome}">
+						<p:outputLabel id="locacao2" value="#{imo.tipoimovel.tipNome}" />
+					</p:column>
+
+					<p:column headerText="Situação"
+						filterBy="#{imo.situacaoimovel.sitNome}">
+						<p:outputLabel id="locacao3" value="#{imo.situacaoimovel.sitNome}" />
+					</p:column>
+
+					<p:column headerText="Imóvel para locação">
+						<p:outputLabel id="locacao4" value="#{imo.imoLocacao ? 'SIM' : 'NÃO'}" />
+					
+					</p:column>
+
+
+					<p:column headerText="Imóvel em negociação">
+						<p:outputLabel id="locacao5" value="#{imo.imoEmNegociacao ? 'SIM' : 'NÃO'}" />
+						
+					</p:column>
+
+					<p:column headerText="Imóvel efêtivo">
+						<p:outputLabel id="locacao6" value="#{imo.imoEfetivo ? 'SIM' : 'NÃO'}" />						
+					</p:column>
+					
+					<p:column headerText="Imóvel com chave disponivel">
+						<p:outputLabel id="locacao7" value="#{imo.imoChave ? 'SIM' : 'NÃO'}" />						
+					</p:column>
+					
+				</p:dataTable>
+
+			</p:fieldset>
+
+
+
+
+			<p:fieldset
+				legend="Quadro de chaves - Quantidade de chaves no quadro #{quadroChavesBean.listaChavesNoQuadro.size()}, Filial:#{quadroChavesBean.filial.filNome}  "
+				style="margin-top:20px" id="areaArrastada">
+				<p:outputPanel id="dropArea">
+					<p:dataGrid id="teste" var="cha" columns="5"
+						value="#{quadroChavesBean.listaChavesNoQuadro}"
+						rendered="#{quadroChavesBean.filialSelecionada}">
+						<p:column headerText="Quadro">
+							<p:panel id="pnl" header="Posição da chave: #{cha.imoChavePosicao}"
+								style="text-align:center">
+								<p:panelGrid columns="1" style="width:100%">
+									<p:outputLabel id="locacao"
+										value="Tipo do imóvel: #{cha.tipoimovel.tipNome}" />
+									<p:outputLabel id="imovel"
+										value=" Codigo do imóvel: #{cha.imoId}" />
+									<p:outputLabel id="qtd"
+										value=" Quantidade de cópias: #{cha.imoChaveQtd}" />
+								</p:panelGrid>
+							</p:panel>
+						</p:column>
+					</p:dataGrid>
+				</p:outputPanel>
+			</p:fieldset>
+			<p:droppable for="dropArea" tolerance="touch"
+				activeStyleClass="ui-state-highlight" datasource="availableCars"
+				onDrop="handleDrop">
+				<p:ajax event="drop" listener="#{quadroChavesBean.onDrop}"
+					update="@all" />
+			</p:droppable>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+		<div class="col-md-12">
+		
+			<p:outputPanel id="displayReferencia" >
+				<p:dataList value="#{pessoaBean.listaReferencias}" var="ref" id="tableReferencia"  emptyMessage="Vazio.">
+					<f:facet name="header">  
+		                Lista de Referência  
+		            </f:facet> 
+		   Nome: #{ref.refNome}, Tel: #{ref.refTelefone1}, E-Mail: #{ref.refEmail1} 
+		    <p:commandButton id="removerReferencia" value="Remover" process="@this"
+						icon="ui-icon-check" update="@this,tableReferencia" action="#{pessoaBean.removerReferencia(ref)}">
+						<f:setPropertyActionListener target="#{pessoaBean.referencia}"
+							value="#{ref}" />
+					</p:commandButton>
+				</p:dataList>
+			</p:outputPanel>
+			
+			<div style="text-align: center; margin-top: 10px;">
+				<p:commandButton id="addRef" type="button" value="Adicionar Referência"
+					onclick="PF('dialogReferencia').show()" icon="ui-icon-extlink"
+					update="addDialog panelCadastrarReferencia nomeRef telefoneRef telefoneRef2 telefoneRef3 contato tipo mailRef2 mailRef" />
+			</div>
+			
+		</div>
+	</div>
+	
+	<p:dialog id="addDialog" header="Adicionar Referência"
+		widgetVar="dialogReferencia" resizable="false">
+		<p:panelGrid id="panelCadastrarReferencia" columns="2"
+			style="margin-bottom:10px">
+			<h:outputLabel value="Nome da referencia:" for="nomeRef" />
+			<h:inputText id="nomeRef" label="Nome da referencia"
+				value="#{pessoaBean.referencia.refNome}" size="60" maxlength="60"
+				required="false"
+				requiredMessage="Falta o nome da refencia da Pessoa !">
+				<f:validateLength minimum="0" maximum="60" />
+			</h:inputText>
+
+			<h:outputLabel value="Número de Celular 1:" for="telefoneRef" />
+			<p:inputMask id="telefoneRef" label="Numero de Celular"
+				value="#{pessoaBean.referencia.refTelefone1}" size="15"
+				required="false" maxlength="15"
+				requiredMessage="Falta o Telefone da referencia daPessoa !"
+				mask="(99) 9999-9999">
+				<f:validateLength minimum="0" maximum="15" />
+			</p:inputMask>
+
+			<h:outputLabel value="Número de Celular 2:" for="telefoneRef2" />
+			<p:inputMask id="telefoneRef2" label="Numero de Celular"
+				value="#{pessoaBean.referencia.refTefefone2}" size="15"
+				maxlength="15" mask="(99) 9999-9999">
+				<f:validateLength minimum="0" maximum="15" />
+			</p:inputMask>
+
+			<h:outputLabel value="Número Residencial:" for="telefoneRef3" />
+			<p:inputMask id="telefoneRef3" label="Numero de Celular"
+				value="#{pessoaBean.referencia.refTefefone3}" size="16"
+				maxlength="16" mask="(99) 9 999-9999">
+				<f:validateLength minimum="0" maximum="16" />
+			</p:inputMask>
+
+
+			<h:outputLabel value="E-Mail da referencia 1:" for="mailRef" />
+			<h:inputText id="mailRef" label="E-Mail da referencia"
+				requiredMessage="Falta o E-Mail da referencia !" required="false"
+				value="#{pessoaBean.referencia.refEmail1}" size="30" maxlength="30"
+				validatorMessage="E-mail inválido">
+				<f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+			</h:inputText>
+
+			<h:outputLabel value="E-Mail da referencia 2:" for="mailRef2" />
+			<h:inputText id="mailRef2" label="E-Mail da referencia"
+				value="#{pessoaBean.referencia.refEmail2}" size="30" maxlength="30"
+				validatorMessage="E-mail inválido">
+				<f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-z-A-Z0-9\-\_\.]+" />
+			</h:inputText>
+
+			<h:outputLabel value="Tipo da referencia:" for="tipo" />
+			<h:inputText id="tipo" label="Tipo da referencia"
+				value="#{pessoaBean.referencia.refTipo}" size="30" maxlength="30"
+				required="false" requiredMessage="Falta o tipo da refencia!">
+				<f:validateLength minimum="0" maximum="30" />
+			</h:inputText>
+
+			<h:outputLabel value="Contato:" for="contato" />
+			<h:inputText id="contato" label="Contato"
+				value="#{pessoaBean.referencia.refContato}" size="60" maxlength="60"
+				required="false" requiredMessage="Falta o contato da refencia!">
+				<f:validateLength minimum="0" maximum="60" />
+			</h:inputText>
+			
+			<p:commandButton id="submitReferencia" value="Adicionar" icon="ui-icon-check" 
+			action="#{pessoaBean.addReferencia}"
+					process="@this,nomeRef,telefoneRef,telefoneRef2,telefoneRef3,contato,tipo,mailRef2,mailRef"
+					update="@parent,panelCadastrarReferencia,displayReferencia">					
+				<f:setPropertyActionListener target="#{pessoaBean.referencia}"
+					value="#{pessoaBean.referencia}" />
+			</p:commandButton>
+			
+			<p:commandButton global="false" process="@this" readonly="true"
+								transient="true" immediate="true" value="Fechar"
+								onclick="addDialog.hide();"
+								class="btn btn-default" update="@this"/>
+
+		</p:panelGrid>
+		
+	</p:dialog>
+	
+</ui:composition>

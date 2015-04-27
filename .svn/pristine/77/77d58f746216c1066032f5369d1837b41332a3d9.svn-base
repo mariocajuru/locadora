@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+
+		<div class="page-header">
+			<h1>
+				Cadastro de Funcionários <small>visão geral</small>
+			</h1>
+		</div>
+		<style>
+.old {
+	background-color: green;
+}
+
+.coluna1 {
+	text-align: right
+}
+
+.coluna2 {
+	text-align: left
+}
+</style>
+
+
+		<h:form id="cadfun">
+
+
+			<p:messages autoUpdate="true" closable="true" />
+			<p:growl id="growl" autoUpdate="true" life="2000" />
+
+			<p:dialog widgetVar="dialogPro" header="Encontre o Funcionário"
+				showEffect="clip" hideEffect="clip" modal="true" height="460" width="655">
+				<h:panelGrid>
+					<p:dataTable value="#{funcionarioBean.listaPessoasFuncionario}"
+						var="pes" id="tabelaPessoa" paginator="true" rows="5"
+						emptyMessage="Não há registro dessa Pessoa"
+						selection="#{funcionarioBean.pessoa}" rowKey="#{pes.pesId}">
+
+
+						<p:column selectionMode="single" style="width:30px;text-align:center" />
+
+						<p:column headerText="Codigo" filterBy="#{pes.pesId}">
+							<h:outputText value="#{pes.pesId}" />
+						</p:column>
+
+						<p:column headerText="Nome" filterBy="#{pes.pesNome}">
+							<h:outputText value="#{pes.pesNome}" />
+						</p:column>
+
+						<p:column headerText="CPF" filterBy="#{pes.pesCpfCnpj}">
+							<h:outputText value="#{pes.pesCpfCnpj}" />
+						</p:column>
+
+
+						<f:facet name="footer">
+
+							<p:commandButton value="Fechar e Adcionar" process="@this"
+								onclick="eventDialog.hide();return false;" icon="ui-icon-search"
+								update="@form:panelGrid">
+							</p:commandButton>
+						</f:facet>
+
+					</p:dataTable>
+				</h:panelGrid>
+			</p:dialog>
+
+			<p:panel header="Cadastrar Funcionário" id="cadfuncionario">
+
+
+				<p:commandButton id="addPessoa" type="button"
+					value="Adcionar/Remover Funcionário"
+					onclick="PF('dialogPro').show();return false;"
+					icon="ui-icon-extlink"
+					requiredMessage="Falta adcionar um Funcionário" ajax="false" />
+
+				<h:panelGrid id="panelGrid" columns="2" bgcolor="#FAFAD2"
+					columnClasses="coluna1, coluna2">
+
+					<h:outputLabel value="Pessoa:" for="pessoa" />
+					<h:outputText id="pessoa" value="#{funcionarioBean.pessoa.pesNome}"
+						style="font-weight:bold" />
+
+
+					<h:outputLabel value="Filial:" for="sede" />
+					<h:selectOneMenu id="sede" value="#{funcionarioBean.sede.filId}"
+						required="true" requiredMessage="Falta selecionar a Filial">
+						<f:selectItem itemLabel="Selecione a Sede" itemValue="0" />
+						<f:selectItems id="SelectSede" value="#{filialBean.listaSedes}"
+							var="sede" itemValue="#{sede.filId}" itemLabel="#{sede.filNome}" />
+					</h:selectOneMenu>
+
+					<h:outputLabel value="Login:" for="loginFun" />
+					<h:inputText id="loginFun" label="loginFun"
+						value="#{funcionarioBean.login}" size="30" maxlength="30"
+						required="true" requiredMessage="Falta o Login!">
+						<f:validateLength minimum="0" maximum="30" />
+					</h:inputText>
+
+
+					<h:outputLabel value="Senha:" for="senhaFun" />
+					<h:inputSecret id="senhaFun" label="senhaFun"
+						value="#{funcionarioBean.senha}" size="30" maxlength="30"
+						required="true" requiredMessage="Falta a senha">
+						<f:validateLength minimum="0" maximum="30" />
+					</h:inputSecret>
+
+					<h:outputLabel value="Confirmar Senha:" for="confirmaSenha" />
+					<h:inputSecret id="confirmaSenha" label="Confirmar Senha"
+						value="#{funcionarioBean.confirmaSenha}" size="30" maxlength="30"
+						required="false" requiredMessage="Falta o campo confirma senha">
+						<f:validateLength minimum="0" maximum="30" />
+					</h:inputSecret>
+
+
+					<h:outputLabel value="Nível de acesso:" for="nivel" />
+					
+						<p:selectManyCheckbox id="nivel" showCheckbox="true" 
+									value="#{funcionarioBean.funcionario.permissao}" style="width:100%" layout="lineDirection"
+									columns="2">
+									<f:attribute name="collectionType" value="java.util.HashSet" />
+									<f:selectItem itemValue="ROLE_ADMIN" itemLabel="Administrador" />
+									<f:selectItem itemValue="ROLE_CAPTADOR" itemLabel="Captador" />
+									<f:selectItem itemValue="ROLE_USUARIO"
+										itemLabel="Administrativo" />
+									<f:selectItem itemValue="ROLE_ATENDENTE"
+										itemLabel="Atendimento" />
+								</p:selectManyCheckbox>
+
+					<h:outputLabel value="Cargo:" />
+					<h:inputText id="cargo" label="cargo"
+						value="#{funcionarioBean.funcionario.funCargo}" size="30"
+						maxlength="30" required="false"
+						requiredMessage="Falta o nome Cargo">
+						<f:validateLength minimum="0" maximum="30" />
+					</h:inputText>
+
+					<p:ajaxStatus onstart="dialogAguarde.show()"
+						oncomplete="dialogAguarde.hide();" />
+					<p:dialog widgetVar="dialogAguarde" showHeader="false"
+						resizable="false" closable="false">
+                Aguarde, enviando e-mail com os dados de funcionario ao e-mail cadastrado pelo funcionario
+            </p:dialog>
+					<p:tooltip for="nivel" value="Nível de acesso ao sistema " />
+					<br />
+
+
+					<h:commandButton action="#{funcionarioBean.salvar}" value="Salvar"
+						update="tabelaSede" class="btn btn-primary" icon="ui-icon-disk" />
+					<h:commandButton value="limpar" type="reset" class="btn btn-info"></h:commandButton>
+				</h:panelGrid>
+				<p:ajaxStatus>
+					<f:facet name="start">
+						<h:outputText
+							value="Salvando, enviando e-mail com login e senha para o novo usuário" />
+					</f:facet>
+					<f:facet name="complete">
+						<h:outputText value="" />
+					</f:facet>
+				</p:ajaxStatus>
+			</p:panel>
+		</h:form>
+		<h:form id="TelaFuncionario" title="TelaFuncionarios" >
+			<p:dataTable id="tabelaFuncionario"
+				value="#{funcionarioBean.listaFuncionarios}" var="fun"
+				paginator="true" rows="5" 
+				emptyMessage="Não há registro desse Funcionario" editable="true"
+				scrollable="true" scrollWidth="100%" scrollRows="5"
+				scrollHeight="true"
+				rowStyleClass="#{fun.funAtivo == 'false' ? 'old' : null}" style="margin-bottom:20px">
+				<f:facet name="header">
+           Funcionários Francisco Imóveis
+       </f:facet>
+				<p:ajax event="rowEdit" listener="#{funcionarioBean.editarProposta}"
+					update="@this" >
+					<f:setPropertyActionListener target="fun"
+						value="#{funcionarioBean.funcionario}" />
+				</p:ajax>
+				<p:ajax event="rowEditCancel"
+					listener="#{funcionarioBean.cancelarEditacaoProposta}"
+					update="@this" />
+				<p:column headerText="Alterar" style="width:62px">
+					<p:rowEditor id="menuEditor"/>
+				</p:column>
+
+				<p:column headerText="Codigo" filterBy="#{fun.funId}"
+					style="width:82px">
+					<h:outputText value="#{fun.funId}" />
+				</p:column>
+				<p:column headerText="Nome" filterBy="#{fun.pessoa.pesNome}" style="width:120px">
+					<h:outputText value="#{fun.pessoa.pesNome}" />
+				</p:column>
+				<p:column headerText="Login" filterBy="#{fun.funLogin}" style="width:92px">
+					<h:outputText value="#{fun.funLogin}" />
+				</p:column>
+				<p:column headerText="Senha" style="width:62px">
+					<p:cellEditor >
+						<f:facet name="output" style="width:62px">
+							<center>
+								<h:outputText value="#{fun.funSenha}" style="width:62px"/>
+							</center>
+						</f:facet>
+						<f:facet name="input">
+							<center>
+								<p:inputText id="valproValorInquilinoTable" style="width:100%"
+									value="#{funcionarioBean.confirmaSenha}" size="10" maxlength="10">
+									<f:validateLength minimum="0" maximum="15" />
+									<p:watermark for="valproValorInquilinoTable" value="Preencher somente se quiser alterar" id="watermark" />
+								</p:inputText>
+							</center>
+						</f:facet>
+					</p:cellEditor>
+
+				</p:column>
+				<p:column headerText="Nivel de acesso" filterBy="#{fun.permissao}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<center>
+								<h:outputText value="#{fun.permissao}" />
+							</center>
+						</f:facet>
+						<f:facet name="input">
+							<center>
+								<p:selectManyCheckbox id="nivelEditavel" showCheckbox="true"
+									value="#{fun.permissao}" style="width:100%" layout="grid"
+									columns="1">
+									<f:attribute name="collectionType" value="java.util.HashSet" />
+									<f:selectItem itemValue="ROLE_ADMIN" itemLabel="Administrador" />
+									<f:selectItem itemValue="ROLE_CAPTADOR" itemLabel="Captador" />
+									<f:selectItem itemValue="ROLE_USUARIO"
+										itemLabel="Administrativo" />
+									<f:selectItem itemValue="ROLE_ATENDENTE"
+										itemLabel="Atendimento" />
+								</p:selectManyCheckbox>
+							</center>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Cargo" filterBy="#{fun.funCargo}" style="width:120px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<center>
+								<h:outputText value="#{fun.funCargo}" />
+							</center>
+						</f:facet>
+						<f:facet name="input">
+							<center>
+								<p:inputText id="valEditCargo" style="width:100%"
+									value="#{fun.funCargo}" size="10" maxlength="29" />
+							</center>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Filial" style="width:120px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<center>
+								<h:outputText value="#{fun.filial.filNome}" />
+							</center>
+						</f:facet>
+						<f:facet name="input">
+							<center>
+
+								<h:selectOneMenu id="filialEditavel" value="#{fun.filial.filId}"
+									requiredMessage="Falta selecionar a Filial">
+									<f:selectItem itemLabel="Selecione a Sede" itemValue="0" />
+									<f:selectItems id="SelectSede" value="#{filialBean.listaSedes}"
+										var="sedeEditavel" itemValue="#{sedeEditavel.filId}"
+										itemLabel="#{sedeEditavel.filNome}" />
+								</h:selectOneMenu>
+							</center>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Ativo" style="width:62px">
+					<p:commandLink action="#{funcionarioBean.ativar}" update="@form">
+						<h:graphicImage library="imagens"
+							name="usuario_ativo_#{fun.funAtivo}.png" style="border:0" />
+						<f:setPropertyActionListener
+							target="#{funcionarioBean.funcionario}" value="#{fun}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

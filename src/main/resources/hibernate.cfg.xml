@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory name="">
+		<!-- <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property> 
+			<property name="hibernate.connection.password">RENOVAR@2013</property> <property 
+			name="hibernate.connection.url">jdbc:sqlserver://localhost\SQLExpress:1433;databaseName=locadora</property> 
+			<property name="hibernate.connection.username">sa</property> -->
+		<property name="connection.datasource">java:/comp/env/jdbc/LocadoraDB</property>
+		<!-- <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property> -->
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServer2008Dialect</property>
+		<property name="hibernate.default_schema">dbo</property>
+		<!-- <property name="hibernate.show_sql">true</property> -->
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+        <!-- <property name="hibernate.format_sql">true</property> -->
+        
+        <!--se ocorrer um comportamento estranho, retire a configuração abaixo  -->
+        <!-- 
+        http://www.guj.com.br/4797-hibernatecfgxml - - hibernate-42 - - sql-server-2008
+        -->
+        <property name="hibernate.connection.pool_size">1</property>
+        <property name="hibernate.cache.provider_class">org.hibernate.cache.internal.NoCacheProvider
+        </property>
+
+		<!--Configuração hibernate envers  -->
+		<property name="org.hibernate.envers.audit_table_suffix">_AUD</property>
+		<property name="org.hibernate.envers.default_schema">log</property>
+		<property name="org.hibernate.envers.default_catalog">renovarsistemas</property>
+		<property name="org.hibernate.envers.revision_on_collection_change">false</property>
+		
+
+		<mapping class="br.com.locadora.modelo.log.Auditoria" />
+		<mapping class="br.com.locadora.modelo.ContaCorrente" />
+		<mapping class="br.com.locadora.modelo.LancamentoContasAPagar" />
+		<mapping class="br.com.locadora.modelo.ContasAPagar" />
+		<mapping class="br.com.locadora.modelo.HistoricoPessoa" />
+		<mapping class="br.com.locadora.modelo.Banco" />
+		<mapping class="br.com.locadora.modelo.Fiador" />
+		<mapping class="br.com.locadora.modelo.DestinacaoLocacao" />
+		<mapping class="br.com.locadora.modelo.DescontoLocacao" />
+		<mapping class="br.com.locadora.modelo.Locacao" />
+		<mapping class="br.com.locadora.modelo.PessoaFiador" />
+		<mapping class="br.com.locadora.modelo.PessoaFiadorId" />
+		<mapping class="br.com.locadora.modelo.Proposta" />
+		<mapping class="br.com.locadora.modelo.ImpostoDeRenda" />
+		<mapping class="br.com.locadora.modelo.FaixaImpostoDeRenda" />
+		<mapping class="br.com.locadora.modelo.CaracteristicasImovelDesejado" />
+		<mapping class="br.com.locadora.modelo.CaracteristicasImovelDesejadoId" />
+		<mapping class="br.com.locadora.modelo.GrupoDeContas" />
+		<mapping class="br.com.locadora.modelo.PlanoDeContas" />
+		<mapping class="br.com.locadora.modelo.ContasFinanceiro" />
+		<mapping class="br.com.locadora.modelo.ImovelDesejado" />
+		<mapping class="br.com.locadora.modelo.ImovelProcurado" />
+		<mapping class="br.com.locadora.modelo.EmprestimoChave" />
+		<mapping class="br.com.locadora.modelo.EnderecoImovelDesejado" />
+		<mapping class="br.com.locadora.modelo.ChaveNoQuadro" />
+		<mapping class="br.com.locadora.modelo.ChaveNoQuadroId" />
+		<mapping class="br.com.locadora.modelo.CentroDeCusto" />
+		<mapping class="br.com.locadora.modelo.ImovelCaracteristicasId" />
+		<mapping class="br.com.locadora.modelo.ImovelCaracteristicas" />
+		<mapping class="br.com.locadora.modelo.ProprietarioId" />
+		<mapping class="br.com.locadora.modelo.Proprietario" />
+		<mapping class="br.com.locadora.modelo.ProprietariosLocacao" />
+		<mapping class="br.com.locadora.modelo.PermissoesLocacao" />
+		<mapping class="br.com.locadora.modelo.SituacaoLocacao" />
+		<mapping class="br.com.locadora.modelo.Cidade" />
+		<mapping class="br.com.locadora.modelo.MensagemFuncionario" />
+		<mapping class="br.com.locadora.modelo.ParametroReferencia" />
+		<mapping class="br.com.locadora.modelo.Parametro" />
+		<mapping class="br.com.locadora.modelo.TipoDeParametroId" />
+		<mapping class="br.com.locadora.modelo.TipoDeParametro" />
+		<mapping class="br.com.locadora.modelo.DadosBancariosProprietario" />
+		<mapping class="br.com.locadora.modelo.Caracteristicas" />
+		<mapping class="br.com.locadora.modelo.QuadroDeChaves" />
+		<mapping class="br.com.locadora.modelo.Regiao" />
+		<mapping class="br.com.locadora.modelo.RegiaoCoordenada" />
+		<mapping class="br.com.locadora.modelo.Referenciapessoal" />
+		<mapping class="br.com.locadora.modelo.Tipoimovel" />
+		<mapping class="br.com.locadora.modelo.Imovel" />
+		<mapping class="br.com.locadora.modelo.IndicesReajustes" />
+		<mapping class="br.com.locadora.modelo.InformacaoAdicional" />
+		<mapping class="br.com.locadora.modelo.Iptu" />
+		<mapping class="br.com.locadora.modelo.Bairro" />
+		<mapping class="br.com.locadora.modelo.Fotoimovel" />
+		<mapping class="br.com.locadora.modelo.Pessoa" />
+		<mapping class="br.com.locadora.modelo.Filial" />
+		<mapping class="br.com.locadora.modelo.Situacaoimovel" />
+		<mapping class="br.com.locadora.modelo.SituacaoLocacaoPermissoes" />
+		<mapping class="br.com.locadora.modelo.SituacaoLocacaoPermissoesId" />
+		<mapping class="br.com.locadora.modelo.StatusLocacao" />
+		<mapping class="br.com.locadora.modelo.SeguroIncendio" />
+		<mapping class="br.com.locadora.modelo.SeguroFianca" />
+		<mapping class="br.com.locadora.modelo.SeguroIncendioImovelComercial" />
+		<mapping class="br.com.locadora.modelo.SeguroIncendioImovelResidencial" />
+		<mapping class="br.com.locadora.modelo.Funcionario" />
+		<mapping class="br.com.locadora.modelo.FormaPagamento" />
+		<mapping class="br.com.locadora.modelo.Email" />
+		<mapping class="br.com.locadora.modelo.Telefone" />
+		<mapping class="br.com.locadora.modelo.Vistoria" />
+		<mapping class="br.com.locadora.modelo.ValorIndiceReajuste" />
+		<mapping class="br.com.locadora.modelo.Ramoatuacao" />
+		<mapping class="br.com.locadora.modelo.Endereco" />
+		<mapping class="br.com.locadora.modelo.TemPerto" />
+	</session-factory>
+</hibernate-configuration>

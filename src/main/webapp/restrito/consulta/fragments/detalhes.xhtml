@@ -1,0 +1,172 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+		
+	<div class="row">
+
+		<!-- Codigo do imovel -->
+		<label class="col-md-1 control-label labelRenovar">COD IMÓVEL</label>
+
+		<div class="col-md-2">
+			<div class="form-group">
+				<p:inputText id="codigo" class="form-control input-sm"
+					value="#{pesquisaImovelBean.imovel.imoId}" size="5"
+					maxlength="6" required="false" >
+					<f:validateLength minimum="0" maximum="6" />
+					<f:converter converterId="javax.faces.Integer" />
+				</p:inputText>
+			</div>
+		</div>
+		
+		<!-- FOTO -->
+		<label class="col-md-1 control-label labelRenovar">FOTO</label>
+
+		<div class="col-md-2">
+			<div class="form-group">
+				<p:selectBooleanButton class="form-control input-sm btn-default"
+					value="#{pesquisaImovelBean.imovel.imoFoto}" onLabel="Sim"
+					offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close">	
+				</p:selectBooleanButton>
+			</div>
+		</div>
+		
+		<!-- Disponível para Locação -->
+		<label class="col-md-1 control-label labelRenovar">LOCAÇÃO</label>
+		
+		<div class="col-md-2">
+			<div class="form-group">
+				<p:selectBooleanButton class="form-control input-sm btn-default"
+					value="#{pesquisaImovelBean.imovel.imoLocacao}" onLabel="Sim" offLabel="Não"
+					onIcon="ui-icon-check" offIcon="ui-icon-close" >
+				</p:selectBooleanButton>
+			</div>
+		</div>
+		
+			<!-- Disponível para Venda -->
+		<label class="col-md-1 control-label labelRenovar">VENDA</label>
+
+		<div class="col-md-2">
+			<div class="form-group">
+				<p:selectBooleanButton class="form-control input-sm btn-default"
+					value="#{pesquisaImovelBean.imovel.imoVenda}" onLabel="Sim"
+					offLabel="Não" onIcon="ui-icon-check" offIcon="ui-icon-close">				
+					<p:ajax event="click" update="@this,condominio"> </p:ajax>
+				</p:selectBooleanButton>
+			</div>
+		</div>
+		
+		</div>
+		<div class="row">
+		
+		<!-- SITUAÇÃO -->
+		<label class="col-md-1 control-label labelRenovar">SITUAÇÃO</label>
+		
+		<div class="col-md-2">
+			<div class="form-group">
+				<p:selectCheckboxMenu id="situacao" class="form-control input-sm"
+					value="#{pesquisaImovelBean.listaSituacoes}" showCheckbox="true" 
+					filter="true" filterText="Filter" filterMatchMode="startsWith" >
+					<f:selectItems value="#{situacaoimovelBean.listaSituacaoImovels}"
+						var="sit" itemValue="#{sit.sitId}" itemLabel="#{sit.sitNome}" />
+				</p:selectCheckboxMenu>
+			</div>
+		</div>
+		
+	
+		<!-- TIPO -->
+		<label class="col-md-1 control-label labelRenovar">TIPO</label>
+
+		<div class="col-md-2">
+			<div class="form-group">
+				<p:selectCheckboxMenu id="tipo" class="form-control input-sm"
+					value="#{pesquisaImovelBean.listaTipos}" showCheckbox="true"
+					filter="true" filterText="Filter" filterMatchMode="startsWith">
+					<f:selectItems value="#{tipoImovelBean.listaTipoImoveis}" var="tip"
+						itemValue="#{tip.tipId}" itemLabel="#{tip.tipNome}" />
+				</p:selectCheckboxMenu>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="row">
+		<!-- ÁREA DO IMÓVEL -->
+		<label class="col-md-2 control-label labelRenovar">ÁREA CONSTRUÍDA</label>
+
+		<div class="col-md-2 form-group">
+			<h:inputText id="areaDe" class="form-control input-sm"
+				value="#{pesquisaImovelBean.imovel.imoAreaImovel}" size="6"
+				maxlength="6" required="false">
+				<f:validateLength minimum="0" maximum="6" />
+				<f:converter converterId="javax.faces.Integer" />
+			</h:inputText>
+		</div>
+		
+		<label class="col-md-1 control-label labelRenovar">ATÉ</label>
+		
+		<div class="col-md-2 form-group">
+			<h:inputText id="areaAte" class="form-control input-sm"
+				value="#{pesquisaImovelBean.imovel.imoAreaTerreno}" size="6"
+				maxlength="6" required="false">
+				<f:validateLength minimum="0" maximum="6" />
+				<f:converter converterId="javax.faces.Integer" />
+			</h:inputText>
+		</div>
+
+	</div>
+
+	<div class="row">
+	
+		<!-- Valor do aluguel -->
+		<label class="col-md-2 control-label labelRenovar">VALOR DO ALUGUEL DE</label>
+		
+		<div class="col-sm-2 form-group">	
+			<h:inputText id="aluDe" class="form-control input-sm"
+				value="#{pesquisaImovelBean.imovel.imoChaveQtd}" size="6" maxlength="6" required="false">
+				<f:validateLength minimum="0" maximum="6" />
+				<f:converter converterId="javax.faces.Integer" />
+			</h:inputText>
+		</div>
+	
+		<label class="col-md-1 control-label labelRenovar">ATÉ</label>
+		
+		<div class="col-sm-2 form-group">
+			<h:inputText id="aluAte" class="form-control input-sm"
+				value="#{pesquisaImovelBean.imovel.imoChavePosicao}" size="6" maxlength="6" required="false">
+				<f:validateLength minimum="0" maximum="6" />
+				<f:converter converterId="javax.faces.Integer" />
+			</h:inputText>
+		</div>
+
+	</div>
+
+	<div class="row">
+	
+		<!-- Valor do imovel -->
+		<label class="col-md-2 control-label labelRenovar">VALOR DO IMÓVEL DE</label>
+		
+		<div class="col-sm-2 form-group">	
+			<h:inputText id="condominio" class="form-control input-sm"
+				value="#{pesquisaImovelBean.imovel.imoValorMercado}" size="10"
+				maxlength="10" required="false" >
+				<f:validateLength minimum="0" maximum="10" />
+				<f:converter converterId="javax.faces.Float" />
+			</h:inputText>
+		</div>
+		
+		<label class="col-md-1 control-label labelRenovar">ATÉ</label>
+		
+		<div class="col-sm-2 form-group">	
+			<h:inputText id="valorImovel" class="form-control input-sm"
+				value="#{pesquisaImovelBean.imovel.imoPosicao}" size="10"
+				maxlength="10" required="false" >
+				<f:validateLength minimum="0" maximum="10" />
+				<f:converter converterId="javax.faces.Float" />
+			</h:inputText>
+		</div>
+		
+	</div>
+</ui:composition>

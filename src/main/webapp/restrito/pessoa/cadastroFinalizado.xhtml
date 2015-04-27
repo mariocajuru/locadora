@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		
+		<h:outputScript library="js" name="jquery.js" />
+	
+		<center>
+		
+			<h:graphicImage library="imagens2" name="done-icon.png"/>
+			
+			<h3>Cadastro finalizado com sucesso!</h3>
+			
+			<br/>
+			<br/>
+			
+			<div style="padding-left: 15%; padding-right: 15%;">
+				<a class="btn btn-androidblue btn-lg btn-block" href="#{request.contextPath}/restrito/pessoa/cadastro.jsf">Cadastrar Pessoa</a>
+				<a class="btn btn-androidblue btn-lg btn-block" href="#{request.contextPath}/restrito/imovel/cadastro.jsf">Cadastrar Imóvel</a>
+			</div>
+			
+			<br/>
+			<br/>
+			
+		</center>
+		
+	</ui:define>
+</ui:composition>
+</html>

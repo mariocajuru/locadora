@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div class="page-header">
+			<h1>
+				Consulta para locação de imóvel <small>visão geral</small>
+			</h1>
+		</div>
+		<script type="text/javascript"
+			src="http://maps.google.com/maps/api/js?sensor=true"></script>
+		<h:form id="consultaForm">
+			<p:growl id="mensagem" showDetail="true" life="2000" />
+
+			
+			<h:outputText value=" Avenida Primeiro de Junho, 43 - Sala 02 - Centro - CEP.: 35.500-002 - Divinópolis/MG."/>
+			<h:panelGrid id="consultaPanel" columns="2">
+				<h:outputLabel value="UF:"
+					style="font-weight:bold; padding-right: 5px; float: right;" />
+				<p:inputText  size="2" value="#{consultaBean.cidade.cidUf}" maxlength="2" />
+				<h:outputLabel value="Rua "
+					style="font-weight:bold; padding-right: 5px; float: right;" />
+				<p:inputText size="50"
+					value="#{consultaBean.endereco.endNome}" />
+					
+					<h:outputLabel value="Numero "
+					style="font-weight:bold; padding-right: 5px; float: right;" />
+				<p:inputText size="5"
+					value="#{consultaBean.endereco.endNumero}" maxlength="5"/>
+
+				<h:outputLabel value="Cidade: "
+					style="font-weight:bold; padding-right: 5px; float: right;" />
+				<p:inputText size="25" value="#{consultaBean.cidade.cidNome}" />
+
+				<h:outputLabel value="Bairro: "
+					style="font-weight:bold; padding-right: 5px; float: right;" />
+				<p:inputText size="25" value="#{consultaBean.bairro.baiNome}" />
+			
+
+			<p:commandButton  value="Pesquisar" icon="ui-icon-pin-s"
+				 class="btn btn-primary" action="#{consultaBean.carregarEnd}" update="mapa"/>
+				 <p:commandButton value="Limpar" type="reset" class="btn btn-info"/>
+</h:panelGrid>
+
+
+			<p:gmap center="#{consultaBean.latitude}, #{consultaBean.longitude}" zoom="15" type="hybrid"
+				style="width:100%;height:600px" model="#{consultaBean.advancedModel}" id="mapa" streetView="true">
+				<p:ajax event="stateChange" listener="#{consultaBean.onStateChange}"
+					update="mensagem" />
+				<p:ajax event="pointSelect" listener="#{consultaBean.onPointSelect}"
+					update="mensagem" />
+					 <p:ajax event="markerDrag" listener="#{consultaBean.onMarkerDrag}" update="mensagem" /> 
+					<p:ajax event="overlaySelect" listener="#{consultaBean.onMarkerSelect}" />  
+  
+        <p:gmapInfoWindow >  
+            <p:outputPanel style="text-align:center;display:block;margin:auto:" >  
+                     <p:graphicImage library="resources/" name="#{consultaBean.marker.data}"  height="150" />
+                    <br />  
+                    <p:commandLink onclick="abrirImovelComEndereco('#{consultaBean.marker.title}');" value="Detalhes" target="_self" />
+                    <br /> 
+                    <h:outputText value="#{consultaBean.marker.title}" /> 
+            </p:outputPanel>  
+  
+        </p:gmapInfoWindow> 
+         
+  
+			</p:gmap>
+			
+			<script language="JavaScript">
+			//<![CDATA[
+								
+				function abrirImovelComEndereco(endereco) {	
+					var imovelID = endereco.split(":")[0];
+
+					var caminho = "#{request.contextPath}/restrito/imovel/cadastro.jsf?id=" + imovelID;
+
+					window.open(caminho, "_blank");
+				}
+				
+			//]]>
+			</script>
+			
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

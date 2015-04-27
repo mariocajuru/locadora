@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"> 
+
+<div class="row">
+
+<!-- SEGURADORA -->
+		<label class="col-xs-2 control-label labelRenovar">SEGURADORA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="seguradora" class="form-control input-sm" 
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('SEGURADORA') são obrigatorios." 
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendio}"
+					value="#{contratoLocacaoBean.seguroIncendio.segIncSeguradora}" disabled="#{contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}" maxlength="50">
+				</h:inputText>
+			</div>
+		</div>
+		<!-- apolice -->
+		<label class="col-xs-2 control-label labelRenovar">Nº APÓLICE</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="apolice" class="form-control input-sm"
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('Nº APÓLICE') são obrigatorios." 
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendio}"
+					value="#{contratoLocacaoBean.seguroIncendio.segIncApolice}" disabled="#{contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}" maxlength="50">
+				</h:inputText>
+			</div>
+		</div>
+
+<!-- Data da incio seguro incendio -->
+		<label class="col-xs-2 control-label labelRenovar">INÍCIO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+				<p:calendar id="dataInicioSeguroIncendio" disabled="#{contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}"
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('INÍCIO') são obrigatorios." 
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendioDatas}"
+					value="#{contratoLocacaoBean.seguroIncendio.segIncDataInicio}" locale="pt_BR"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true"  >
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+					</p:calendar>
+			</div>
+		</div>
+		
+		
+<!-- Data fim seguro incendio -->
+		<label class="col-xs-2 control-label labelRenovar">TÉRMINO</label>
+		
+		<div class="col-xs-2">
+			<div class="form-group data">
+				
+				<p:calendar id="dataFimSeguroIncendio" disabled="#{contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}"
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('TÉRMINO') são obrigatorios." 
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendioDatas}"
+					value="#{contratoLocacaoBean.seguroIncendio.segIncDataFinal}" locale="pt_BR"
+					pattern="dd/MM/yyyy" minlength="10" maxlength="10" navigator="true"  >
+					<h:outputScript name="calendario_pt_BR.js" library="js" />
+					</p:calendar>
+			</div>
+		</div>
+
+		<!-- Valor total -->
+		<label class="col-xs-2 control-label labelRenovar">VAL.TOTAL(R$)</label>
+		<div class="col-xs-2">
+			<div class="form-group">
+				<p:inputMask id="valorTotalSeguroIncendio"
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('VAL.TOTAL') são obrigatorios." 
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendio}"
+					value="#{contratoLocacaoBean.seguroIncendio.segIncValorTotal}"
+					size="15" maxlength="15"   disabled="#{!contratoLocacaoBean.seguroIncendio.segIncSeguroParticular || contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+					<f:convertNumber pattern="#0.00#" />
+				</p:inputMask>
+			</div>
+		</div>
+
+			<!-- Valor total venal-->
+		<label class="col-xs-2 control-label labelRenovar">VAL.VENAL TOTAL(R$)</label>
+		<div class="col-xs-2">
+			<div class="form-group">
+				<p:inputMask id="valorVenalTotalSeguroIncendio"
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('VAL.VENAL TOTAL') são obrigatorios." 
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendio}"
+					value="#{contratoLocacaoBean.seguroIncendio.segIncValorVenalTotal}"
+					size="15" maxlength="15"  disabled="#{contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+					<f:convertNumber pattern="#0.00#" />
+				</p:inputMask>
+			</div>
+		</div>
+		
+					<!-- Valor parcela-->
+		<label class="col-xs-2 control-label labelRenovar">VAL.PARCELA</label>
+		<div class="col-xs-2">
+			<div class="form-group">
+				<pe:inputNumber id="valorParcelaSeguroIncendio"
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('VAL.PARCELA') são obrigatorios." 
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendio}"
+					value="#{contratoLocacaoBean.seguroIncendio.segIncValorParcela}"
+					size="15" maxlength="15"  symbol="R$ "
+					decimalPlaces="2" disabled="#{!contratoLocacaoBean.seguroIncendio.segIncSeguroParticular || contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}">
+					<f:validateLength minimum="0" maximum="15" />
+					<f:converter converterId="javax.faces.Double" />
+				</pe:inputNumber>
+			</div>
+		</div>
+		
+		
+		<!-- Plano -->
+		<label class="col-xs-2 control-label labelRenovar">PLANO</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<pe:inputNumber id="plano"  decimalPlaces="0" 
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('PLANO') são obrigatorios." 
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendio}"
+					value="#{contratoLocacaoBean.seguroIncendio.segIncPlano}" disabled="#{contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}" maxlength="50"/>
+			</div>
+		</div>
+						<!-- PROPOSTA -->
+		<label class="col-xs-2 control-label labelRenovar">PROPOSTA</label>
+
+		<div class="col-xs-2">
+			<div class="form-group">
+				<h:inputText id="propostaFianca" class="form-control input-sm" 
+					value="#{contratoLocacaoBean.seguroIncendio.segIncProposta}" disabled="#{contratoLocacaoBean.alteracao || contratoLocacaoBean.bloquearPreenchimentoSeguroIncendio}" maxlength="50">
+				</h:inputText>
+			</div>
+		</div>
+
+		<!-- SEGURO PARTICULAR -->
+		<label class="col-md-2 control-label labelRenovar">SEGURO
+			PARTICULAR</label>
+
+		<div class="col-md-2 form-group">
+			<p:selectBooleanButton id="seguroParticular"
+				class="form-control input-sm"
+				requiredMessage="O ramo da destinação escolhido não tem o tipo de seguro definido. Os campos de seguro incêndio ('SEGURO PARTICULAR') são obrigatorios."
+				disabled="#{contratoLocacaoBean.alteracao}"
+				required="#{contratoLocacaoBean.preenchimentoSeguroIncendio}"
+				value="#{contratoLocacaoBean.seguroIncendio.segIncSeguroParticular}"
+				onLabel="Sim" offLabel="Não" onIcon="ui-icon-check"
+				offIcon="ui-icon-close">
+				<p:ajax event="change" process="@this" listener="#{contratoLocacaoBean.botaoSeguroIncendioParticular}"
+				update="panelSeguroIncendio"/>
+			</p:selectBooleanButton>
+		</div>
+
+	</div>
+
+	<div class="row" style="text-align: center">
+		<div class="btn-group">
+			<p:commandButton value="Calcular Seguro Incêndio" rendered="#{!contratoLocacaoBean.alteracao}"
+				action="#{contratoLocacaoBean.valTotalSeguroIncendio()}" process="@this,dataInicioLocacao,valorVenalTotalSeguroIncendio,categoria,plano" update="@this,valorTotalSeguroIncendio,valorParcelaSeguroIncendio"
+				class="btn btn-default btn-lg" />
+		</div>
+	</div>
+</ui:composition>

@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div class="page-header">
+			<h1>
+				Lista de chaves <small>Click para alterar os dados</small>
+			</h1>
+		</div>
+
+		<style>
+.coluna1 {
+	text-align: right
+}
+
+.coluna2 {
+	text-align: left
+}
+</style>
+		<h:form id="formChave">
+			<p:growl id="growl" sticky="true" showDetail="true" />
+			<h:panelGrid id="panelGrid">
+						<p:dataTable var="cha" value="#{chaveBean.listaChaves}"
+						id="dataAlter" editable="true" editMode="cell"
+						cellSeparator=" \/ " scrollable="true" scrollWidth="800"
+						scrollHeight="350" widgetVar="chaveTable">
+
+						<f:facet name="header">  
+           Dados da Chave  
+        </f:facet>
+						<p:ajax event="cellEdit" listener="#{chaveBean.alterar(cha)}"
+							update=":formChave:growl, dataAlter">
+							<f:setPropertyActionListener target="#{chaveBean.chave}"
+								value="#{cha}" />
+						</p:ajax>
+						<p:column headerText="Codigo da chave" filterBy="#{cha.chaId}"  style="width:100px">
+						<h:outputText value="#{cha.chaId}"></h:outputText>
+						</p:column>
+							<p:column headerText="Posição no quadro" filterBy="#{cha.chaPosicaoQuadro}"  style="width:100px">
+						<h:outputText value="#{cha.chaPosicaoQuadro}"></h:outputText>
+						</p:column>
+							<p:column id="situacaoChave" headerText="Situação da chave" style="width:200px">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText id="situacaoNome" value="#{cha.situacaochave.sitChaNome}" />
+								</f:facet>
+								<f:facet name="input">
+									<h:selectOneMenu value="#{cha.situacaochave.sitChaId}"
+										style="width:200px">
+										<f:selectItems value="#{situacaoChaveBean.listaSituacoesChaves}" var="ram"
+									itemLabel="#{ram.sitChaNome}" itemValue="#{ram.sitChaId}" />
+									</h:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Codigo endereço"  style="width:100px">
+						<h:outputText value="#{cha.endereco.endId}"></h:outputText>
+						</p:column>
+							<p:column headerText="Endereço/Nº" style="width:400px">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{cha.endereco.endNome}" /> / 
+									<h:outputText value="Nº: #{cha.endereco.endNumero}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="enderecoEdite" value="#{cha.endereco.endNome}"
+										style="width:350px" title="Endereço" />/
+										<p:inputText value="#{cha.endereco.endNumero}"
+										style="width:50px" label="Nº" title="Nº" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Complemento" style="width:80px">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{cha.endereco.endComplemento}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{cha.endereco.endComplemento}"
+										style="width:80px" label="Complemento" title="Complemento" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+				
+
+						<p:column headerText="Zona" style="width:80px">
+							<p:cellEditor>
+								<f:facet name="output">
+
+									<h:outputText value="#{cha.endereco.endZona}" />
+								</f:facet>
+								<f:facet name="input">
+									<h:selectOneMenu id="Zona" value="#{cha.endereco.endZona}"
+										style="width:80px">
+										<f:converter converterId="javax.faces.Character" />
+										<f:selectItem itemValue="R" itemLabel="Zona Urbana" />
+										<f:selectItem itemValue="U" itemLabel="Zona Rural" />
+									</h:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="Cep" style="width:80px">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{cha.endereco.endCep}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputMask id="cepAlter" label="cep" mask="99.999-999"
+										value="#{cha.endereco.endCep}" style="width:80px" size="10">
+										<f:validateLength minimum="10" maximum="10" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+
+						<p:column headerText="Bairro" style="width:140px">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{cha.endereco.bairro.baiNome}" />
+								</f:facet>
+								<f:facet name="input">
+									<h:selectOneMenu value="#{cha.endereco.bairro.baiId}"
+										style="width:140px">
+										<f:selectItems id="SelectBairroAlter"
+											value="#{bairroBean.listaBairros}" var="baiAlter"
+											itemValue="#{baiAlter.baiId}" itemLabel="#{baiAlter.baiNome}" />
+									</h:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Cidade" style="width:180px">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{cha.endereco.cidade.cidNome}" />
+								</f:facet>
+								<f:facet name="input">
+									<h:selectOneMenu value="#{cha.endereco.cidade.cidId}"
+										style="width:180px">
+										<f:selectItems id="selectCidadefis"
+											value="#{cidadeBean.listaCidades}" var="cid"
+											itemValue="#{cid.cidId}" itemLabel="#{cid.cidNome}" />
+									</h:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						
+						<p:column headerText="Observação da Chave" style="width: 250px"
+							filterBy="#{cha.chaObservacao}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{cha.chaObservacao}" />
+
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="nome" value="#{cha.chaObservacao}"
+										style="width:240px" title="Nome" />
+
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Quantida de Chaves" style="width: 250px"
+							filterBy="#{cha.chaQtd}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{cha.chaQtd}" />
+
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="quantidade" value="#{cha.chaQtd}"
+										style="width:240px" title="Quantidade" />
+
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						</p:dataTable>
+						</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

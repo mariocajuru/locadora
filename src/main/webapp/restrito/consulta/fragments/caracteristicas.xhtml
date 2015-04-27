@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="row">
+
+		<p:dataGrid value="#{pesquisaImovelBean.listaCaracteristicas}" var="detalhe"
+			columns="6" paginator="false" class="renovar-DataGrid-Size-2">
+
+			<div class="col-sm-12 form-group">
+				<label class="control-label">#{detalhe.nome}</label>
+
+				<p:selectBooleanButton class="form-control input-sm btn-default"
+					value="#{detalhe.selecionado}"
+					rendered="#{detalhe.unitario == true}" onLabel="Sim"
+					onIcon="ui-icon-check" offLabel="Não" offIcon="ui-icon-close" />
+
+				<h:selectOneMenu class="form-control input-sm"
+					value="#{detalhe.quantidade}"
+					rendered="#{detalhe.unitario == false}">
+					<f:selectItem itemValue="0" itemLabel="" />
+					<f:selectItem itemValue="1" itemLabel="1" />
+					<f:selectItem itemValue="2" itemLabel="2" />
+					<f:selectItem itemValue="3" itemLabel="3" />
+					<f:selectItem itemValue="4" itemLabel="4" />
+					<f:selectItem itemValue="5" itemLabel="5" />
+					<f:selectItem itemValue="6" itemLabel="6" />
+					<f:selectItem itemValue="7" itemLabel="7" />
+					<f:selectItem itemValue="8" itemLabel="8" />
+					<f:selectItem itemValue="9" itemLabel="9" />
+					<f:selectItem itemValue="10" itemLabel="10" />
+					<f:selectItem itemValue="11" itemLabel="11" />
+					<f:selectItem itemValue="12" itemLabel="12" />
+					<f:selectItem itemValue="13" itemLabel="13" />
+					<f:selectItem itemValue="14" itemLabel="14" />
+					<f:selectItem itemValue="15" itemLabel="15" />
+					<f:selectItem itemValue="16" itemLabel="16" />
+					<f:selectItem itemValue="17" itemLabel="17" />
+					<f:selectItem itemValue="18" itemLabel="18" />
+				</h:selectOneMenu>
+
+			</div>
+		</p:dataGrid>
+		</div>
+	
+	<br/>
+	<br/>
+	
+	<div class="row">
+	
+		<!-- QUARTOS DO IMÓVEL -->
+		<label class="col-md-2 control-label labelRenovar">QUARTOS DE</label>
+
+		<div class="col-md-2">
+			<div class="form-group">
+				<h:inputText id="quartoDe" class="form-control input-sm"
+					value="#{pesquisaImovelBean.imovel.imoDiasDeCadastro}" size="6"
+					maxlength="6" required="false">
+					<f:validateLength minimum="0" maximum="6" />
+					<f:converter converterId="javax.faces.Integer" />
+				</h:inputText>
+			</div>
+		</div>
+		
+		<label class="col-md-1 control-label labelRenovar"> ATÉ </label>
+		
+		<div class="col-md-2">
+			<div class="form-group">
+	
+				<h:inputText id="quartoAte" class="form-control input-sm"
+					value="#{pesquisaImovelBean.imovel.imoIdFuncionarioIndicacao}"
+					size="6" maxlength="6" required="false">
+					<f:validateLength minimum="0" maximum="6" />
+					<f:converter converterId="javax.faces.Integer" />
+				</h:inputText>
+				
+			</div>
+		</div>
+
+	</div>
+
+</ui:composition>
