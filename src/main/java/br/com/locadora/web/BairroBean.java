@@ -20,6 +20,7 @@ import br.com.locadora.web.util.ContextoUtil;
 public class BairroBean  implements Serializable{
 
 	/**
+	 * Bean de Bairro
 	 * 
 	 */
 	private static final long serialVersionUID = 6894661044899483446L;
